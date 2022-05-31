@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+
+<!-- === Header Starts === -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title> Human-AI Shared Control via Frequency-based Policy Dissection</title>
+    <link href="./assets/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/font.css" rel="stylesheet" type="text/css">
+    <link href="./assets/style.css" rel="stylesheet" type="text/css">
+    <script src="./assets/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/corpus.js"></script>
+
+</head>
+<!-- === Header Ends === -->
+
+<script>
+    var lang_flag = 1;
+
+
+</script>
+
+<body>
+
+<!-- === Home Section Starts === -->
+<div class="section">
+    <!-- === Title Starts === -->
+    <div class="header">
+        <!--        <div class="logo">-->
+        <!--            <a href="https://decisionforce.github.io/" target="_blank">-->
+        <!--                <img src="images/deciforce.png">-->
+        <!--            </a>-->
+        <!--        </div>-->
+        <!--        <div style="padding-top: 30pt; margin: 0 50pt;" class="title" id="lang">-->
+        <!--            Safe Driving via Expert Guided Policy Optimization-->
+        <!--        </div>-->
+
+        <table>
+            <tr>
+                <td>
+<!-- 
+                    <div class="logo"
+                         style="
+                         width: 100pt;
+                         vertical-align: text-top;
+                         text-align: center;
+                         ">
+                        <a href="https://decisionforce.github.io/" target="_blank">
+                            <img src="images/deciforce.png">
+                        </a>
+                    </div>-->
+
+                </td>
+                <td>
+                    <div style="padding-top: 20pt;padding-left: 50pt;" class="title" id="lang">
+                        Human-AI Shared Control via Frequency-based Policy Dissection
+                    </div>
+                </td>
+                <td>
+<!--
+                    <div class="logo"
+                         style="
+                         width: 100pt;
+                         padding-top: 10pt;
+                         vertical-align: center;
+                         text-align: center;
+                         ">
+                        <a href="https://github.com/decisionforce/metadrive" target="_blank">
+                            <img style=" width: 120pt;" src="images/metadrive.png">
+                        </a>
+                    </div>
+-->
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+    <!-- === Title Ends === -->
+    <div class="author">
+<!--        <p style="text-align:center">International Conference on Learning Representations (ICLR) 2022</p>-->
+        <a href="https://Quanyili.github.io">Quanyi Li</a><sup>1</sup>,&nbsp;
+        <a href="https://pengzhenghao.github.io" target="_blank">Zhenghao Peng</a><sup>2</sup>,&nbsp;&nbsp;
+        <a href="https://hbwu-ntu.github.io/" target="_blank">Haibin Wu</a><sup>1</sup>,
+        <a href="#" target="_blank">Lan Feng</a><sup>4</sup>,
+        <a href="http://bzhou.ie.cuhk.edu.hk" target="_blank">Bolei Zhou</a><sup>3</sup>&nbsp;
+
+    </div>
+
+    <div class="institution" style="font-size: 11pt;">
+        <div>
+            <sup>1</sup>Centre for Perceptual and Interactive Intelligence,
+            <!--            <sup>2</sup>SenseTime Research <br>-->
+            <sup>2</sup>The Chinese University of Hong Kong<br>
+            <sup>3</sup>University of California, Los Angeles, <sup>4</sup>ETH Zurich<br>
+
+        </div>
+    </div>
+    <table border="0" align="center">
+        <tr>
+            <td align="center" style="padding: 0pt 0 15pt 0">
+<!--                <a class="bar" href="https://decisionforce.github.io/HACO"><b>Webpage</b></a> |-->
+<!--                <a class="bar" href="https://github.com/decisionforce/HACO"><b>Code</b></a> |-->
+<!--                &lt;!&ndash;                <a class="bar" href="images/egpo_poster.png"><b>Poster</b></a> |&ndash;&gt;-->
+<!--                                <a class="bar" href="#video"><b>Video</b></a> |-->
+<!--                                <a class="bar" href="#talk"><b>Talk</b></a> |-->
+<!--                                <a class="bar" href="https://openreview.net/pdf?id=0cgU-BZp2ky"><b>Paper</b></a> |-->
+<!--                                <a class="bar" href="https://github.com/decisionforce/HACO/blob/main/docs/iclr_poster.pdf"><b>Poster</b></a>-->
+
+
+
+            </td>
+        </tr>
+    </table>
+
+</div>
+<!-- === Home Section Ends === -->
+
+<!--<div class="section">-->
+<!--    &lt;!&ndash;    <div class="title" id="lang">Demonstrative Videos</div>&ndash;&gt;-->
+<!--    <div align="center">-->
+<!--        <table width="90%" style="margin: -20pt -5pt; text-align: center;">-->
+<!--            <tr>-->
+<!--                <td>-->
+<!--                    <video style="display:block; width:98%; height:auto; "-->
+<!--                           autoplay="autoplay" muted loop="loop" playsinline>-->
+<!--                        <source src="https://raw.githubusercontent.com/decisionforce/archive/master/EGPO/egpo_vs_ppo.mp4"-->
+<!--                                type="video/mp4"/>-->
+<!--                    </video>-->
+<!--                    <div style="top: -10%;">EGPO-trained agent exhibits safer driving behaviors than the PPO agent and obtains much lower cost.</div><br>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            &lt;!&ndash;        </table>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <br>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <br>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <table width="95%" style="margin: 0 0; text-align: center;">&ndash;&gt;-->
+<!--            &lt;!&ndash;            <tr>&ndash;&gt;-->
+<!--            &lt;!&ndash;                <td>&ndash;&gt;-->
+<!--            &lt;!&ndash;                    <video style="display:block; width:98%; height:auto;"&ndash;&gt;-->
+<!--            &lt;!&ndash;                           autoplay="autoplay" controls muted loop="loop">&ndash;&gt;-->
+<!--            &lt;!&ndash;                        <source src="https://raw.githubusercontent.com/decisionforce/archive/master/EGPO/egpo_showtime.mp4"&ndash;&gt;-->
+<!--            &lt;!&ndash;                                type="video/mp4"/>&ndash;&gt;-->
+<!--            &lt;!&ndash;                    </video>&ndash;&gt;-->
+<!--            &lt;!&ndash;                </td>&ndash;&gt;-->
+<!--            &lt;!&ndash;            </tr>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <tr>&ndash;&gt;-->
+<!--            &lt;!&ndash;                <td>&ndash;&gt;-->
+<!--            &lt;!&ndash;                    The behaviors of EGPO-trained agents.&ndash;&gt;-->
+<!--            &lt;!&ndash;                </td>&ndash;&gt;-->
+<!--            &lt;!&ndash;            </tr>&ndash;&gt;-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash; === Overview Section Starts === &ndash;&gt;-->
+<!--<div class="section">-->
+<!--    <div class="title" id="lang">Human-AI Copilot Optimization (HACO)</div>-->
+<!--    <div class="body">-->
+<!--        <div class="teaser">-->
+<!--            <img src="images/framework.jpg">-->
+<!--            <div class="text">-->
+<!--                <br>-->
+<!--                Fig. 1 Framework </div>-->
+<!--        </div>-->
+<!--        <div class="text">-->
+
+<!--            <p>-->
+<!--                We develop an efficient <b>Human-AI Copilot Optimization method (HACO)</b>, which incorporate human into-->
+<!--                the Reinforcement Learning (RL) training loop to boost the learning efficiency and ensure the safety.-->
+<!--                Sidestepping the requirement of complex reward engineering, HACO injects the human knowledge extracted-->
+<!--                from partial demonstration into the proxy value function by Offline RL technique. On the other hand,-->
+<!--                entropy regularization and intervention minimization are used for encouraging exploration and saving-->
+<!--                human budget respectively.-->
+<!--                The comprehensive experiments show the superior sample efficiency and safety guarantee of the proposed-->
+<!--                method.-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash; === Result Section Starts === &ndash;&gt;-->
+<!--<div class="section">-->
+<!--    <div class="title" id="lang">Experiment Result</div>-->
+<!--    <div class="body">-->
+<!--                <div class="teaser"><img-->
+<!--                src="images/haco_exp.jpg">-->
+<!--                        <div class="text">-->
+<!--                <br>-->
+<!--                Fig. 2 Learning Dynamics </div>-->
+<!--        </div>-->
+<!--        <div class="text">-->
+<!--            The experiments conducted on <a href="https://github.com/decisionforce/metadrive">MetaDrive Simulator</a>-->
+<!--            show the efficient training as well as the low safety violation, when compared with RL, Offline RL,-->
+<!--            Imitation Learning and human-in-the-loop baselines. Results are reported in the Table 1.-->
+<!--            Compared to other data-hungry baselines, HACO utilizes less transitions and achieve highest success rate.-->
+<!--            Also, with the human protection, HACO yields only 30.14 total safety violations in the whole-->
+<!--            training process, two orders of magnitude less than other RL baselines, even though HACO access neither-->
+<!--            the cost or reward signal.-->
+<!--            In the human-in-the-loop paradigm, another concern is the expensive human budget consuming.-->
+<!--            As shown in Fig. 2 <b>B</b>., expensive human budget decreases along with the training.-->
+<!--        </div>-->
+<!--        <div class="teaser">-->
+<!--                     <div class="text">-->
+
+<!--                Table. 1 Comparison results-->
+<!--                          <br>-->
+<!--                     </div>-->
+<!--            <img-->
+<!--                src="images/exp_table.png">-->
+<!--        </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--&lt;!&ndash; === Result Section Ends === &ndash;&gt;-->
+<div class="section" style=" text-align: center">
+    This webpage is still under construction :-)
+</div>
+<!--<div class="section">-->
+<!--    <div class="title" id="talk">Talk</div>-->
+<!--    <div class="text">-->
+<!--        <br>-->
+<!--        <p>-->
+<!--            We summarize our core technical comtribution in this talk.-->
+<!--        </p>-->
+<!--    </div>-->
+<!--    <div class="body">-->
+<!--        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">-->
+<!--            <iframe width="900" height="506" src="https://www.youtube.com/embed/PiJv4wtp8T8"-->
+<!--                    title="YouTube video player" frameborder="0"-->
+<!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--                    allowfullscreen></iframe>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </div>-->
+
+
+
+<!--<div class="section">-->
+<!--    <div class="title" id="video">Demo Video</div>-->
+<!--    <div class="text">-->
+<!--        <br>-->
+<!--        <p>-->
+<!--            HACO is tested on <a href="https://github.com/decisionforce/metadrive">MetaDrive Simulator</a>, which is-->
+<!--            efficient and allows generating various scenarios. Here, we provide the full training process of HACO and-->
+<!--            compare it with RL, IL and Offline RL baselines. As a result, HACO achieves superior sample efficiency-->
+<!--            with safety guarantee and outperform all baselines.-->
+<!--        </p>-->
+<!--    </div>-->
+<!--    <div class="body">-->
+<!--        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">-->
+<!--            <iframe width="900" height="506" src="https://www.youtube.com/embed/Mp37zErSXwk"-->
+<!--                    title="YouTube video player" frameborder="0"-->
+<!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--                    allowfullscreen></iframe>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    </div>-->
+<!--<div class="section">-->
+<!--    <div class="title" id="video_carla">Benchmark HACO on CARLA</div>-->
+<!--    <div class="text">-->
+<!--        <br>-->
+<!--        <p>-->
+<!--            Furthermore, we benchmark HACO on <a href=https://github.com/carla-simulator/carla>CARLA Simulator</a>,-->
+<!--            where agent takes semantic top-down view as observation. Equipped with 3-layer convolution neural network,-->
+<!--            HACO agent learns not only the feature extractor but the driving policy with human involvement in 10 minutes.-->
+<!--        </p>-->
+<!--    </div>-->
+<!--    <div class="body">-->
+<!--        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">-->
+<!--            <iframe width="900" height="506" src="https://www.youtube.com/embed/vm-Cog-9feY"-->
+<!--                    title="YouTube video player" frameborder="0"-->
+<!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+<!--                    allowfullscreen></iframe>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<!-- === Reference Section Starts === -->
+<div class="section">
+    <div class="bibtex">
+        <div class="text">Reference</div>
+    </div>
+
+    <!--    If you find this work useful in your project, please consider to cite it through:-->
+    <pre>
+
+    </pre>
+    <!-- Adjust the frame size based on the demo (Every project differs). -->
+</div>
+
+</body>
+</html>
