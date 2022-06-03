@@ -4,7 +4,7 @@ Official implementation of the paper: **Human-AI Shared Control via Frequency-ba
 
 [**Webpage**](https://metadriverse.github.io/policydissect/) | 
 [**Code**](https://github.com/metadriverse/policydissect) | 
-[**Video**](https://youtu.be/_V4uds880LM) |
+[**Video**](https://youtu.be/2Shqhwgom3A) |
 [**Paper**](https://arxiv.org/pdf/2206.00152.pdf) |
 
 [comment]: <> ([**Poster**]&#40;https://github.com/decisionforce/HACO/blob/main/docs/iclr_poster.pdf&#41; )
