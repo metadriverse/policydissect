@@ -17,7 +17,7 @@ Please run ```python policydissect/play/play_[env].py``` to play with these neur
 **Environments**:
 
 - [x] MetaDrive
-- [ ] Pybullet-Quadrupedal Robot
+- [x] Pybullet-Quadrupedal Robot (Forked from: https://github.com/Mehooz/vision4leg.git)
 - [ ] Gym-Walker
 - [ ] Gym-BipedalWalker
 - [ ] Gym-Ant
