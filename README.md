@@ -19,8 +19,8 @@ Please run ```python policydissect/play/play_[env].py``` to play with these neur
 - [x] MetaDrive
 - [ ] Pybullet-Quadrupedal Robot
 - [ ] Gym-Walker
-- [ ] Gym-Bipedal Walker
-- [ ] Gym-Bipedal Ant
+- [ ] Gym-BipedalWalker
+- [ ] Gym-Ant
 
 ## Installation
 ```bash
