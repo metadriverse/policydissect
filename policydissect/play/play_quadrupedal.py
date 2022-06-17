@@ -44,6 +44,7 @@ if __name__ == "__main__":
     keyboard.hook(legged_control)
     parser = argparse.ArgumentParser()
     parser.add_argument('--hard', action="store_true")
+    parser.add_argument('--seed', default=3, type=int)
     args = parser.parse_args()
     params["env"]["env_build"]["enable_rendering"] = True
     if args.hard:
@@ -63,7 +64,7 @@ if __name__ == "__main__":
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_GUI, 0)
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_SHADOWS, 0)
 
-    seed = 2
+    seed = args.seed
     seed_env(env, seed)
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_GUI, 0, lightPosition=(0, -50, 2))
     with open(os.path.join(weights_path, "quadrupedal_obs_normalizer.pkl"), 'rb') as f:
@@ -74,6 +75,7 @@ if __name__ == "__main__":
     while True:
         if legged_robot_command == "Reset":
             o = env.reset()
+            legged_robot_command= "Forward"
         action = ppo_inference_torch(policy_weights, o, LEGGED_MAP, legged_robot_command)
         o, r, d, i = env.step(action)
         update_render(env)
