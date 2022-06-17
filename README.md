@@ -11,13 +11,12 @@ Official implementation of the paper: **Human-AI Shared Control via Frequency-ba
 
 Currently, we provide some interactive neural controllers enabled by *Policy Dissection*. 
 The policy dissection method and training code will be updated soon.
-Please run ```python policydissect/play/play_[env].py``` to play with these neural controllers.
 
 
 **Environments**:
 
 - [x] MetaDrive
-- [ ] Pybullet-Quadrupedal Robot
+- [x] Pybullet-Quadrupedal Robot (Forked from: https://github.com/Mehooz/vision4leg.git)
 - [ ] Gym-Walker
 - [ ] Gym-BipedalWalker
 - [ ] Gym-Ant
@@ -35,4 +34,18 @@ conda activate policydissect
 # Install basic dependency
 pip install -e .
 ```
+
+## Play 
+### MetaDrive
+Run```python policydissect/play/play_metadriv.py``` to collaborate with the AI driver. 
+Press ```w```,```a```,```s```,```d``` for triggering lane following, left/right lane changing and braking, and
+```r``` for resetting the environment.
+
+### Quadrupedal Robot
+The quadrupedal robot is trained with the code provided by https://github.com/Mehooz/vision4leg.git.
+For playing with legged robot, run```python policydissect/play/play_quadrupedal.py```.
+Press ```w```,```a```,```s```,```d``` for changing the moving direction. and ```r``` for reset.
+Also, you can collaborate with AI and challenge the hard environment consisting of obstacles and challenging terrains by running ```python policydissect/play/play_quadrupedal.py --hard```
+You can change to a different environment by adding ```--seed you_seed_int_type```.
+*tips: Avoiding running too fast!*
 
