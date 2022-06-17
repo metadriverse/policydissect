@@ -44,7 +44,7 @@ Press ```w```,```a```,```s```,```d``` for triggering lane following, left/right 
 ### Quadrupedal Robot
 The quadrupedal robot is trained with the code provided by https://github.com/Mehooz/vision4leg.git.
 For playing with legged robot, run```python policydissect/play/play_quadrupedal.py```.
-Press ```i```,```j```,```k```,```l``` for changing the moving direction. and ```r``` for reset.
+Press ```w```,```a```,```s```,```d``` for changing the moving direction. and ```r``` for reset.
 Also, you can collaborate with AI and challenge the hard environment consisting of obstacles and challenging terrains by running ```python policydissect/play/play_quadrupedal.py --hard```
 You can change to a different environment by adding ```--seed you_seed_int_type```.
 *tips: Avoiding running too fast!*

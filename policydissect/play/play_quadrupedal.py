@@ -23,13 +23,13 @@ def update_render(env):
 
 def legged_control(event):
     global legged_robot_command
-    if event.event_type == "down" and event.name == "i":
+    if event.event_type == "down" and event.name == "w":
         legged_robot_command = "Forward"
-    elif event.event_type == "down" and event.name == "l":
+    elif event.event_type == "down" and event.name == "d":
         legged_robot_command = "Turn Right"
-    elif event.event_type == "down" and event.name == "j":
+    elif event.event_type == "down" and event.name == "a":
         legged_robot_command = "Turn Left"
-    elif event.event_type == "down" and event.name == "k":
+    elif event.event_type == "down" and event.name == "s":
         legged_robot_command = "Stop"
     elif event.event_type == "down" and event.name == "r":
         legged_robot_command = "Reset"
@@ -58,6 +58,7 @@ if __name__ == "__main__":
         params['env'])
 
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_WIREFRAME, 0)
+    pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_KEYBOARD_SHORTCUTS, 0)
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_RGB_BUFFER_PREVIEW, 0)
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_DEPTH_BUFFER_PREVIEW, 0)
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_SEGMENTATION_MARK_PREVIEW, 0)
@@ -75,7 +76,7 @@ if __name__ == "__main__":
     while True:
         if legged_robot_command == "Reset":
             o = env.reset()
-            legged_robot_command= "Forward"
+            legged_robot_command = "Forward"
         action = ppo_inference_torch(policy_weights, o, LEGGED_MAP, legged_robot_command)
         o, r, d, i = env.step(action)
         update_render(env)
