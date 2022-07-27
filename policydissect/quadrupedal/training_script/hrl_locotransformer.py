@@ -1,9 +1,10 @@
 import os
-from policydissect.utils.legged_utils import get_single_hrl_env
 import os.path as osp
 import sys
 
 import numpy as np
+
+from policydissect.utils.legged_utils import get_single_hrl_env
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from policydissect.quadrupedal.vision4leg.get_env import get_subprocvec_env
@@ -14,11 +15,10 @@ import policydissect.quadrupedal.torchrl.networks as networks
 import policydissect.quadrupedal.torchrl.policies as policies
 from policydissect.quadrupedal.torchrl.utils import Logger
 from policydissect.quadrupedal.torchrl.replay_buffers.on_policy import OnPolicyReplayBuffer
-from policydissect.quadrupedal.torchrl.utils import get_params
 from policydissect.quadrupedal.torchrl.utils import get_args
 from policydissect.utils.legged_config import params
 import torch
-import argparse
+from policydissect.utils.legged_hrl_env import HRLWrapper
 
 args = get_args()
 
@@ -26,11 +26,8 @@ args = get_args()
 def experiment():
     device = torch.device("cuda:{}".format(args.device) if args.cuda else "cpu")
     params["env"]["env_build"]["enable_rendering"] = False
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--seed', default=3, type=int)
-    parser.add_argument('--action_repeat', default=10, type=int)
     params["env"]["env_build"]["terrain_type"] = "random_blocks_sparse_and_heightfield"
-    params["env"]["action_repeat"] = args.action_repeat
+    HRLWrapper.set_repeat(args.action_repeat)
     env = get_subprocvec_env(
         params["env_name"],
         params["env"],

@@ -16,10 +16,15 @@ from policydissect.weights import weights_path
 
 
 class HRLWrapper(BaseWrapper):
-    REPEAT = 20
+    REPEAT = None
     LEGGED_MAP = {"Turn Left": {3: [(239, 85)]},
                   "Turn Right": {3: [(239, -75)]},
                   "Stop": {1: [(76, -70)]}}
+
+    @classmethod
+    def set_repeat(cls, repeat):
+        print("Set action repeat: {}".format(repeat))
+        cls.REPEAT = repeat
 
     def __init__(self, env):
         super(HRLWrapper, self).__init__(env)
