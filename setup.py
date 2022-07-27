@@ -234,6 +234,6 @@ setup(
         "pygame",
         "tensorboardX",
         "tabulate",
-        ""
+        "tqdm"
     ],
 )
