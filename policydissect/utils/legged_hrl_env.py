@@ -5,7 +5,7 @@ import pickle
 
 import numpy as np
 import pybullet
-from gym.spaces import Discrete
+from gym.spaces import Box
 
 from policydissect.quadrupedal.torchrl.env.base_wrapper import BaseWrapper
 from policydissect.quadrupedal.vision4leg.get_env import get_env
@@ -31,7 +31,7 @@ class HRLWrapper(BaseWrapper):
         with open(os.path.join(weights_path, "quadrupedal_obs_normalizer.pkl"), 'rb') as f:
             env._obs_normalizer = pickle.load(f)
         self.policy_weights = np.load(os.path.join(weights_path, "quadrupedal.npz"))
-        self.action_space = Discrete(4)
+        self.action_space = Box(low=-1., high=1., shape=(1,))
         self._actions = ["Forward", "Turn Left", "Turn Right", "Stop"]
         self.last_o = None
 
@@ -41,6 +41,16 @@ class HRLWrapper(BaseWrapper):
         return ret
 
     def step(self, action):
+        if -1 <= action < -0.5:
+            action = 0
+        elif -0.5 <= action < 0.:
+            action = 1
+        elif 0. <= action < 0.5:
+            action = 2
+        elif 0.5 <= action <= 1.:
+            action = 3
+        else:
+            raise ValueError("out of bound")
         command = self._actions[action]
         for _ in range(self.REPEAT):
             action = ppo_inference_torch(self.policy_weights, self.last_o, self.LEGGED_MAP, command)
@@ -56,7 +66,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     params = hrl_param
     params["env"]["env_build"]["enable_rendering"] = True
-    params["env"]["env_build"]["terrain_type"] = "random_blocks_sparse_and_heightfield"
+    params["env"]["env_build"]["terrain_type"] = "plane"
+    # params["env"]["env_build"]["terrain_type"] = "random_blocks_sparse_and_heightfield"
 
     env = get_env(
         params['env_name'],
@@ -73,9 +84,11 @@ if __name__ == "__main__":
     seed = args.seed
     seed_env(env, seed)
     env = HRLWrapper(env)
+    env.REPEAT = 50
     env.reset()
     for command in [1, 0, 2, 3, 1, 0, 2, 3, ]:
         print(env._actions[command])
+        command = (command - 2) * 0.5
         o, r, d, i = env.step(command)
         if d:
             env.reset()

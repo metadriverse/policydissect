@@ -1,4 +1,5 @@
 import os
+import datetime
 import os.path as osp
 import sys
 
@@ -16,7 +17,7 @@ import policydissect.quadrupedal.torchrl.policies as policies
 from policydissect.quadrupedal.torchrl.utils import Logger
 from policydissect.quadrupedal.torchrl.replay_buffers.on_policy import OnPolicyReplayBuffer
 from policydissect.quadrupedal.torchrl.utils import get_args
-from policydissect.utils.legged_config import params
+from policydissect.utils.legged_config import hrl_param
 import torch
 from policydissect.utils.legged_hrl_env import HRLWrapper
 
@@ -24,6 +25,7 @@ args = get_args()
 
 
 def experiment():
+    params = hrl_param
     device = torch.device("cuda:{}".format(args.device) if args.cuda else "cpu")
     params["env"]["env_build"]["enable_rendering"] = False
     params["env"]["env_build"]["terrain_type"] = "random_blocks_sparse_and_heightfield"
@@ -33,6 +35,14 @@ def experiment():
         params["env"],
         args.vec_env_nums,
         args.proc_nums,
+        env_func=get_single_hrl_env
+    )
+
+    eval_env = get_subprocvec_env(
+        params["env_name"],
+        params["env"],
+        max(2, args.vec_env_nums),
+        max(2, args.proc_nums),
         env_func=get_single_hrl_env
     )
 
@@ -47,9 +57,7 @@ def experiment():
 
     buffer_param = params['replay_buffer']
 
-    experiment_name = os.path.split(
-        os.path.splitext(args.config)[0])[-1] if args.id is None \
-        else args.id
+    experiment_name = "hrl_{}".format(datetime.datetime.now().strftime("%Y-%m-%d_%H%M"))
     logger = Logger(
         experiment_name, params['env_name'],
         args.seed, params, args.log_dir, args.overwrite)
@@ -95,7 +103,7 @@ def experiment():
     print(vf)
 
     params['general_setting']['collector'] = VecOnPolicyCollector(
-        vf, env=env, eval_env=None, pf=pf,
+        vf, env=env, eval_env=eval_env, pf=pf,
         replay_buffer=replay_buffer, device=device,
         train_render=False,
         **params["collector"]
