@@ -1,5 +1,5 @@
 import sys
-sys.path.append(".")
+sys.path.append("")
 import torch
 import argparse
 from policydissect.quadrupedal.vision4leg.get_env import get_env

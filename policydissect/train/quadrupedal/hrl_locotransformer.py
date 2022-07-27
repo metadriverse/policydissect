@@ -6,7 +6,7 @@ import numpy as np
 
 from policydissect.utils.legged_utils import get_single_hrl_env
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../quadrupedal"))
 from policydissect.quadrupedal.vision4leg.get_env import get_subprocvec_env
 import random
 from policydissect.quadrupedal.torchrl.collector.on_policy import VecOnPolicyCollector

@@ -19,7 +19,7 @@ import argparse
 import torch
 import os
 import sys
-sys.path.append(".")
+sys.path.append("")
 
 
 def get_args():

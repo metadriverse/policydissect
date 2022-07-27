@@ -3,7 +3,7 @@ import time
 import sys
 import os.path as osp
 import numpy as np
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../quadrupedal"))
 from policydissect.quadrupedal.vision4leg.get_env import get_subprocvec_env, get_vec_env
 from policydissect.quadrupedal.torchrl.env import get_vec_env
 import random
