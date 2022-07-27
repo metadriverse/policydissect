@@ -1,3 +1,6 @@
 /policydissect.egg-info/
 **/__pycache__/**
 .idea/
+*.log
+*.stderr
+*.stdout
