@@ -1,5 +1,4 @@
 import argparse
-import sys
 import os
 import os.path
 import pickle
@@ -10,8 +9,8 @@ from gym.spaces import Box
 
 from policydissect.quadrupedal.torchrl.env.base_wrapper import BaseWrapper
 from policydissect.quadrupedal.vision4leg.get_env import get_env
-from policydissect.utils.legged_utils import seed_env
 from policydissect.utils.legged_config import hrl_param
+from policydissect.utils.legged_utils import seed_env
 from policydissect.utils.policy import ppo_inference_torch
 from policydissect.weights import weights_path
 
@@ -27,8 +26,10 @@ class HRLWrapper(BaseWrapper):
         print("Set action repeat: {}".format(repeat))
         cls.REPEAT = repeat
 
-    def __init__(self, env):
+    def __init__(self, env, repeat):
         super(HRLWrapper, self).__init__(env)
+        assert repeat is not None, "If hrl = None then do not use this wrapper"
+        self.REPEAT = repeat
         with open(os.path.join(weights_path, "quadrupedal_obs_normalizer.pkl"), 'rb') as f:
             env._obs_normalizer = pickle.load(f)
         self.policy_weights = np.load(os.path.join(weights_path, "quadrupedal.npz"))
@@ -37,10 +38,10 @@ class HRLWrapper(BaseWrapper):
         self.last_o = None
 
     def need_image(self):
-        self.env.env.env.env.env.env.env._gym_env.get_image_interval = 1
+        self.env.env.env.env.env.env._gym_env.get_image_interval = 1
 
     def no_image(self):
-        self.env.env.env.env.env.env.env._gym_env.get_image_interval = 10000000000
+        self.env.env.env.env.env.env._gym_env.get_image_interval = 10000000000
 
     def reset(self, **kwargs):
         self.need_image()
@@ -62,7 +63,7 @@ class HRLWrapper(BaseWrapper):
         command = self._actions[action]
         for i in range(self.REPEAT):
             action = ppo_inference_torch(self.policy_weights, self.last_o, self.LEGGED_MAP, command)
-            if i==self.REPEAT -1:
+            if i == self.REPEAT - 1:
                 self.need_image()
             else:
                 self.no_image()
@@ -95,11 +96,9 @@ if __name__ == "__main__":
 
     seed = args.seed
     seed_env(env, seed)
-    env = HRLWrapper(env)
-    env.REPEAT = 10
+    env.REPEAT = 100
     env.reset()
     for command in [1, 0, 2, 3, 1, 0, 2, 3, ]:
-        print(env._actions[command])
         command = (command - 2) * 0.5
         o, r, d, i = env.step(command)
         if d:

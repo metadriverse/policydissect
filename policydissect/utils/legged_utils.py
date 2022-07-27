@@ -15,4 +15,4 @@ def seed_env(env, seed):
 def get_single_hrl_env(env_id, env_param):
     from policydissect.utils.legged_hrl_env import HRLWrapper
     env = get_single_env(env_id, env_param)
-    return HRLWrapper(env)
+    return HRLWrapper(env ,repeat=env_param["env_build"]["action_repeat"])

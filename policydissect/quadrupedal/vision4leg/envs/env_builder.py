@@ -200,7 +200,8 @@ def build_a1_ground_env(
     curriculum=False,
     interpolation=False,
     fixed_delay_observation=False,
-    random_spawn_heading=False
+    random_spawn_heading=False,
+    action_repeat=None, # plase holder
 ):
 
   sim_params = locomotion_gym_config.SimulationParameters()

@@ -29,7 +29,7 @@ def experiment():
     device = torch.device("cuda:{}".format(args.device) if args.cuda else "cpu")
     params["env"]["env_build"]["enable_rendering"] = False
     params["env"]["env_build"]["terrain_type"] = "random_blocks_sparse_and_heightfield"
-    HRLWrapper.set_repeat(args.action_repeat)
+    params["env"]["env_build"]["action_repeat"]=args.action_repeat
     env = get_subprocvec_env(
         params["env_name"],
         params["env"],
