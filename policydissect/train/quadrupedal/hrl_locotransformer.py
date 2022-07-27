@@ -41,8 +41,8 @@ def experiment():
     eval_env = get_subprocvec_env(
         params["env_name"],
         params["env"],
-        max(2, args.vec_env_nums),
-        max(2, args.proc_nums),
+        1,
+        1,
         env_func=get_single_hrl_env
     )
 
