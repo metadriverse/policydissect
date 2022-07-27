@@ -231,6 +231,9 @@ setup(
         "protobuf==3.20",
         "tensorflow==2.3.1",
         "gym",
-        "pygame"
+        "pygame",
+        "tensorboardX",
+        "tabulate",
+        ""
     ],
 )

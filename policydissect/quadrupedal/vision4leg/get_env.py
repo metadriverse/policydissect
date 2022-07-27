@@ -129,14 +129,15 @@ def get_vec_env(env_id, env_param, vec_env_nums):
     return vec_env
 
 
-def get_subprocvec_env(env_id, env_param, vec_env_nums, proc_nums):
+def get_subprocvec_env(env_id, env_param, vec_env_nums, proc_nums, env_func=None):
+  env_func = env_func or get_single_env
   if isinstance(env_param, list):
     assert vec_env_nums % len(env_param) == 0
     env_args = [
       [env_id, env_sub_params] for env_sub_params in env_param
     ] * (vec_env_nums // len(env_param))
     vec_env = SubProcVecEnv(
-      proc_nums, vec_env_nums, [get_single_env] * vec_env_nums,
+      proc_nums, vec_env_nums, [env_func] * vec_env_nums,
       env_args
     )
 
@@ -149,7 +150,7 @@ def get_subprocvec_env(env_id, env_param, vec_env_nums, proc_nums):
 
   else:
     vec_env = SubProcVecEnv(
-      proc_nums, vec_env_nums, get_single_env,
+      proc_nums, vec_env_nums, env_func,
       [env_id, env_param])
 
     if "obs_norm" in env_param and env_param["obs_norm"]:

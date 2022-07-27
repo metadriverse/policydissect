@@ -2,12 +2,12 @@ import argparse
 import os.path
 import pickle
 
-import pygame
 import numpy as np
 import pybullet
 
 from policydissect.quadrupedal.vision4leg.get_env import get_env
-from policydissect.utils.legged_utils import params, seed_env
+from policydissect.utils.legged_utils import seed_env
+from policydissect.utils.legged_config import params
 from policydissect.utils.policy import ppo_inference_torch
 from policydissect.weights import weights_path
 
@@ -41,7 +41,6 @@ LEGGED_MAP = {"Turn Left": {3: [(239, 85)]},
               "Stop": {1: [(76, -70)]}}
 
 if __name__ == "__main__":
-    pygame.init()
     parser = argparse.ArgumentParser()
     parser.add_argument('--hard', action="store_true")
     parser.add_argument('--seed', default=3, type=int)
