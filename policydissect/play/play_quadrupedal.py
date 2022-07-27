@@ -24,15 +24,15 @@ def update_render(env):
 def legged_control():
     global legged_robot_command
     keys = pybullet.getKeyboardEvents()
-    if ord("w") in keys and keys[ord("w")] & pybullet.KEY_IS_DOWN:
+    if ord("w") in keys and keys[ord("w")] & pybullet.KEY_WAS_TRIGGERED:
         legged_robot_command = "Forward"
-    elif ord("d") in keys and keys[ord("d")] & pybullet.KEY_IS_DOWN:
+    elif ord("d") in keys and keys[ord("d")] & pybullet.KEY_WAS_TRIGGERED:
         legged_robot_command = "Turn Right"
-    elif ord("a") in keys and keys[ord("a")] & pybullet.KEY_IS_DOWN:
+    elif ord("a") in keys and keys[ord("a")] & pybullet.KEY_WAS_TRIGGERED:
         legged_robot_command = "Turn Left"
-    elif ord("s") in keys and keys[ord("s")] & pybullet.KEY_IS_DOWN:
+    elif ord("s") in keys and keys[ord("s")] & pybullet.KEY_WAS_TRIGGERED:
         legged_robot_command = "Stop"
-    elif ord("r") in keys and keys[ord("r")] & pybullet.KEY_IS_DOWN:
+    elif ord("r") in keys and keys[ord("r")] & pybullet.KEY_WAS_TRIGGERED:
         legged_robot_command = "Reset"
 
 
