@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from torch import nn as nn
 
-import torchrl.algo.utils as atu
+import policydissect.quadrupedal.torchrl.algo.utils as atu
 from .dqn import DQN
 
 

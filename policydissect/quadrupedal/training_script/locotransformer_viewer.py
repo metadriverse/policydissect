@@ -5,8 +5,8 @@ import pybullet
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-import torchrl.networks as networks
-import torchrl.policies as policies
+import policydissect.quadrupedal.torchrl.networks as networks
+import policydissect.quadrupedal.torchrl.policies as policies
 from gym.wrappers.monitoring.video_recorder import VideoRecorder
 import gym.wrappers as wrappers
 import gym

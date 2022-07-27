@@ -1,5 +1,6 @@
-import sys
 import os
+import time
+import sys
 import os.path as osp
 import numpy as np
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
@@ -8,46 +9,31 @@ from policydissect.quadrupedal.torchrl.env import get_vec_env
 import random
 import gym
 from policydissect.quadrupedal.torchrl.collector.on_policy import VecOnPolicyCollector
-from policydissect.quadrupedal.torchrl.algo import PPO
-import torchrl.networks as networks
-import torchrl.policies as policies
+from policydissect.quadrupedal.torchrl.algo import PPO, VMPO
+import policydissect.quadrupedal.torchrl.networks as networks
+import policydissect.quadrupedal.torchrl.policies as policies
 from policydissect.quadrupedal.torchrl.utils import Logger
 from policydissect.quadrupedal.torchrl.replay_buffers.on_policy import OnPolicyReplayBuffer
 from policydissect.quadrupedal.torchrl.utils import get_params
 from policydissect.quadrupedal.torchrl.utils import get_args
 import torch
 
-# from
 
 args = get_args()
 params = get_params(args.config)
-# params["env"]["env_build"]["enable_rendering"] = True
 
 
 def experiment(args):
 
   device = torch.device(
     "cuda:{}".format(args.device) if args.cuda else "cpu")
-
+  params["env"]["env_build"]["enable_rendering"] = False
   env = get_subprocvec_env(
     params["env_name"],
     params["env"],
     args.vec_env_nums,
     args.proc_nums
   )
-  # eval_env = get_subprocvec_env(
-  #     params["env_name"],
-  #     params["env"],
-  #     2,
-  #     2
-  # )
-
-  # env = get_vec_env(
-  #     params["env_name"],
-  #     params["env"],
-  #     args.vec_env_nums,
-  #     # 4
-  # )
   eval_env = get_subprocvec_env(
     params["env_name"],
     params["env"],
@@ -90,20 +76,32 @@ def experiment(args):
   params['net']['base_type'] = networks.MLPBase
   # params['net']['activation_func'] = torch.nn.Tanh
 
-  pf = policies.GaussianContPolicyBasicBias(
-    input_shape=env.observation_space.shape[0],
+  encoder = networks.LocoTransformerEncoder(
+    in_channels=env.image_channels,
+    state_input_dim=env.observation_space.shape[0],
+    **params["encoder"]
+  )
+
+  pf = policies.GaussianContPolicyLocoTransformer(
+    encoder=encoder,
+    state_input_shape=env.observation_space.shape[0],
+    visual_input_shape=(env.image_channels, 64, 64),
     output_shape=env.action_space.shape[0],
-    **params['net'],
-    **params['policy']
+    **params["net"],
+    **params["policy"]
   )
-  vf = networks.Net(
-    input_shape=env.observation_space.shape,
+
+  vf = networks.LocoTransformer(
+    encoder=encoder,
+    state_input_shape=env.observation_space.shape[0],
+    visual_input_shape=(env.image_channels, 64, 64),
     output_shape=1,
-    **params['net']
+    **params["net"]
   )
-  vf.base = pf.base
+
   print(pf)
   print(vf)
+
   params['general_setting']['collector'] = VecOnPolicyCollector(
     vf, env=env, eval_env=eval_env, pf=pf,
     replay_buffer=replay_buffer, device=device,

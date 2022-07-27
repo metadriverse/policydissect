@@ -4,8 +4,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchrl.networks.init as init
-import torchrl.networks.base as base
+import policydissect.quadrupedal.torchrl.networks.init as init
+import policydissect.quadrupedal.torchrl.networks.base as base
 
 
 class ZeroNet(nn.Module):

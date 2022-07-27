@@ -3,7 +3,7 @@ import time
 from collections import deque
 import numpy as np
 import torch
-import torchrl.algo.utils as atu
+import policydissect.quadrupedal.torchrl.algo.utils as atu
 import gym
 import os
 import os.path as osp

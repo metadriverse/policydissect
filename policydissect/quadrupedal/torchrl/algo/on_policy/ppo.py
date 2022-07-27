@@ -4,7 +4,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 from .a2c import A2C
-import torchrl.algo.utils as atu
+import policydissect.quadrupedal.torchrl.algo.utils as atu
 
 
 class PPO(A2C):

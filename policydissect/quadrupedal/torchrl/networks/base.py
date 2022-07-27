@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-import torchrl.networks.init as init
+import policydissect.quadrupedal.torchrl.networks.init as init
 
 
 class MLPBase(nn.Module):

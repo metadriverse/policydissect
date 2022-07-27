@@ -22,7 +22,7 @@ from policydissect.quadrupedal.vision4leg.envs.sensors import sensor
 from policydissect.quadrupedal.vision4leg.robots import robot_config
 import pybullet as pyb
 import cv2
-import vision4leg.envs.pybullet_client as bullet_client
+import policydissect.quadrupedal.vision4leg.envs.pybullet_client as bullet_client
 import pybullet  # pytype: disable=import-error
 import numpy as np
 from gym.utils import seeding

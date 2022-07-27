@@ -7,7 +7,7 @@ from torch.nn.utils.convert_parameters import vector_to_parameters
 from torch.nn.utils.convert_parameters import parameters_to_vector
 import numpy as np
 from .a2c import A2C
-import torchrl.algo.utils as atu
+import policydissect.quadrupedal.torchrl.algo.utils as atu
 
 
 class TRPO(A2C):

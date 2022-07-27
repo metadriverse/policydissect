@@ -10,8 +10,8 @@ import random
 import gym
 from policydissect.quadrupedal.torchrl.collector.on_policy import VecOnPolicyCollector
 from policydissect.quadrupedal.torchrl.algo import PPO, VMPO
-import torchrl.networks as networks
-import torchrl.policies as policies
+import policydissect.quadrupedal.torchrl.networks as networks
+import policydissect.quadrupedal.torchrl.policies as policies
 from policydissect.quadrupedal.torchrl.utils import Logger
 from policydissect.quadrupedal.torchrl.replay_buffers.on_policy import OnPolicyReplayBuffer
 from policydissect.quadrupedal.torchrl.utils import get_params

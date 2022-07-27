@@ -5,7 +5,7 @@ import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
 from .a2c import A2C
-import torchrl.algo.utils as atu
+import policydissect.quadrupedal.torchrl.algo.utils as atu
 
 
 class VMPO(A2C):
