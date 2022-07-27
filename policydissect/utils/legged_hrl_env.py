@@ -1,4 +1,5 @@
 import argparse
+import sys
 import os
 import os.path
 import pickle
@@ -35,7 +36,14 @@ class HRLWrapper(BaseWrapper):
         self._actions = ["Forward", "Turn Left", "Turn Right", "Stop"]
         self.last_o = None
 
+    def need_image(self):
+        self.env.env.env.env.env.env.env._gym_env.get_image_interval = 1
+
+    def no_image(self):
+        self.env.env.env.env.env.env.env._gym_env.get_image_interval = 10000000000
+
     def reset(self, **kwargs):
+        self.need_image()
         ret = super(HRLWrapper, self).reset(**kwargs)
         self.last_o = ret[:93]
         return ret
@@ -52,8 +60,12 @@ class HRLWrapper(BaseWrapper):
         else:
             raise ValueError("out of bound")
         command = self._actions[action]
-        for _ in range(self.REPEAT):
+        for i in range(self.REPEAT):
             action = ppo_inference_torch(self.policy_weights, self.last_o, self.LEGGED_MAP, command)
+            if i==self.REPEAT -1:
+                self.need_image()
+            else:
+                self.no_image()
             o, r, d, i = super(HRLWrapper, self).step(action)
             self.last_o = o[:93]
         return o, r, d, i
@@ -84,7 +96,7 @@ if __name__ == "__main__":
     seed = args.seed
     seed_env(env, seed)
     env = HRLWrapper(env)
-    env.REPEAT = 50
+    env.REPEAT = 10
     env.reset()
     for command in [1, 0, 2, 3, 1, 0, 2, 3, ]:
         print(env._actions[command])
