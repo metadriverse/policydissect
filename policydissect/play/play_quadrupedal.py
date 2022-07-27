@@ -2,7 +2,7 @@ import argparse
 import os.path
 import pickle
 
-import keyboard
+import pygame
 import numpy as np
 import pybullet
 
@@ -21,17 +21,18 @@ def update_render(env):
                               replaceItemUniqueId=True)
 
 
-def legged_control(event):
+def legged_control():
     global legged_robot_command
-    if event.event_type == "down" and event.name == "w":
+    keys = pybullet.getKeyboardEvents()
+    if ord("w") in keys and keys[ord("w")] & pybullet.KEY_IS_DOWN:
         legged_robot_command = "Forward"
-    elif event.event_type == "down" and event.name == "d":
+    elif ord("d") in keys and keys[ord("d")] & pybullet.KEY_IS_DOWN:
         legged_robot_command = "Turn Right"
-    elif event.event_type == "down" and event.name == "a":
+    elif ord("a") in keys and keys[ord("a")] & pybullet.KEY_IS_DOWN:
         legged_robot_command = "Turn Left"
-    elif event.event_type == "down" and event.name == "s":
+    elif ord("s") in keys and keys[ord("s")] & pybullet.KEY_IS_DOWN:
         legged_robot_command = "Stop"
-    elif event.event_type == "down" and event.name == "r":
+    elif ord("r") in keys and keys[ord("r")] & pybullet.KEY_IS_DOWN:
         legged_robot_command = "Reset"
 
 
@@ -40,8 +41,7 @@ LEGGED_MAP = {"Turn Left": {3: [(239, 85)]},
               "Stop": {1: [(76, -70)]}}
 
 if __name__ == "__main__":
-
-    keyboard.hook(legged_control)
+    pygame.init()
     parser = argparse.ArgumentParser()
     parser.add_argument('--hard', action="store_true")
     parser.add_argument('--seed', default=3, type=int)
@@ -74,6 +74,7 @@ if __name__ == "__main__":
 
     o = env.reset()
     while True:
+        legged_control()
         if legged_robot_command == "Reset":
             o = env.reset()
             legged_robot_command = "Forward"

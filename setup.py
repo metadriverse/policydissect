@@ -223,7 +223,6 @@ setup(
     name="policydissect",
     install_requires=[
         "metadrive-simulator==0.2.5.1",
-        "keyboard",
         "yapf",
         "toolz",
         'numpy',
@@ -232,5 +231,6 @@ setup(
         "protobuf==3.20",
         "tensorflow==2.3.1",
         "gym",
+        "pygame"
     ],
 )
