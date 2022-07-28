@@ -81,7 +81,7 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
         reward = infos["step_reward"] if self.use_step_reward else 1
         if infos["out_of_road"] or infos["crash_vehicle"] or infos["crash_object"]:
             reward -= 1 * self.action_repeat if self.use_step_reward else 1
-        if command=="Brake":
+        if self.command=="Brake":
             reward /= 2
         return np.concatenate([o, np.eye(4)[int(ori_action)]], axis=-1), reward, done, infos
 
