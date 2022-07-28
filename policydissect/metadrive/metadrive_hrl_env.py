@@ -30,6 +30,12 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
         else:
             self.crash_done = False
 
+        if "crash_penalty" in config:
+            self.crash_penalty = config["crash_penalty"]
+            config.pop("crash_penalty")
+        else:
+            self.crash_penalty = 1
+
         default_config = dict(
             use_render=False,
             start_seed=500,
@@ -48,7 +54,8 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
     @property
     def observation_space(self):
-        return gym.spaces.Box(-1, 1, (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + 4,), dtype=np.float64)
+        return gym.spaces.Box(-1, 1, (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + 4,),
+                              dtype=np.float64)
 
     @property
     def action_space(self) -> gym.Space:
@@ -80,8 +87,8 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
             done |= infos["crash_vehicle"] or infos["crash_object"] or infos["crash"]
         reward = infos["step_reward"] if self.use_step_reward else 1
         if infos["out_of_road"] or infos["crash_vehicle"] or infos["crash_object"]:
-            reward -= 1 * self.action_repeat if self.use_step_reward else 1
-        if self.command=="Brake":
+            reward = (-1 * self.action_repeat if self.use_step_reward else -self.crash_penalty)
+        if self.command == "Brake" and reward > 0:
             reward /= 2
         return np.concatenate([o, np.eye(4)[int(ori_action)]], axis=-1), reward, done, infos
 
@@ -139,16 +146,18 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
 if __name__ == "__main__":
     env = HRLSafeMetaDriveEnv(
-        config={"use_render": False, "manual_control": True, "use_step_reward": False, "crash_done": True})
+        config={"use_render": True, "manual_control": True, "use_step_reward": False, "crash_done": False})
     env.reset()
     print(env.observation_space)
-    actions = [1, 2, 0, 3]
+    actions = [2]
     while True:
         for action in actions:
             print(env.actions[action])
             o, r, d, i = env.step(action)
             assert env.observation_space.contains(o)
-            print(o[-4:], r, d)
+            print(o[-4:], r, d, i["episode_length"])
             if d:
+                print(i["max_step"])
+                print("reset")
                 env.reset()
                 break
