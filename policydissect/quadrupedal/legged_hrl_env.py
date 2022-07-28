@@ -9,12 +9,11 @@ import pybullet
 from gym.spaces import Box
 
 from policydissect.quadrupedal.torchrl.env.base_wrapper import BaseWrapper
-from policydissect.utils.legged_utils import get_single_hrl_env
-from policydissect.utils.legged_config import hrl_param
-from policydissect.utils.legged_utils import seed_env
-from policydissect.utils.policy import ppo_inference_torch
+from policydissect.quadrupedal.legged_utils import get_single_hrl_env
+from policydissect.quadrupedal.legged_config import hrl_param
+from policydissect.quadrupedal.legged_utils import seed_env
 from policydissect.weights import weights_path
-from policydissect.utils.legged_utils import ControllableMLP
+from policydissect.quadrupedal.legged_utils import ControllableMLP
 
 
 class HRLWrapper(BaseWrapper):

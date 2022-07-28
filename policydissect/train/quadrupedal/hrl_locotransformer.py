@@ -5,7 +5,7 @@ import sys
 
 import numpy as np
 
-from policydissect.utils.legged_utils import get_single_hrl_env
+from policydissect.quadrupedal.legged_utils import get_single_hrl_env
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../quadrupedal"))
 from policydissect.quadrupedal.vision4leg.get_env import get_subprocvec_env
@@ -17,9 +17,8 @@ import policydissect.quadrupedal.torchrl.policies as policies
 from policydissect.quadrupedal.torchrl.utils import Logger
 from policydissect.quadrupedal.torchrl.replay_buffers.on_policy import OnPolicyReplayBuffer
 from policydissect.quadrupedal.torchrl.utils import get_args
-from policydissect.utils.legged_config import hrl_param
+from policydissect.quadrupedal.legged_config import hrl_param
 import torch
-from policydissect.utils.legged_hrl_env import HRLWrapper
 
 args = get_args()
 

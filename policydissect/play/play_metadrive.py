@@ -1,7 +1,7 @@
 import numpy as np
 from metadrive.examples.ppo_expert.numpy_expert import ckpt_path
 
-from policydissect.utils.metadrive_env import MetaDriveEnv
+from policydissect.metadrive.metadrive_env import MetaDriveEnv
 from policydissect.utils.policy import ppo_inference_tf
 
 # neuron at layer 0, index 123 is for lateral control

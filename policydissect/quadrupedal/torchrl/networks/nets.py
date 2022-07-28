@@ -1,12 +1,9 @@
 import copy
-import math
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import policydissect.quadrupedal.torchrl.networks.init as init
-import policydissect.quadrupedal.torchrl.networks.base as base
-import policydissect.utils.legged_utils
+import policydissect.quadrupedal.legged_utils
 
 
 class ZeroNet(nn.Module):
@@ -296,7 +293,7 @@ class ImpalaEncoderProjResidualActor(nn.Module):
 
     self.activation_func = activation_func
 
-    self.base = policydissect.utils.legged_utils.ControllableMLP(
+    self.base = policydissect.quadrupedal.legged_utils.ControllableMLP(
       input_shape=state_input_shape,
       hidden_shapes=state_hidden_shapes,
       add_ln=add_ln, activation_func=activation_func, **kwargs
@@ -648,7 +645,7 @@ class ImpalaMixResidualActor(nn.Module):
 
     self.activation_func = activation_func
 
-    self.base = policydissect.utils.legged_utils.ControllableMLP(
+    self.base = policydissect.quadrupedal.legged_utils.ControllableMLP(
       input_shape=state_input_shape,
       hidden_shapes=state_hidden_shapes,
       add_ln=add_ln, activation_func=activation_func,

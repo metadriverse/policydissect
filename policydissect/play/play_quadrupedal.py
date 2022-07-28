@@ -6,8 +6,8 @@ import numpy as np
 import pybullet
 
 from policydissect.quadrupedal.vision4leg.get_env import get_env
-from policydissect.utils.legged_utils import seed_env
-from policydissect.utils.legged_config import params
+from policydissect.quadrupedal.legged_utils import seed_env
+from policydissect.quadrupedal.legged_config import params
 from policydissect.utils.policy import ppo_inference_torch
 from policydissect.weights import weights_path
 
