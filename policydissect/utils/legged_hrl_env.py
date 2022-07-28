@@ -1,4 +1,5 @@
 import argparse
+import torch
 import os
 import os.path
 import pickle
@@ -8,11 +9,12 @@ import pybullet
 from gym.spaces import Box
 
 from policydissect.quadrupedal.torchrl.env.base_wrapper import BaseWrapper
-from policydissect.quadrupedal.vision4leg.get_env import get_env
+from policydissect.utils.legged_utils import get_single_hrl_env
 from policydissect.utils.legged_config import hrl_param
 from policydissect.utils.legged_utils import seed_env
 from policydissect.utils.policy import ppo_inference_torch
 from policydissect.weights import weights_path
+from policydissect.utils.legged_utils import ControllableMLP
 
 
 class HRLWrapper(BaseWrapper):
@@ -32,7 +34,10 @@ class HRLWrapper(BaseWrapper):
         self.REPEAT = repeat
         with open(os.path.join(weights_path, "quadrupedal_obs_normalizer.pkl"), 'rb') as f:
             env._obs_normalizer = pickle.load(f)
-        self.policy_weights = np.load(os.path.join(weights_path, "quadrupedal.npz"))
+
+        policy_weights = np.load(os.path.join(weights_path, "quadrupedal.npz"))
+        self.policy_weights = policy_weights
+        self.policy = ControllableMLP(policy_weights, self.LEGGED_MAP)
         self.action_space = Box(low=-1., high=1., shape=(1,))
         self._actions = ["Forward", "Turn Left", "Turn Right", "Stop"]
         self.last_o = None
@@ -61,15 +66,19 @@ class HRLWrapper(BaseWrapper):
         else:
             raise ValueError("out of bound")
         command = self._actions[action]
+        print(command)
+        total_r = 0
         for i in range(self.REPEAT):
-            action = ppo_inference_torch(self.policy_weights, self.last_o, self.LEGGED_MAP, command)
+            action = self.policy(torch.from_numpy(self.last_o), command, False).detach().numpy()
+            # action= ppo_inference_torch(self.policy_weights, self.last_o, self.LEGGED_MAP, command)
             if i == self.REPEAT - 1:
                 self.need_image()
             else:
                 self.no_image()
             o, r, d, i = super(HRLWrapper, self).step(action)
+            total_r += r
             self.last_o = o[:93]
-        return o, r, d, i
+        return o, total_r, d, i
 
 
 if __name__ == "__main__":
@@ -80,9 +89,10 @@ if __name__ == "__main__":
     params = hrl_param
     params["env"]["env_build"]["enable_rendering"] = True
     params["env"]["env_build"]["terrain_type"] = "plane"
+    params["env"]["env_build"]["action_repeat"] = 100
     # params["env"]["env_build"]["terrain_type"] = "random_blocks_sparse_and_heightfield"
 
-    env = get_env(
+    env = get_single_hrl_env(
         params['env_name'],
         params['env'])
 

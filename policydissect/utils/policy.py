@@ -48,7 +48,10 @@ def ppo_inference_torch(weights, obs,
                         conditional_control_map,
                         command,
                         deterministic=False, activation="tanh",
-                        tanh_action=True):
+                        tanh_action=True,
+                        print_value=False):
+    if print_value:
+        print("===== numpy =====")
     step_activation_value = []
     activate_func = relu if activation == "relu" else np.tanh
     obs = obs.reshape(1, -1)
@@ -61,6 +64,8 @@ def ppo_inference_torch(weights, obs,
             x = activate_func(x)
             control_neuron_activation(x, layer_index, conditional_control_map, command, legged=True)
             step_activation_value.append({"after_tanh": [x], "before_tanh": [x]})
+        if print_value:
+            print(layer_index, ":", x)
 
     x = x.reshape(-1)
     mean, log_std = np.tanh(x) if tanh_action else x, weights["logstd"]
