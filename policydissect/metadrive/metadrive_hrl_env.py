@@ -99,7 +99,7 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
         ret = {}
 
         ret["step_reward"] = self._sum_info("step_reward")
-        ret["cost"] = self._sum_info("cost")
+        ret["cost"] = 0
         ret["step_energy"] = self._sum_info("step_energy")
 
         ret["velocity"] = self._mean_info("velocity")
@@ -119,6 +119,11 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
         ret["arrive_dest"] = self._or_info("arrive_dest")
         ret["max_step"] = self._or_info("max_step")
         ret["crash"] = self._or_info("crash")
+
+        # fix cost stat to adapt original setting
+        ret["cost"] += self.config["crash_vehicle_cost"] if ret["crash_vehicle"] else 0
+        ret["cost"] += self.config["crash_object_cost"] if ret["crash_object"] else 0
+        ret["cost"] += self.config["out_of_road_cost"] if ret["out_of_road"] else 0
 
         return ret
 
