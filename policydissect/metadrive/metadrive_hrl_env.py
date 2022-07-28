@@ -42,6 +42,7 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
             accident_prob=0.8,
             traffic_density=0.1,
             environment_num=20,
+            horizon=1000,
             vehicle_config=dict(
                 lidar=dict(num_lasers=240, distance=50, num_others=4, gaussian_noise=0.0, dropout_prob=0.0)))
         default_config.update(config)
@@ -82,7 +83,9 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
             if self.config["use_render"]:
                 self.render(text={"command": self.command, "step:": self.engine.episode_step})
         infos = self._merge_info()
-        done = infos["arrive_dest"] or infos["out_of_road"]
+        done = infos["arrive_dest"] or infos["out_of_road"] or self.engine.episode_step > self.config["horizon"]
+        if self.engine.episode_step > self.config["horizon"]:
+            infos["max_step"] = True
         if self.crash_done:
             done |= infos["crash_vehicle"] or infos["crash_object"] or infos["crash"]
         reward = infos["step_reward"] if self.use_step_reward else 1
