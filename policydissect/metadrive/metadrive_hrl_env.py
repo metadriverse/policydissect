@@ -11,9 +11,15 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
                                           "Right Lane Change": {0: [(123, -8)]},
                                           "Brake": {0: [(249, -20)]}}
 
-    def __init__(self, config, action_repeat):
+    def __init__(self, config=None):
+        config = config or {}
+        if "action_repeat" in config:
+            action_repeat = config["action_repeat"]
+            config.pop("action_repeat")
+        else:
+            action_repeat = 10
         default_config = dict(
-            use_render=True,
+            use_render=False,
             start_seed=500,
             accident_prob=0.8,
             traffic_density=0.1,
@@ -47,14 +53,20 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
                                       self.command)
             o, r, d, i = super(HRLSafeMetaDriveEnv, self).step(action)
             total_r += r
+            if i["crash_vehicle"]:
+                r -= 2
+            if i["crash_object"]:
+                r -= 2
             self.last_o = o
             if self.config["use_render"]:
-                self.render(text={"command": env.command, "step:": env.engine.episode_step})
+                self.render(text={"command": self.command, "step:":self.engine.episode_step})
+        if "takeover" not in i:
+            i["takeover"] = False
         return o, total_r, d, i
 
 
 if __name__ == "__main__":
-    env = HRLSafeMetaDriveEnv(config={"use_render": True}, action_repeat=50)
+    env = HRLSafeMetaDriveEnv(config={"use_render": True, "manual_control": True})
     env.reset()
     actions = [1, 2, 0, 3]
     while True:
