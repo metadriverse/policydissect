@@ -48,7 +48,7 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
     @property
     def observation_space(self):
-        return gym.spaces.Box(-1, 1, (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + 4,))
+        return gym.spaces.Box(-1, 1, (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + 4,), dtype=np.float64)
 
     @property
     def action_space(self) -> gym.Space:
@@ -137,7 +137,7 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
 if __name__ == "__main__":
     env = HRLSafeMetaDriveEnv(
-        config={"use_render": True, "manual_control": True, "use_step_reward": True, "crash_done": True})
+        config={"use_render": False, "manual_control": True, "use_step_reward": True, "crash_done": True})
     env.reset()
     print(env.observation_space)
     actions = [1, 2, 0, 3]
