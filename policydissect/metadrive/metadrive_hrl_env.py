@@ -139,12 +139,13 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
 if __name__ == "__main__":
     env = HRLSafeMetaDriveEnv(
-        config={"use_render": False, "manual_control": True, "use_step_reward": True, "crash_done": True})
+        config={"use_render": False, "manual_control": True, "use_step_reward": False, "crash_done": True})
     env.reset()
     print(env.observation_space)
     actions = [1, 2, 0, 3]
     while True:
         for action in actions:
+            print(env.actions[action])
             o, r, d, i = env.step(action)
             assert env.observation_space.contains(o)
             print(o[-4:], r, d)
