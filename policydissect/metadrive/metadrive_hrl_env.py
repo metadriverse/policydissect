@@ -92,27 +92,26 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
                 self.render(text={"command": self.command, "step:": self.engine.episode_step})
         infos = self._merge_info()
         done = infos["arrive_dest"] or infos["out_of_road"] or self.engine.episode_step > self.config["horizon"]
+        if self.crash_done:
+            done |= infos["crash_vehicle"] or infos["crash_object"] or infos["crash"]
         reward = self._get_reward(infos, done)
         return np.concatenate([o, np.eye(self.action_space.n)[int(ori_action)]], axis=-1), reward, done, infos
 
-    def _get_reward(self, infos, done):
-        cp = list(self.observations.values())[0].cloud_points
-        front_dist = np.exp(max(cp[: 2] + cp[-2:])) - 1
-        print(front_dist)
-        reward = front_dist
-        # if self.engine.episode_step > self.config["horizon"]:
-        #     infos["max_step"] = True
-        # if self.crash_done:
-        #     done |= infos["crash_vehicle"] or infos["crash_object"] or infos["crash"]
-        # reward = infos["step_reward"] if self.use_step_reward else 1
-        # if self.command == "Brake":
-        if self.multiply_r:
-            reward *= np.clip(self.vehicle.speed / 30, 0, 1.)
-        else:
-            reward += np.clip(self.vehicle.speed / 30, 0, 1.)
+    def _get_reward(self, infos):
+        # cp = list(self.observations.values())[0].cloud_points
+        # front_dist = np.exp(max(cp[: 2] + cp[-2:])) - 1
+        # print(front_dist)
+        # reward = front_dist
+        # if self.multiply_r:
+        #     reward *= np.clip(self.vehicle.speed / 30, 0, 1.)
+        # else:
+        #     reward += np.clip(self.vehicle.speed / 30, 0, 1.)
+        # if infos["out_of_road"] or infos["crash_vehicle"] or infos["crash_object"]:
+        #     reward = -self.crash_penalty * 2
+
+        reward = infos["step_reward"]
         if infos["out_of_road"] or infos["crash_vehicle"] or infos["crash_object"]:
             reward = -self.crash_penalty * 2
-
         return reward
 
     def _merge_info(self):
