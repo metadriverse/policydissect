@@ -94,7 +94,7 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
         done = infos["arrive_dest"] or infos["out_of_road"] or self.engine.episode_step > self.config["horizon"]
         if self.crash_done:
             done |= infos["crash_vehicle"] or infos["crash_object"] or infos["crash"]
-        reward = self._get_reward(infos, done)
+        reward = self._get_reward(infos)
         return np.concatenate([o, np.eye(self.action_space.n)[int(ori_action)]], axis=-1), reward, done, infos
 
     def _get_reward(self, infos):
