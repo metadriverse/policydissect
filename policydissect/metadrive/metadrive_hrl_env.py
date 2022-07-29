@@ -9,7 +9,7 @@ from policydissect.utils.policy import ppo_inference_tf
 class HRLSafeMetaDriveEnv(MetaDriveEnv):
     PPO_EXPERT_CONDITIONAL_CONTROL_MAP = {"Left Lane Change": {0: [(123, 8.5)]},
                                           "Right Lane Change": {0: [(123, -8)]},
-                                          "Brake": {0: [(249, -20)]}}
+                                          }
 
     def __init__(self, config=None):
         config = config or {}
@@ -55,19 +55,19 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
     @property
     def observation_space(self):
-        return gym.spaces.Box(-1, 1, (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + 4,),
+        return gym.spaces.Box(-1, 1, (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + self.action_space.n,),
                               dtype=np.float64)
 
     @property
     def action_space(self) -> gym.Space:
-        return gym.spaces.Discrete(4)
+        return gym.spaces.Discrete(3)
 
     def reset(self, *args, **kwargs):
         ret = super(MetaDriveEnv, self).reset(*args, **kwargs)
         self.last_o = ret
         self.command = "Forward"
         index = self.actions.index(self.command)
-        return np.concatenate([ret, np.eye(4)[index]], axis=-1)
+        return np.concatenate([ret, np.eye(self.action_space.n)[index]], axis=-1)
 
     def step(self, action):
         ori_action = action
@@ -85,7 +85,7 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
         infos = self._merge_info()
         done = infos["arrive_dest"] or infos["out_of_road"] or self.engine.episode_step > self.config["horizon"]
         reward = self._get_reward(infos, done)
-        return np.concatenate([o, np.eye(4)[int(ori_action)]], axis=-1), reward, done, infos
+        return np.concatenate([o, np.eye(self.action_space.n)[int(ori_action)]], axis=-1), reward, done, infos
 
     def _get_reward(self, infos, done):
         cp = list(self.observations.values())[0].cloud_points
@@ -163,10 +163,10 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
 if __name__ == "__main__":
     env = HRLSafeMetaDriveEnv(
-        config={"use_render": True, "manual_control": True, "use_step_reward": False, "crash_done": False})
+        config={"use_render": True, "manual_control": False, "use_step_reward": False, "crash_done": False})
     env.reset()
     print(env.observation_space)
-    actions = [2]
+    actions = [2, 0, 1]
     while True:
         for action in actions:
             print(env.actions[action])
