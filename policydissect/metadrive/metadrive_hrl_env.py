@@ -18,6 +18,13 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
             config.pop("action_repeat")
         else:
             action_repeat = 10
+
+        if "multiply_r" in config:
+            self.multiply_r = config["multiply_r"]
+            config.pop("multiply_r")
+        else:
+            self.multiply_r = False
+
         if "use_step_reward" in config:
             self.use_step_reward = config["use_step_reward"]
             config.pop("use_step_reward")
@@ -55,7 +62,8 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
 
     @property
     def observation_space(self):
-        return gym.spaces.Box(-1, 1, (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + self.action_space.n,),
+        return gym.spaces.Box(-1, 1,
+                              (super(HRLSafeMetaDriveEnv, self).observation_space.shape[0] + self.action_space.n,),
                               dtype=np.float64)
 
     @property
@@ -98,7 +106,10 @@ class HRLSafeMetaDriveEnv(MetaDriveEnv):
         #     done |= infos["crash_vehicle"] or infos["crash_object"] or infos["crash"]
         # reward = infos["step_reward"] if self.use_step_reward else 1
         # if self.command == "Brake":
-        reward += np.clip(self.vehicle.speed / 30, 0, 1.)
+        if self.multiply_r:
+            reward *= np.clip(self.vehicle.speed / 30, 0, 1.)
+        else:
+            reward += np.clip(self.vehicle.speed / 30, 0, 1.)
         if infos["out_of_road"] or infos["crash_vehicle"] or infos["crash_object"]:
             reward = -self.crash_penalty * 2
 
