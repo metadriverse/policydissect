@@ -228,6 +228,40 @@
         </div>
     </div>
 </div>
+
+<div class="section" style=" text-align: left">
+    <div class="title" id="Parkour Demo">Parkour Demo</div>
+    We trained bipedal robots in IsaacGym. Though this robot can only move forward, activating the identified primitives
+    can evoke complex behaviors like crouching, forward jumping, back-flipping and so on.
+    <div class="body">
+        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
+            <iframe width="900" height="508" src="https://www.youtube.com/embed/cqCmy-aNuD4"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+
+<div class="section" style=" text-align: left">
+    <div class="title" id="Tracking Demo">Comparison with goal-conditioned controller</div>
+    A goal-conditioned controller following a target yaw is trained in IsaacGym. For a fair comparison, we directly
+    identify the primitives related to yaw rate in this controller with the proposed method. After that, we employ
+    a PID controller can be used to decide the output of the yaw rate neuron so the neural controller can also track a
+    target yaw. Note that the explict target yaw command in the observation is set to 0 for this primitive activation
+    command tracking. The results show that the goal-conditioned control achieved by our method is compatible to the
+    explict goal-conditioned control.
+    <div class="body">
+        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
+            <iframe width="900" height="508" src="https://www.youtube.com/embed/T6qg3IYlc2A"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
 <!--<div class="section">-->
 <!--    <div class="title" id="talk">Talk</div>-->
 <!--    <div class="text">-->
@@ -294,10 +328,13 @@
     <div class="bibtex">
         <div class="text">Reference</div>
     </div>
-
     <!--    If you find this work useful in your project, please consider to cite it through:-->
     <pre>
-
+ @article{li2022human,
+  title={Human-AI Shared Control via Frequency-based Policy Dissection},
+  author={Li, Quanyi and Peng, Zhenghao and Wu, Haibin and Feng, Lan and Zhou, Bolei},
+  journal={arXiv preprint arXiv:2206.00152},
+  year={2022}}
     </pre>
     <!-- Adjust the frame size based on the demo (Every project differs). -->
 </div>
