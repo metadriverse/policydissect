@@ -1,6 +1,6 @@
 # Policy Dissection
 
-Official implementation of the paper: **Human-AI Shared Control via Frequency-based Policy Dissection** 
+[NeurIPS 2022] Official implementation of the paper: **Human-AI Shared Control via Frequency-based Policy Dissection** 
 
 [**Webpage**](https://metadriverse.github.io/policydissect/) | 
 [**Code**](https://github.com/metadriverse/policydissect) | 
@@ -17,6 +17,8 @@ The policy dissection method and training code will be updated soon.
 
 - [x] MetaDrive
 - [x] Pybullet-Quadrupedal Robot (Forked from: https://github.com/Mehooz/vision4leg.git)
+- [ ] Isaacgym-Cassie
+- [ ] Isaacgym-ANYmal
 - [ ] Gym-Walker
 - [ ] Gym-BipedalWalker
 - [ ] Gym-Ant
@@ -49,3 +51,11 @@ Also, you can collaborate with AI and challenge the hard environment consisting 
 You can change to a different environment by adding ```--seed your_seed_int_type```.
 *tips: Avoid running fast!*
 
+## Reference
+```
+@article{li2022human,
+  title={Human-AI Shared Control via Frequency-based Policy Dissection},
+  author={Li, Quanyi and Peng, Zhenghao and Wu, Haibin and Feng, Lan and Zhou, Bolei},
+  journal={arXiv preprint arXiv:2206.00152},
+  year={2022}}
+```
