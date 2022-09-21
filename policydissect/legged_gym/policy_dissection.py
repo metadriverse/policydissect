@@ -290,7 +290,7 @@ if __name__ == "__main__":
     seed_num = 10
     start_time = time.time()
 
-    path = "./scripts/forward_cassie_elu.npz"
+    path = "../weights/forward_cassie_elu.npz"
     activation_func = "elu"
     # task_name = "anymal_c_rough"
     task_name = "cassie"

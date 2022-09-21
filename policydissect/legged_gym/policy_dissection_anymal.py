@@ -290,7 +290,7 @@ if __name__ == "__main__":
     seed_num = 10
     start_time = time.time()
 
-    path = "./scripts/anymal_tanh.npz"
+    path = "../weights/anymal_tanh.npz"
     activation_func = "tanh"
     task_name = "anymal_c_flat"
     # task_name = "cassie"
