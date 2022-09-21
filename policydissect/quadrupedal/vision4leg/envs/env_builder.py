@@ -29,9 +29,9 @@ from policydissect.quadrupedal.vision4leg.envs.env_wrappers import curriculum_wr
 from policydissect.quadrupedal.vision4leg.envs.utilities import controllable_env_randomizer_from_config
 from policydissect.quadrupedal.vision4leg.envs import locomotion_gym_config
 from policydissect.quadrupedal.vision4leg.envs import locomotion_gym_env_with_rich_information
-from policydissect.quadrupedal.vision4leg.envs import locomotion_gym_mpc_env_with_rich_information
 import os
 import inspect
+
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
@@ -118,8 +118,7 @@ class RandoDirWrapper(gym.ObservationWrapper):
     def observation(self, observation):
         self.time_count_randdir += 1
         if self.dir_update_interval is not None and \
-            self.time_count_randdir % self.dir_update_interval == 0:
-
+                self.time_count_randdir % self.dir_update_interval == 0:
             self.current_angle = np.random.uniform(low=-np.pi / 2, high=np.pi / 2)
             self.current_vec = np.array([np.cos(self.current_angle), np.sin(self.current_angle)])
             self.env.task.target_vel_dir = self.current_vec
@@ -137,52 +136,51 @@ class RandoDirWrapper(gym.ObservationWrapper):
 
 
 def build_a1_ground_env(
-    motor_control_mode="POSITION",
-    z_constrain=False,
-    other_direction_penalty=0,
-    z_penalty=0,
-    clip_num=None,
-    enable_rendering=False,
-    diagonal_act=False,
-    num_action_repeat=10,
-    time_step_s=0.001,
-    add_last_action_input=False,
-    enable_action_interpolation=False,
-    enable_action_filter=False,
-    domain_randomization=False,
-    get_image=False,
-    depth_image=False,
-    depth_norm=False,
-    grayscale=True,
-    rgbd=False,
-    fric_coeff=[0.8, 0.1, 0.1],
-    terrain_type="plane",
-    alive_reward=0.1,
-    fall_reward=0,
-    target_vel=1,
-    random_init_range=0,
-    dir_update_interval=None,
-    check_contact=False,
-    random_dir=False,
-    rotate_sensor=False,
-    frame_extract=1,
-    goal=False,
-    subgoal=False,
-    goal_coeff=10,
-    subgoal_reward=None,
-    record_video=False,
-    no_displacement=False,
-    get_image_interval=1,
-    reset_frame_idx=False,
-    reset_frame_idx_each_step=False,
-    random_shape=False,
-    moving=False,
-    curriculum=False,
-    interpolation=False,
-    fixed_delay_observation=False,
-    random_spawn_heading=False
+        motor_control_mode="POSITION",
+        z_constrain=False,
+        other_direction_penalty=0,
+        z_penalty=0,
+        clip_num=None,
+        enable_rendering=False,
+        diagonal_act=False,
+        num_action_repeat=10,
+        time_step_s=0.001,
+        add_last_action_input=False,
+        enable_action_interpolation=False,
+        enable_action_filter=False,
+        domain_randomization=False,
+        get_image=False,
+        depth_image=False,
+        depth_norm=False,
+        grayscale=True,
+        rgbd=False,
+        fric_coeff=[0.8, 0.1, 0.1],
+        terrain_type="plane",
+        alive_reward=0.1,
+        fall_reward=0,
+        target_vel=1,
+        random_init_range=0,
+        dir_update_interval=None,
+        check_contact=False,
+        random_dir=False,
+        rotate_sensor=False,
+        frame_extract=1,
+        goal=False,
+        subgoal=False,
+        goal_coeff=10,
+        subgoal_reward=None,
+        record_video=False,
+        no_displacement=False,
+        get_image_interval=1,
+        reset_frame_idx=False,
+        reset_frame_idx_each_step=False,
+        random_shape=False,
+        moving=False,
+        curriculum=False,
+        interpolation=False,
+        fixed_delay_observation=False,
+        random_spawn_heading=False
 ):
-
     sim_params = locomotion_gym_config.SimulationParameters()
     sim_params.enable_rendering = enable_rendering
 
@@ -326,164 +324,6 @@ def build_a1_ground_env(
     return env
 
 
-def build_a1_ground_mpc_env(
-    motor_control_mode="POSITION",
-    z_constrain=False,
-    other_direction_penalty=0,
-    z_penalty=0,
-    clip_num=None,
-    enable_rendering=False,
-    num_action_repeat=10,
-    time_step_s=0.001,
-    enable_action_interpolation=False,
-    enable_action_filter=False,
-    domain_randomization=False,
-    get_image=False,
-    empty_image=False,
-    depth_image=False,
-    depth_norm=False,
-    grayscale=True,
-    rgbd=False,
-    fric_coeff=[0.8, 0.1, 0.1],
-    terrain_type="plane",
-    alive_reward=0.1,
-    fall_reward=0,
-    target_vel=1,
-    random_init_range=0,
-    check_contact=False,
-    random_dir=False,
-    dir_update_interval=None,
-    frame_extract=1,
-    goal=False,
-    subgoal=False,
-    policy_freq=10,
-    goal_coeff=10,
-    subgoal_reward=None,
-    record_video=False,
-    get_image_interval=1,
-    reset_frame_idx=False,
-    reset_frame_idx_each_step=False,
-    random_shape=False,
-    moving=False,
-    curriculum=False,
-    interpolation=False,
-    vision_only=False,
-):
-
-    sim_params = locomotion_gym_config.SimulationParameters()
-    sim_params.enable_rendering = enable_rendering
-
-    if motor_control_mode == "TORQUE":
-        sim_params.motor_control_mode = robot_config.MotorControlMode.TORQUE
-    elif motor_control_mode == "POSITION":
-        sim_params.motor_control_mode = robot_config.MotorControlMode.POSITION
-    else:
-        print("Use TORQUE or POSITION")
-        exit()
-
-    sim_params.reset_time = 2
-    sim_params.time_step_s = time_step_s  # 0.005
-    sim_params.num_action_repeat = num_action_repeat  # 5
-    sim_params.enable_action_interpolation = enable_action_interpolation
-    sim_params.enable_action_filter = enable_action_filter
-    sim_params.enable_clip_motor_commands = False
-
-    if subgoal:
-        sim_params.enable_hard_reset = False
-
-    # sim_params.egl_rendering = True
-    gym_config = locomotion_gym_config.LocomotionGymConfig(simulation_parameters=sim_params)
-
-    if terrain_type == "mount" or terrain_type == "hill":
-        check_contact = True
-    if goal:
-        task = goal_task.GoalTask(
-            z_constrain=z_constrain,
-            other_direction_penalty=other_direction_penalty,
-            z_penalty=z_penalty,
-            num_action_repeat=num_action_repeat * policy_freq,
-            time_step_s=time_step_s,
-            height_fall_coeff=0.2,
-            alive_reward=alive_reward,
-            fall_reward=fall_reward,
-            target_vel=target_vel,
-            check_contact=check_contact,
-            goal_coeff=goal_coeff,
-            subgoal=subgoal
-        )
-    else:
-        task = move_forward_task_mpc.MoveForwardTask(
-            z_constrain=z_constrain,
-            move_forward_coeff=1.,
-            other_direction_penalty=other_direction_penalty,
-            z_penalty=z_penalty,
-            num_action_repeat=num_action_repeat * policy_freq,
-            time_step_s=time_step_s,
-            height_fall_coeff=0.2,
-            alive_reward=alive_reward,
-            fall_reward=fall_reward,
-            target_vel=target_vel,
-            check_contact=check_contact,
-            subgoal_reward=subgoal_reward
-            # init_orientation=lc.INIT_ORIENTATION,
-        )
-    randomizers = []
-    if domain_randomization:
-        randomizer = controllable_env_randomizer_from_config.ControllableEnvRandomizerFromConfig(verbose=False)
-        randomizers.append(randomizer)
-    terrain_randomizer = a1_rg.TerrainRandomizer(
-        mesh_filename='terrain9735.obj',
-        terrain_type=a1_rg.TerrainTypeDict[terrain_type],
-        mesh_scale=[0.6, 0.3, 0.2],
-        height_range=0.1,
-        random_shape=random_shape,
-        moving=moving
-    )
-    randomizers.append(terrain_randomizer)
-
-    init_pos = None
-    init_ori = None
-    init_pos = a1_rg.QUADRUPED_INIT_POSITION[terrain_type]
-    if "mount" in terrain_type:
-        init_ori = a1_rg.QUADRUPED_INIT_ORI[terrain_type]
-    env = locomotion_gym_mpc_env_with_rich_information.LocomotionGymEnv(
-        gym_config=gym_config,
-        policy_freq=policy_freq,
-        env_randomizers=randomizers,
-        get_image=get_image,
-        empty_image=empty_image,
-        depth_image=depth_image,
-        vision_only=vision_only,
-        grayscale=grayscale,
-        rgbd=rgbd,
-        depth_norm=depth_norm,
-        fric_coeff=fric_coeff,
-        task=task,
-        random_init_range=random_init_range,
-        init_pos=init_pos,
-        init_ori=init_ori,
-        frame_extract=frame_extract,
-        record_video=record_video,
-        get_image_interval=get_image_interval,
-        reset_frame_idx=reset_frame_idx,
-        reset_frame_idx_each_step=reset_frame_idx_each_step,
-        interpolation=interpolation
-    )
-    env = observation_dictionary_to_array_wrapper.ObservationDictionaryToArrayWrapper(env)
-    if clip_num is not None:
-        env = MPCActionRestrain(env, clip_num)
-
-    if random_dir:
-        assert terrain_type == "mount" or terrain_type == "hill"
-        env = RandoDirWrapper(env, dir_update_interval=dir_update_interval)
-
-    if curriculum:
-        env = curriculum_wrapper_env.CurriculumWrapperEnv(
-            env, episode_length_start=1000, episode_length_end=2000, curriculum_steps=10000000, num_parallel_envs=8
-        )
-    return env
-
-
 if __name__ == "__main__":
     env = build_a1_ground_env(
         motor_control_mode="POSITION",
@@ -504,6 +344,7 @@ if __name__ == "__main__":
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_SEGMENTATION_MARK_PREVIEW, 0)
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_GUI, 0)
     import time
+
     c_t = time.time()
     env.reset()
     for i in range(100000000):

@@ -232,9 +232,10 @@ setup(
         "toolz",
         'numpy',
         'pybullet',
+        "librosa",
         "torch==1.10.0",
         "protobuf==3.20",
         "tensorflow==2.3.1",
-        "gym",
+        "gym==0.19.0",
     ],
 )
