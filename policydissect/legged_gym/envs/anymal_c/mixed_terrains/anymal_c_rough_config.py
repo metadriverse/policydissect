@@ -28,7 +28,7 @@
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
 
-from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
+from policydissect.legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
 
 
 class AnymalCRoughCfg(LeggedRobotCfg):
@@ -67,10 +67,10 @@ class AnymalCRoughCfg(LeggedRobotCfg):
         # decimation: Number of control action updates @ sim DT per policy DT
         decimation = 4
         use_actuator_network = True
-        actuator_net_file = "{LEGGED_GYM_ROOT_DIR}/resources/actuator_nets/anydrive_v3_lstm.pt"
+        actuator_net_file = "{LEGGED_GYM_ROOT_DIR}/legged_gym/resources/actuator_nets/anydrive_v3_lstm.pt"
 
     class asset(LeggedRobotCfg.asset):
-        file = "{LEGGED_GYM_ROOT_DIR}/resources/robots/anymal_c/urdf/anymal_c.urdf"
+        file = "{LEGGED_GYM_ROOT_DIR}/legged_gym/resources/robots/anymal_c/urdf/anymal_c.urdf"
         name = "anymal_c"
         foot_name = "FOOT"
         penalize_contacts_on = ["SHANK", "THIGH"]

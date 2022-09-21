@@ -39,8 +39,8 @@ import torch
 # from torch.tensor import Tensor
 from typing import Tuple, Dict
 
-from legged_gym.envs import LeggedRobot
-from legged_gym import LEGGED_GYM_ROOT_DIR
+from policydissect.legged_gym.envs import LeggedRobot
+from policydissect.legged_gym import LEGGED_GYM_ROOT_DIR
 from .mixed_terrains.anymal_c_rough_config import AnymalCRoughCfg
 
 

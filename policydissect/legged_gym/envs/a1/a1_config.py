@@ -28,7 +28,7 @@
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
 
-from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
+from policydissect.legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
 
 
 class A1RoughCfg(LeggedRobotCfg):
@@ -62,7 +62,7 @@ class A1RoughCfg(LeggedRobotCfg):
         decimation = 4
 
     class asset(LeggedRobotCfg.asset):
-        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/a1/urdf/a1.urdf'
+        file = '{LEGGED_GYM_ROOT_DIR}/legged_gym/resources/robots/a1/urdf/a1.urdf'
         name = "a1"
         foot_name = "foot"
         penalize_contacts_on = ["thigh", "calf"]

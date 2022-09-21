@@ -33,8 +33,8 @@ import os
 from datetime import datetime
 
 import isaacgym
-from legged_gym.envs import *
-from legged_gym.utils import get_args, export_policy_as_jit, task_registry, Logger
+from policydissect.legged_gym.envs import *
+from policydissect.legged_gym.utils import get_args, export_policy_as_jit, task_registry, Logger
 
 import torch
 

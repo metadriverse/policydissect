@@ -28,12 +28,12 @@
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
 
-from legged_gym.envs import AnymalCRoughCfg, AnymalCRoughCfgPPO
+from policydissect.legged_gym.envs import AnymalCRoughCfg, AnymalCRoughCfgPPO
 
 
 class AnymalBRoughCfg(AnymalCRoughCfg):
     class asset(AnymalCRoughCfg.asset):
-        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/anymal_b/urdf/anymal_b.urdf'
+        file = '{LEGGED_GYM_ROOT_DIR}/legged_gym/resources/robots/anymal_b/urdf/anymal_b.urdf'
         name = "anymal_b"
         foot_name = 'FOOT'
 

@@ -37,7 +37,7 @@ from isaacgym import gymtorch, gymapi, gymutil
 
 import torch
 from typing import Tuple, Dict
-from legged_gym.envs import LeggedRobot
+from policydissect.legged_gym.envs import LeggedRobot
 
 
 class Cassie(LeggedRobot):

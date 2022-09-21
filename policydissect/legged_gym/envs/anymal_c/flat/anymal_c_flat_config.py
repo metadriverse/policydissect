@@ -28,7 +28,7 @@
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
 
-from legged_gym.envs import AnymalCRoughCfg, AnymalCRoughCfgPPO
+from policydissect.legged_gym.envs import AnymalCRoughCfg, AnymalCRoughCfgPPO
 
 
 class AnymalCFlatCfg(AnymalCRoughCfg):

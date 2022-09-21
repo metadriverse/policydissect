@@ -1,20 +1,20 @@
-from legged_gym import LEGGED_GYM_ROOT_DIR
+from policydissect.legged_gym import LEGGED_GYM_ROOT_DIR
 import os
 
 import isaacgym
-from legged_gym.envs import *
-from legged_gym.utils import get_args, export_policy_as_jit, task_registry, Logger
-from legged_gym.policy_utils import ppo_inference_torch, control_neuron_activation
+from policydissect.legged_gym.envs import *
+from policydissect.legged_gym.utils import get_args, export_policy_as_jit, task_registry, Logger
+from policydissect.legged_gym.policy_utils import ppo_inference_torch, control_neuron_activation
 import numpy as np
 import torch
 import pickle
 import time
 from isaacgym import *
-from legged_gym import *
+from policydissect.legged_gym import *
 
 import numpy as np
-from legged_gym.policy_utils import ppo_inference_torch
-from legged_gym.utils import get_args, task_registry
+from policydissect.legged_gym.policy_utils import ppo_inference_torch
+from policydissect.legged_gym.utils import get_args, task_registry
 
 import os
 import librosa
