@@ -105,7 +105,6 @@ if __name__ == '__main__':
     # (479, 30) (47, 32)
     args = get_args()
     args.num_envs = 1
-
     args.task = "anymal_c_flat"
     activation = "tanh"
     play(
@@ -116,5 +115,4 @@ if __name__ == '__main__':
         model_name="anymal",
         target_heading_list=[0, 0.4, 0.9, 1.2, 0.9, 0.4, 0., -0.4, -0.9, -1.2, -0.9, -0.4, 0.],
         command_last_time=100,
-        trigger_neuron=True
-    )
+        trigger_neuron=True)

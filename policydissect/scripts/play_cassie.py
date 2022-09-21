@@ -69,7 +69,6 @@ def play(args, map, activation_func="elu", model_name=None):
     env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_SPACE, "Back Flip")
     env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_Q, "Jump")
     env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_R, "Reset")
-
     env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_D, "Right")
 
     self = env
@@ -96,8 +95,7 @@ def play(args, map, activation_func="elu", model_name=None):
         if command == "Jump" and counter == 0:
             command = "Stop"
 
-        obs[..., 10] = 0.1
-        # obs[..., -121:] = 0.
+        obs[..., 10] = 0.1 # Default Stop
         actions, _ = ppo_inference_torch(
             policy_weights, obs.clone().cpu().numpy(), map, command, activation=activation_func, deterministic=True
         )
@@ -105,28 +103,12 @@ def play(args, map, activation_func="elu", model_name=None):
         obs, _, rews, dones, infos, = env.step(actions)
         x, y, z = env.base_pos[0]
         env.set_camera((x - 3, y, 2), (x, y, z))
-        # env.render()
         counter -= 1
         if dones[0]:
             command = "Stop"
 
 
 if __name__ == '__main__':
-    cassie_elu = {"Right": {1: [(169, 10)]}, "Forward": {2: [(2, 5)]}, "z": {0: [(267, 7), (497, 10)]}}
-    z_0_cassie_elu = {
-        "Right": {
-            1: [(169, 10)]
-        },
-        "Forward": {
-            1: [(40, 28)],
-            0: [(487, -10)]
-        },
-        "z": {
-            0: [(394, 146), (170, 143), (487, -100)]
-        }
-    }
-    anymal_elu = {"Forward": {0: [(143, -15)]}}
-
     forward_cassie = {
         # 0
         "Tiptoe": {
@@ -156,11 +138,8 @@ if __name__ == '__main__':
         },
         "Stop": {}
     }
-    # (479, 30) (47, 32)
     args = get_args()
     args.num_envs = 1
-
-    # args.task = "anymal_c_rough"
     args.task = "cassie"
     activation = "elu"
     play(args, activation_func=activation, map=forward_cassie, model_name="forward_cassie")
