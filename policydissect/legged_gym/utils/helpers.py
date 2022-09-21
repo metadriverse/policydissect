@@ -159,7 +159,7 @@ def update_cfg_from_args(env_cfg, cfg_train, args):
 
 def get_args(extra_parameters=None):
     extra_parameters = extra_parameters or []
-    custom_parameters = extra_parameters+[
+    custom_parameters = extra_parameters + [
         {
             "name": "--task",
             "type": str,

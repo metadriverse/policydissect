@@ -17,14 +17,14 @@ import torch
 
 
 def follow_command(
-        args,
-        layer,
-        index,
-        activation_func="elu",
-        model_name=None,
-        target_heading_list=[0.5],
-        command_last_time=50,
-        trigger_neuron=True
+    args,
+    layer,
+    index,
+    activation_func="elu",
+    model_name=None,
+    target_heading_list=[0.5],
+    command_last_time=50,
+    trigger_neuron=True
 ):
     activation_pid_controller = ActivationPID(
         k_p=20,
@@ -156,7 +156,7 @@ def play(args, map, activation_func="elu", model_name=None):
         if command == "Jump" and counter == 0:
             command = "Stop"
 
-        obs[..., 10] = 0.1 # Default Stop
+        obs[..., 10] = 0.1  # Default Stop
         actions, _ = ppo_inference_torch(
             policy_weights, obs.clone().cpu().numpy(), map, command, activation=activation_func, deterministic=True
         )
