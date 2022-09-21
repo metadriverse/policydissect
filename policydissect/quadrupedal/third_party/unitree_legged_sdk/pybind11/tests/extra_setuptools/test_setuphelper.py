@@ -81,21 +81,15 @@ def test_simple_setup_py(monkeypatch, tmpdir, parallel, std):
     for item in tmpdir.listdir():
         print(item.basename)
 
-    assert (
-        len([f for f in tmpdir.listdir() if f.basename.startswith("simple_setup")]) == 1
-    )
+    assert (len([f for f in tmpdir.listdir() if f.basename.startswith("simple_setup")]) == 1)
     assert len(list(tmpdir.listdir())) == 4  # two files + output + build_dir
 
     (tmpdir / "test.py").write_text(
-        dedent(
-            u"""\
+        dedent(u"""\
             import simple_setup
             assert simple_setup.f(3) == 9
-            """
-        ),
+            """),
         encoding="ascii",
     )
 
-    subprocess.check_call(
-        [sys.executable, "test.py"], stdout=sys.stdout, stderr=sys.stderr
-    )
+    subprocess.check_call([sys.executable, "test.py"], stdout=sys.stdout, stderr=sys.stderr)

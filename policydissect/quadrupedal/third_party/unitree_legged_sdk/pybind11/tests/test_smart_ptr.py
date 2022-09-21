@@ -16,8 +16,7 @@ def test_smart_ptr(capture):
             m.print_object_4(o)
         assert capture == "MyObject1[{i}]\n".format(i=i) * 4
 
-    for i, o in enumerate([m.make_myobject1_1(), m.make_myobject1_2(), m.MyObject1(6), 7],
-                          start=4):
+    for i, o in enumerate([m.make_myobject1_1(), m.make_myobject1_2(), m.MyObject1(6), 7], start=4):
         print(o)
         with capture:
             if not isinstance(o, int):

@@ -10,7 +10,6 @@ SETTING_DICT = {
 
 ENV_DICT = {
     "A1MoveGround": eb.build_a1_ground_env,
-    "A1MoveGroundMPC": eb.build_a1_ground_mpc_env,
 }
 
 NO_PATH_LILST = [
@@ -18,7 +17,4 @@ NO_PATH_LILST = [
     "A1MoveGroundMPC",
 ]
 
-TIMELIMIT_DICT = {
-    "A1MoveGround": 1000,
-    "A1MoveGroundMPC": 1000
-}
+TIMELIMIT_DICT = {"A1MoveGround": 1000, "A1MoveGroundMPC": 1000}

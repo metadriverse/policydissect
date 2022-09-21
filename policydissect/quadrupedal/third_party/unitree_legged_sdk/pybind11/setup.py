@@ -15,9 +15,7 @@ import tempfile
 import setuptools.command.sdist
 
 DIR = os.path.abspath(os.path.dirname(__file__))
-VERSION_REGEX = re.compile(
-    r"^\s*#\s*define\s+PYBIND11_VERSION_([A-Z]+)\s+(.*)$", re.MULTILINE
-)
+VERSION_REGEX = re.compile(r"^\s*#\s*define\s+PYBIND11_VERSION_([A-Z]+)\s+(.*)$", re.MULTILINE)
 
 # PYBIND11_GLOBAL_SDIST will build a different sdist, with the python-headers
 # files, and the sys.prefix files (CMake and headers).
@@ -44,9 +42,7 @@ with open("include/pybind11/detail/common.h") as f:
     matches = dict(VERSION_REGEX.findall(f.read()))
 cpp_version = "{MAJOR}.{MINOR}.{PATCH}".format(**matches)
 if version != cpp_version:
-    msg = "Python version {} does not match C++ version {}!".format(
-        version, cpp_version
-    )
+    msg = "Python version {} does not match C++ version {}!".format(version, cpp_version)
     raise RuntimeError(msg)
 
 
