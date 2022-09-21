@@ -1,9 +1,3 @@
-1. pip3 install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113
-   -f https://download.pytorch.org/whl/cu113/torch_stable.html
-2. at isaacgym pip install -e .
-3. install rsl_rl and legged_gym
-4. pip install pygame, tensorboard, setuptools==50.0.0
-
 # Policy Dissection
 
 [NeurIPS 2022] Official implementation of the paper: **Human-AI Shared Control via Frequency-based Policy Dissection**
@@ -56,17 +50,17 @@ For playing with agents trained in IsaacGym, follow the instructions below to in
 
 ### MetaDrive
 
-Run```python policydissect/play/play_metadriv.py``` to collaborate with the AI driver.
+Run```python policydissect/scripts/play_metadriv.py``` to collaborate with the AI driver.
 Press ```w```,```a```,```s```,```d``` for triggering lane following, left/right lane changing and braking, and
 ```r``` for resetting the environment.
 
 ### Quadrupedal Robot
 
 The quadrupedal robot is trained with the code provided by https://github.com/Mehooz/vision4leg.git.
-For playing with legged robot, run```python policydissect/play/play_quadrupedal.py```.
+For playing with legged robot, run```python policydissect/scripts/play_quadrupedal.py```.
 Press ```w```,```a```,```s```,```d``` for changing the moving direction. and ```r``` for reset.
 Also, you can collaborate with AI and challenge the hard environment consisting of obstacles and challenging terrains by
-running ```python policydissect/play/play_quadrupedal.py --hard```
+running ```python policydissect/scripts/play_quadrupedal.py --hard```
 You can change to a different environment by adding ```--seed your_seed_int_type```.
 *tips: Avoid running fast!*
 
