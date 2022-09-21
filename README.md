@@ -9,6 +9,8 @@
 
 [comment]: <> ([**Poster**]&#40;https://github.com/decisionforce/HACO/blob/main/docs/iclr_poster.pdf&#41; )
 
+![alt text](https://github.com/metadriverse/policydissect/blob/main/docs/assets/overview.png?raw=true&)
+
 Currently, we provide some interactive neural controllers enabled by *Policy Dissection*. 
 The policy dissection method and training code will be updated soon.
 
