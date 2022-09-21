@@ -118,11 +118,10 @@ def test_trivial_broadcasting():
     assert vectorized_is_trivial(np.array(1), np.array(2), 3) == trivial.c_trivial
     assert vectorized_is_trivial(np.array([1, 3]), np.array([2, 4]), 3) == trivial.c_trivial
     assert trivial.c_trivial == vectorized_is_trivial(
-        np.array([[1, 3, 5], [7, 9, 11]]), np.array([[2, 4, 6], [8, 10, 12]]), 3)
-    assert vectorized_is_trivial(
-        np.array([[1, 2, 3], [4, 5, 6]]), np.array([2, 3, 4]), 2) == trivial.non_trivial
-    assert vectorized_is_trivial(
-        np.array([[1, 2, 3], [4, 5, 6]]), np.array([[2], [3]]), 2) == trivial.non_trivial
+        np.array([[1, 3, 5], [7, 9, 11]]), np.array([[2, 4, 6], [8, 10, 12]]), 3
+    )
+    assert vectorized_is_trivial(np.array([[1, 2, 3], [4, 5, 6]]), np.array([2, 3, 4]), 2) == trivial.non_trivial
+    assert vectorized_is_trivial(np.array([[1, 2, 3], [4, 5, 6]]), np.array([[2], [3]]), 2) == trivial.non_trivial
     z1 = np.array([[1, 2, 3, 4], [5, 6, 7, 8]], dtype='int32')
     z2 = np.array(z1, dtype='float32')
     z3 = np.array(z1, dtype='float64')
@@ -156,14 +155,14 @@ def test_trivial_broadcasting():
 
 def test_passthrough_arguments(doc):
     assert doc(m.vec_passthrough) == (
-        "vec_passthrough(" + ", ".join([
-            "arg0: float",
-            "arg1: numpy.ndarray[numpy.float64]",
-            "arg2: numpy.ndarray[numpy.float64]",
-            "arg3: numpy.ndarray[numpy.int32]",
-            "arg4: int",
-            "arg5: m.numpy_vectorize.NonPODClass",
-            "arg6: numpy.ndarray[numpy.float64]"]) + ") -> object")
+        "vec_passthrough(" + ", ".join(
+            [
+                "arg0: float", "arg1: numpy.ndarray[numpy.float64]", "arg2: numpy.ndarray[numpy.float64]",
+                "arg3: numpy.ndarray[numpy.int32]", "arg4: int", "arg5: m.numpy_vectorize.NonPODClass",
+                "arg6: numpy.ndarray[numpy.float64]"
+            ]
+        ) + ") -> object"
+    )
 
     b = np.array([[10, 20, 30]], dtype='float64')
     c = np.array([100, 200])  # NOT a vectorized argument
@@ -171,9 +170,8 @@ def test_passthrough_arguments(doc):
     g = np.array([[1000000, 2000000, 3000000]], dtype='int')  # requires casting
     assert np.all(
         m.vec_passthrough(1, b, c, d, 10000, m.NonPODClass(100000), g) ==
-        np.array([[1111111, 2111121, 3111131],
-                  [1112111, 2112121, 3112131],
-                  [1113111, 2113121, 3113131]]))
+        np.array([[1111111, 2111121, 3111131], [1112111, 2112121, 3112131], [1113111, 2113121, 3113131]])
+    )
 
 
 def test_method_vectorization():

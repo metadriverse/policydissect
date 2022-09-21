@@ -117,8 +117,9 @@ def test_vector_buffer_numpy():
     ma[1]['x'] = 99
     assert v[1].x == 99
 
-    v = m.VectorStruct(np.zeros(3, dtype=np.dtype([('w', 'bool'), ('x', 'I'),
-                                                   ('y', 'float64'), ('z', 'bool')], align=True)))
+    v = m.VectorStruct(
+        np.zeros(3, dtype=np.dtype([('w', 'bool'), ('x', 'I'), ('y', 'float64'), ('z', 'bool')], align=True))
+    )
     assert len(v) == 3
 
     b = np.array([1, 2, 3, 4], dtype=np.uint8)
@@ -196,7 +197,7 @@ def test_noncopyable_containers():
 
     i = 1
     for j in dnc:
-        assert(j.value == i)
+        assert (j.value == i)
         i += 1
 
     # std::map

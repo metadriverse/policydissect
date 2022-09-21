@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
@@ -37,29 +37,38 @@ from torch.nn.modules import rnn
 from .actor_critic import ActorCritic, get_activation
 from policydissect.legged_gym.rsl_rl.utils import unpad_trajectories
 
+
 class ActorCriticRecurrent(ActorCritic):
     is_recurrent = True
-    def __init__(self,  num_actor_obs,
-                        num_critic_obs,
-                        num_actions,
-                        actor_hidden_dims=[256, 256, 256],
-                        critic_hidden_dims=[256, 256, 256],
-                        activation='elu',
-                        rnn_type='lstm',
-                        rnn_hidden_size=256,
-                        rnn_num_layers=1,
-                        init_noise_std=1.0,
-                        **kwargs):
-        if kwargs:
-            print("ActorCriticRecurrent.__init__ got unexpected arguments, which will be ignored: " + str(kwargs.keys()),)
 
-        super().__init__(num_actor_obs=rnn_hidden_size,
-                         num_critic_obs=rnn_hidden_size,
-                         num_actions=num_actions,
-                         actor_hidden_dims=actor_hidden_dims,
-                         critic_hidden_dims=critic_hidden_dims,
-                         activation=activation,
-                         init_noise_std=init_noise_std)
+    def __init__(
+        self,
+        num_actor_obs,
+        num_critic_obs,
+        num_actions,
+        actor_hidden_dims=[256, 256, 256],
+        critic_hidden_dims=[256, 256, 256],
+        activation='elu',
+        rnn_type='lstm',
+        rnn_hidden_size=256,
+        rnn_num_layers=1,
+        init_noise_std=1.0,
+        **kwargs
+    ):
+        if kwargs:
+            print(
+                "ActorCriticRecurrent.__init__ got unexpected arguments, which will be ignored: " + str(kwargs.keys()),
+            )
+
+        super().__init__(
+            num_actor_obs=rnn_hidden_size,
+            num_critic_obs=rnn_hidden_size,
+            num_actions=num_actions,
+            actor_hidden_dims=actor_hidden_dims,
+            critic_hidden_dims=critic_hidden_dims,
+            activation=activation,
+            init_noise_std=init_noise_std
+        )
 
         activation = get_activation(activation)
 
@@ -84,7 +93,7 @@ class ActorCriticRecurrent(ActorCritic):
     def evaluate(self, critic_observations, masks=None, hidden_states=None):
         input_c = self.memory_c(critic_observations, masks, hidden_states)
         return super().evaluate(input_c.squeeze(0))
-    
+
     def get_hidden_states(self):
         return self.memory_a.hidden_states, self.memory_c.hidden_states
 
@@ -96,7 +105,7 @@ class Memory(torch.nn.Module):
         rnn_cls = nn.GRU if type.lower() == 'gru' else nn.LSTM
         self.rnn = rnn_cls(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers)
         self.hidden_states = None
-    
+
     def forward(self, input, masks=None, hidden_states=None):
         batch_mode = masks is not None
         if batch_mode:

@@ -23,7 +23,6 @@ class PIDController:
 
 
 class ActivationPID(PIDController):
-
     def __init__(self, k_p, k_i, k_d, neuron_layer, neuron_index):
         super(ActivationPID, self).__init__(k_p, k_i, k_d)
         self.neuron_layer = neuron_layer

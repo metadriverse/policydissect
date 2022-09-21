@@ -18,7 +18,4 @@ NO_PATH_LILST = [
     "A1MoveGroundMPC",
 ]
 
-TIMELIMIT_DICT = {
-    "A1MoveGround": 1000,
-    "A1MoveGroundMPC": 1000
-}
+TIMELIMIT_DICT = {"A1MoveGround": 1000, "A1MoveGroundMPC": 1000}

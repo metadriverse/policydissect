@@ -63,9 +63,9 @@ def play(args, activation_func="elu", model_name=None):
 
     for i in range(10 * int(env.max_episode_length)):
         # obs[..., 9:12] = torch.Tensor([1.5, 0., .0])
-        actions, _ = ppo_inference_torch(policy_weights, obs.clone().cpu().numpy(), {}, "None",
-                                         activation=activation_func,
-                                         deterministic=False)
+        actions, _ = ppo_inference_torch(
+            policy_weights, obs.clone().cpu().numpy(), {}, "None", activation=activation_func, deterministic=False
+        )
         actions = torch.unsqueeze(torch.from_numpy(actions.astype(np.float32)), dim=0)
         obs, _, rews, dones, infos = env.step(actions)
 

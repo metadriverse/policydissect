@@ -138,7 +138,6 @@ def test_custom(msg):
 
 def test_nested_throws(capture):
     """Tests nested (e.g. C++ -> Python -> C++) exception handling"""
-
     def throw_myex():
         raise m.MyException("nested error")
 
@@ -165,8 +164,7 @@ def test_nested_throws(capture):
 
     # C++ -> Python -> C++ -> Python
     with capture:
-        m.try_catch(
-            m.MyException5, pycatch, m.MyException, m.try_catch, m.MyException, throw_myex5)
+        m.try_catch(m.MyException5, pycatch, m.MyException, m.try_catch, m.MyException, throw_myex5)
     assert str(capture).startswith("MyException5: nested error 5")
 
     # C++ -> Python -> C++
@@ -182,7 +180,6 @@ def test_nested_throws(capture):
 
 # This can often happen if you wrap a pybind11 class in a Python wrapper
 def test_invalid_repr():
-
     class MyRepr(object):
         def __repr__(self):
             raise AttributeError("Example error")

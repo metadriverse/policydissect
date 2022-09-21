@@ -50,6 +50,7 @@ def test_single_char_arguments():
     """Tests failures for passing invalid inputs to char-accepting functions"""
     def toobig_message(r):
         return "Character code point not in range({0:#x})".format(r)
+
     toolong_message = "Expected a character, but multi-character string found"
 
     assert m.ord_char(u'a') == 0x61  # simple ASCII
@@ -116,6 +117,7 @@ def test_single_char_arguments():
 def test_bytes_to_string():
     """Tests the ability to pass bytes to C++ string-accepting functions.  Note that this is
     one-way: the only way to return bytes to Python is via the pybind11::bytes class."""
+
     # Issue #816
 
     def to_bytes(s):
@@ -236,12 +238,16 @@ def test_tuple(doc):
     assert m.tuple_passthrough([True, "test", 5]) == (5, "test", True)
     assert m.empty_tuple() == ()
 
-    assert doc(m.pair_passthrough) == """
+    assert doc(
+        m.pair_passthrough
+    ) == """
         pair_passthrough(arg0: Tuple[bool, str]) -> Tuple[str, bool]
 
         Return a pair in reversed order
     """
-    assert doc(m.tuple_passthrough) == """
+    assert doc(
+        m.tuple_passthrough
+    ) == """
         tuple_passthrough(arg0: Tuple[bool, str, int]) -> Tuple[int, str, bool]
 
         Return a triple in reversed order

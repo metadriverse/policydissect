@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
@@ -32,6 +32,7 @@ from abc import ABC, abstractmethod
 import torch
 from typing import Tuple, Union
 
+
 # minimal interface of the environment
 class VecEnv(ABC):
     num_envs: int
@@ -40,21 +41,26 @@ class VecEnv(ABC):
     num_actions: int
     max_episode_length: int
     privileged_obs_buf: torch.Tensor
-    obs_buf: torch.Tensor 
+    obs_buf: torch.Tensor
     rew_buf: torch.Tensor
     reset_buf: torch.Tensor
-    episode_length_buf: torch.Tensor # current episode duration
+    episode_length_buf: torch.Tensor  # current episode duration
     extras: dict
     device: torch.device
+
     @abstractmethod
-    def step(self, actions: torch.Tensor) -> Tuple[torch.Tensor, Union[torch.Tensor, None], torch.Tensor, torch.Tensor, dict]:
+    def step(self,
+             actions: torch.Tensor) -> Tuple[torch.Tensor, Union[torch.Tensor, None], torch.Tensor, torch.Tensor, dict]:
         pass
+
     @abstractmethod
     def reset(self, env_ids: Union[list, torch.Tensor]):
         pass
+
     @abstractmethod
     def get_observations(self) -> torch.Tensor:
         pass
+
     @abstractmethod
     def get_privileged_observations(self) -> Union[torch.Tensor, None]:
         pass

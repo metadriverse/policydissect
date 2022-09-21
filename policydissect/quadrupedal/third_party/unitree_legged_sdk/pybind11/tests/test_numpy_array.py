@@ -19,8 +19,7 @@ def test_dtypes():
         print(check)
         assert check.numpy == check.pybind11, check
         if check.numpy.num != check.pybind11.num:
-            print("NOTE: typenum mismatch for {}: {} != {}".format(
-                check, check.numpy.num, check.pybind11.num))
+            print("NOTE: typenum mismatch for {}: {} != {}".format(check, check.numpy.num, check.pybind11.num))
 
 
 @pytest.fixture(scope='function')
@@ -76,18 +75,16 @@ def test_index_offset(arr, args, ret):
 
 
 def test_dim_check_fail(arr):
-    for func in (m.index_at, m.index_at_t, m.offset_at, m.offset_at_t, m.data, m.data_t,
-                 m.mutate_data, m.mutate_data_t):
+    for func in (m.index_at, m.index_at_t, m.offset_at, m.offset_at_t, m.data, m.data_t, m.mutate_data,
+                 m.mutate_data_t):
         with pytest.raises(IndexError) as excinfo:
             func(arr, 1, 2, 3)
         assert str(excinfo.value) == 'too many indices for an array: 3 (ndim = 2)'
 
 
-@pytest.mark.parametrize('args, ret',
-                         [([], [1, 2, 3, 4, 5, 6]),
-                          ([1], [4, 5, 6]),
-                          ([0, 1], [2, 3, 4, 5, 6]),
-                          ([1, 2], [6])])
+@pytest.mark.parametrize(
+    'args, ret', [([], [1, 2, 3, 4, 5, 6]), ([1], [4, 5, 6]), ([0, 1], [2, 3, 4, 5, 6]), ([1, 2], [6])]
+)
 def test_data(arr, args, ret):
     from sys import byteorder
     assert all(m.data_t(arr, *args) == ret)
@@ -134,8 +131,7 @@ def test_mutate_data(arr):
 
 
 def test_bounds_check(arr):
-    for func in (m.index_at, m.index_at_t, m.data, m.data_t,
-                 m.mutate_data, m.mutate_data_t, m.at_t, m.mutate_at_t):
+    for func in (m.index_at, m.index_at_t, m.data, m.data_t, m.mutate_data, m.mutate_data_t, m.at_t, m.mutate_at_t):
         with pytest.raises(IndexError) as excinfo:
             func(arr, 2, 0)
         assert str(excinfo.value) == 'index 2 is out of bounds for axis 0 with size 2'
@@ -284,7 +280,9 @@ def test_overload_resolution(msg):
 
     with pytest.raises(TypeError) as excinfo:
         m.overloaded("not an array")
-    assert msg(excinfo.value) == """
+    assert msg(
+        excinfo.value
+    ) == """
         overloaded(): incompatible function arguments. The following argument types are supported:
             1. (arg0: numpy.ndarray[numpy.float64]) -> str
             2. (arg0: numpy.ndarray[numpy.float32]) -> str
@@ -395,7 +393,7 @@ def test_array_failure():
 
 
 def test_initializer_list():
-    assert m.array_initializer_list1().shape == (1,)
+    assert m.array_initializer_list1().shape == (1, )
     assert m.array_initializer_list2().shape == (1, 2)
     assert m.array_initializer_list3().shape == (1, 2, 3)
     assert m.array_initializer_list4().shape == (1, 2, 3, 4)
@@ -404,46 +402,44 @@ def test_initializer_list():
 def test_array_resize(msg):
     a = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9], dtype='float64')
     m.array_reshape2(a)
-    assert(a.size == 9)
-    assert(np.all(a == [[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+    assert (a.size == 9)
+    assert (np.all(a == [[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
 
     # total size change should succced with refcheck off
     m.array_resize3(a, 4, False)
-    assert(a.size == 64)
+    assert (a.size == 64)
     # ... and fail with refcheck on
     try:
         m.array_resize3(a, 3, True)
     except ValueError as e:
-        assert(str(e).startswith("cannot resize an array"))
+        assert (str(e).startswith("cannot resize an array"))
     # transposed array doesn't own data
     b = a.transpose()
     try:
         m.array_resize3(b, 3, False)
     except ValueError as e:
-        assert(str(e).startswith("cannot resize this array: it does not own its data"))
+        assert (str(e).startswith("cannot resize this array: it does not own its data"))
     # ... but reshape should be fine
     m.array_reshape2(b)
-    assert(b.shape == (8, 8))
+    assert (b.shape == (8, 8))
 
 
 @pytest.mark.xfail("env.PYPY")
 def test_array_create_and_resize(msg):
     a = m.create_and_resize(2)
-    assert(a.size == 4)
-    assert(np.all(a == 42.))
+    assert (a.size == 4)
+    assert (np.all(a == 42.))
 
 
 def test_index_using_ellipsis():
     a = m.index_using_ellipsis(np.zeros((5, 6, 7)))
-    assert a.shape == (6,)
+    assert a.shape == (6, )
 
 
 @pytest.mark.parametrize("forcecast", [False, True])
 @pytest.mark.parametrize("contiguity", [None, 'C', 'F'])
 @pytest.mark.parametrize("noconvert", [False, True])
-@pytest.mark.filterwarnings(
-    "ignore:Casting complex values to real discards the imaginary part:numpy.ComplexWarning"
-)
+@pytest.mark.filterwarnings("ignore:Casting complex values to real discards the imaginary part:numpy.ComplexWarning")
 def test_argument_conversions(forcecast, contiguity, noconvert):
     function_name = "accept_double"
     if contiguity == 'C':
@@ -458,7 +454,7 @@ def test_argument_conversions(forcecast, contiguity, noconvert):
 
     for dtype in [np.dtype('float32'), np.dtype('float64'), np.dtype('complex128')]:
         for order in ['C', 'F']:
-            for shape in [(2, 2), (1, 3, 1, 1), (1, 1, 1), (0,)]:
+            for shape in [(2, 2), (1, 3, 1, 1), (1, 1, 1), (0, )]:
                 if not noconvert:
                     # If noconvert is not passed, only complex128 needs to be truncated and
                     # "cannot be safely obtained". So without `forcecast`, the argument shouldn't
@@ -470,10 +466,8 @@ def test_argument_conversions(forcecast, contiguity, noconvert):
                     # trivially contiguous.
                     trivially_contiguous = sum(1 for d in shape if d > 1) <= 1
                     should_raise = (
-                        dtype.name != 'float64' or
-                        (contiguity is not None and
-                         contiguity != order and
-                         not trivially_contiguous)
+                        dtype.name != 'float64'
+                        or (contiguity is not None and contiguity != order and not trivially_contiguous)
                     )
 
                 array = np.zeros(shape, dtype=dtype, order=order)

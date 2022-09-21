@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
@@ -30,6 +30,7 @@
 
 import torch
 
+
 def split_and_pad_trajectories(tensor, dones):
     """ Splits trajectories at done indices. Then concatenates them and padds with zeros up to the length og the longest trajectory.
     Returns masks corresponding to valid parts of the trajectories
@@ -57,15 +58,16 @@ def split_and_pad_trajectories(tensor, dones):
     trajectory_lengths = done_indices[1:] - done_indices[:-1]
     trajectory_lengths_list = trajectory_lengths.tolist()
     # Extract the individual trajectories
-    trajectories = torch.split(tensor.transpose(1, 0).flatten(0, 1),trajectory_lengths_list)
+    trajectories = torch.split(tensor.transpose(1, 0).flatten(0, 1), trajectory_lengths_list)
     padded_trajectories = torch.nn.utils.rnn.pad_sequence(trajectories)
-
 
     trajectory_masks = trajectory_lengths > torch.arange(0, tensor.shape[0], device=tensor.device).unsqueeze(1)
     return padded_trajectories, trajectory_masks
+
 
 def unpad_trajectories(trajectories, masks):
     """ Does the inverse operation of  split_and_pad_trajectories()
     """
     # Need to transpose before and after the masking to have proper reshaping
-    return trajectories.transpose(1, 0)[masks.transpose(1, 0)].view(-1, trajectories.shape[0], trajectories.shape[-1]).transpose(1, 0)
+    return trajectories.transpose(1, 0)[masks.transpose(1, 0)].view(-1, trajectories.shape[0],
+                                                                    trajectories.shape[-1]).transpose(1, 0)

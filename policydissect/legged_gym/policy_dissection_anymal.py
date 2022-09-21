@@ -61,12 +61,27 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
 
                 error_freq = cal_relation(neuron_fft, target_dim_fft)
                 # error = error_norm*error_freq
-                target_error.append({"neuron": {"layer": layer, "neuron_index": neuron_index},
-                                     "error": {"freq_diff": error_freq, "base_phase_diff": relation_coefficient},
-                                     })
+                target_error.append(
+                    {
+                        "neuron": {
+                            "layer": layer,
+                            "neuron_index": neuron_index
+                        },
+                        "error": {
+                            "freq_diff": error_freq,
+                            "base_phase_diff": relation_coefficient
+                        },
+                    }
+                )
                 neuron_ret[layer][neuron_index].append(
-                    {"{}_dim".format(target_dim_name): k,
-                     "error": {"freq_diff": error_freq, "base_phase_diff": relation_coefficient}})
+                    {
+                        "{}_dim".format(target_dim_name): k,
+                        "error": {
+                            "freq_diff": error_freq,
+                            "base_phase_diff": relation_coefficient
+                        }
+                    }
+                )
         target_error.sort(key=lambda i: i["error"]["freq_diff"])
         target_ret[k] = target_error
 
@@ -93,12 +108,10 @@ def draw_origin_and_fft(data, label=None, save_figure=False, n_fft=16, for_neuro
         plt.plot(data, label="Activation of Unit: {}".format(label) if for_neuron else "Transition of {}".format(label))
         plt.legend()
         plt.subplot(3, 1, 2)
-        plt.imshow(plot_y, aspect="auto", origin="lower",
-                   interpolation='none')
+        plt.imshow(plot_y, aspect="auto", origin="lower", interpolation='none')
         plt.legend("STFT, {}".format(label))
         plt.subplot(3, 1, 3)
-        plt.imshow(phase, aspect="auto", origin="lower",
-                   interpolation='none')
+        plt.imshow(phase, aspect="auto", origin="lower", interpolation='none')
         plt.legend("STFT Phase, {}".format(label))
         plt.savefig("./dissection/{}.png".format(label))
     return plot_y, phase
@@ -128,35 +141,51 @@ def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=
         layer_fft = []
         for neuron in range(len(activation_after_tanh[layer])):
             if specific_neuron is None:
-                fft_ret, phase = draw_origin_and_fft(activation_after_tanh[layer][neuron],
-                                                     label="neuron_{}_{}".format(layer, neuron),
-                                                     save_figure=save_figure,
-                                                     for_neuron=True,
-                                                     n_fft=n_fft)
+                fft_ret, phase = draw_origin_and_fft(
+                    activation_after_tanh[layer][neuron],
+                    label="neuron_{}_{}".format(layer, neuron),
+                    save_figure=save_figure,
+                    for_neuron=True,
+                    n_fft=n_fft
+                )
                 strength_dist = activation_after_tanh[layer][neuron]
                 # positive_strength = np.quantile(strength_dist, strength_quantile)
                 # negative_strength = np.quantile(strength_dist, 1 - strength_quantile)
-                layer_fft.append({"fft_amplitude": fft_ret, "fft_phase": phase,
-                                  # "strength": {"positive": positive_strength, "negative": negative_strength}
-                                  })
+                layer_fft.append(
+                    {
+                        "fft_amplitude": fft_ret,
+                        "fft_phase": phase,
+                        # "strength": {"positive": positive_strength, "negative": negative_strength}
+                    }
+                )
             elif specific_neuron is not None:
                 assert isinstance(specific_neuron, list), "Use list [(layer, neuron index), (),...]"
                 if (layer, neuron) in specific_neuron:
-                    fft_ret, phase = draw_origin_and_fft(activation_after_tanh[layer][neuron],
-                                                         label="neuron_{}_{}".format(layer, neuron),
-                                                         save_figure=save_figure,
-                                                         for_neuron=True,
-                                                         n_fft=n_fft)
+                    fft_ret, phase = draw_origin_and_fft(
+                        activation_after_tanh[layer][neuron],
+                        label="neuron_{}_{}".format(layer, neuron),
+                        save_figure=save_figure,
+                        for_neuron=True,
+                        n_fft=n_fft
+                    )
                     strength_dist = activation_after_tanh[layer][neuron]
                     # positive_strength = np.quantile(strength_dist, strength_quantile)
                     # negative_strength = np.quantile(strength_dist, 1 - strength_quantile)
-                    layer_fft.append({"fft_amplitude": fft_ret, "fft_phase": phase,
-                                      # "strength": {"positive": positive_strength, "negative": negative_strength}
-                                      })
+                    layer_fft.append(
+                        {
+                            "fft_amplitude": fft_ret,
+                            "fft_phase": phase,
+                            # "strength": {"positive": positive_strength, "negative": negative_strength}
+                        }
+                    )
                 else:
-                    layer_fft.append({"fft_amplitude": np.inf, "fft_phase": np.inf,
-                                      # "strength": {"positive": positive_strength, "negative": negative_strength}
-                                      })
+                    layer_fft.append(
+                        {
+                            "fft_amplitude": np.inf,
+                            "fft_phase": np.inf,
+                            # "strength": {"positive": positive_strength, "negative": negative_strength}
+                        }
+                    )
 
         neurons_fft.append(layer_fft)
     return neurons_fft, activation_after_tanh
@@ -168,19 +197,23 @@ def analyze_observation(epi_observation, save_figure=False, n_fft=16, specific_o
     obs_fft = []
     for dim in range(len(per_obs_dim)):
         if specific_obs is None:
-            fft_ret, phase = draw_origin_and_fft(per_obs_dim[dim],
-                                                 label="obs_dim_{}".format(dim),
-                                                 save_figure=save_figure,
-                                                 for_neuron=False,
-                                                 n_fft=n_fft)
+            fft_ret, phase = draw_origin_and_fft(
+                per_obs_dim[dim],
+                label="obs_dim_{}".format(dim),
+                save_figure=save_figure,
+                for_neuron=False,
+                n_fft=n_fft
+            )
             obs_fft.append({"fft_amplitude": fft_ret, "fft_phase": phase})
         elif specific_obs is not None:
             if dim in specific_obs:
-                fft_ret, phase = draw_origin_and_fft(per_obs_dim[dim],
-                                                     label="obs_dim_{}".format(dim),
-                                                     save_figure=save_figure,
-                                                     for_neuron=False,
-                                                     n_fft=n_fft)
+                fft_ret, phase = draw_origin_and_fft(
+                    per_obs_dim[dim],
+                    label="obs_dim_{}".format(dim),
+                    save_figure=save_figure,
+                    for_neuron=False,
+                    n_fft=n_fft
+                )
                 obs_fft.append({"fft_amplitude": fft_ret, "fft_phase": phase})
             else:
                 # print("discard obs dim: {}".format(dim))
@@ -195,11 +228,13 @@ def analyze_actions(epi_action, save_figure=False, n_fft=16):
     per_action_dim = np.moveaxis(obs_per_step, 0, -1)
     action_fft = []
     for dim in range(len(per_action_dim)):
-        fft_ret, phase = draw_origin_and_fft(per_action_dim[dim],
-                                             label="action_dim_{}".format(dim),
-                                             save_figure=save_figure,
-                                             for_neuron=False,
-                                             n_fft=n_fft)
+        fft_ret, phase = draw_origin_and_fft(
+            per_action_dim[dim],
+            label="action_dim_{}".format(dim),
+            save_figure=save_figure,
+            for_neuron=False,
+            n_fft=n_fft
+        )
         action_fft.append({"fft_amplitude": fft_ret, "fft_phase": phase})
     return action_fft, per_action_dim
 
@@ -214,15 +249,13 @@ def do_policy_dissection(collect_episodes, specific_neuron=None, specific_obs=No
         epi_activation = epi_data["neuron_activation"]
         observations = epi_data["observations"]
 
-        neurons_fft, origin_neuron = analyze_neuron(epi_activation, n_fft=n_fft,
-                                                    specific_neuron=specific_neuron)
+        neurons_fft, origin_neuron = analyze_neuron(epi_activation, n_fft=n_fft, specific_neuron=specific_neuron)
 
-        obs_fft, origin_obs = analyze_observation(observations, n_fft=n_fft,
-                                                  specific_obs=specific_obs)
+        obs_fft, origin_obs = analyze_observation(observations, n_fft=n_fft, specific_obs=specific_obs)
 
-        ret_obs = get_most_relevant_neuron(target_dim_name="obs",
-                                           neurons_activation_fft=neurons_fft,
-                                           epi_target_dims_fft=obs_fft)["obs_analysis"]
+        ret_obs = get_most_relevant_neuron(
+            target_dim_name="obs", neurons_activation_fft=neurons_fft, epi_target_dims_fft=obs_fft
+        )["obs_analysis"]
         this_epi_frequency_error = ret_obs
         this_epi_frequency_error["seed"] = k
         ckpt_ret[k] = this_epi_frequency_error
@@ -283,8 +316,9 @@ if __name__ == "__main__":
             current_step += 1
             total_r += r
             if d:
-                collected_episodes.append(dict(neuron_activation=episode_activation_values,
-                                               observations=episode_observations))
+                collected_episodes.append(
+                    dict(neuron_activation=episode_activation_values, observations=episode_observations)
+                )
                 print("Finish seed: {}, reward: {}".format(seed, total_r))
                 break
             episode_observations.append(o.cpu().numpy()[0])

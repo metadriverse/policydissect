@@ -17,8 +17,9 @@ legged_robot_command = "Forward"
 def update_render(env):
     pos = env.env.env.env.env.env.env._gym_env._robot.GetBasePosition()
     text_pos = [pos[0] - 0.5, pos[1], pos[2] + 0.5]
-    pybullet.addUserDebugText(legged_robot_command, text_pos, textSize=4, textColorRGB=[1, 0, 0],
-                              replaceItemUniqueId=True)
+    pybullet.addUserDebugText(
+        legged_robot_command, text_pos, textSize=4, textColorRGB=[1, 0, 0], replaceItemUniqueId=True
+    )
 
 
 def legged_control(event):
@@ -35,9 +36,7 @@ def legged_control(event):
         legged_robot_command = "Reset"
 
 
-LEGGED_MAP = {"Turn Left": {3: [(239, 85)]},
-              "Turn Right": {3: [(239, -75)]},
-              "Stop": {1: [(76, -70)]}}
+LEGGED_MAP = {"Turn Left": {3: [(239, 85)]}, "Turn Right": {3: [(239, -75)]}, "Stop": {1: [(76, -70)]}}
 
 if __name__ == "__main__":
 
@@ -53,9 +52,7 @@ if __name__ == "__main__":
     else:
         params["env"]["env_build"]["terrain_type"] = "plane"
 
-    env = get_env(
-        params['env_name'],
-        params['env'])
+    env = get_env(params['env_name'], params['env'])
 
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_WIREFRAME, 0)
     pybullet.configureDebugVisualizer(pybullet.COV_ENABLE_KEYBOARD_SHORTCUTS, 0)

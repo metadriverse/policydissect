@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: BSD-3-Clause
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
@@ -51,8 +51,9 @@ class CassieRoughCfg(LeggedRobotCfg):
             heading = [0., 0.]
 
     class terrain(LeggedRobotCfg.terrain):
-        measured_points_x = [-0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4,
-                             0.5]  # 1mx1m rectangle (without center line)
+        measured_points_x = [
+            -0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5
+        ]  # 1mx1m rectangle (without center line)
         measured_points_y = [-0.5, -0.4, -0.3, -0.2, -0.1, 0., 0.1, 0.2, 0.3, 0.4, 0.5]
 
     class init_state(LeggedRobotCfg.init_state):
@@ -75,12 +76,22 @@ class CassieRoughCfg(LeggedRobotCfg):
 
     class control(LeggedRobotCfg.control):
         # PD Drive parameters:
-        stiffness = {'hip_abduction': 100.0, 'hip_rotation': 100.0,
-                     'hip_flexion': 200., 'thigh_joint': 200., 'ankle_joint': 200.,
-                     'toe_joint': 40.}  # [N*m/rad]
-        damping = {'hip_abduction': 3.0, 'hip_rotation': 3.0,
-                   'hip_flexion': 6., 'thigh_joint': 6., 'ankle_joint': 6.,
-                   'toe_joint': 1.}  # [N*m*s/rad]     # [N*m*s/rad]
+        stiffness = {
+            'hip_abduction': 100.0,
+            'hip_rotation': 100.0,
+            'hip_flexion': 200.,
+            'thigh_joint': 200.,
+            'ankle_joint': 200.,
+            'toe_joint': 40.
+        }  # [N*m/rad]
+        damping = {
+            'hip_abduction': 3.0,
+            'hip_rotation': 3.0,
+            'hip_flexion': 6.,
+            'thigh_joint': 6.,
+            'ankle_joint': 6.,
+            'toe_joint': 1.
+        }  # [N*m*s/rad]     # [N*m*s/rad]
         # action scale: target angle = actionScale * action + defaultAngle
         action_scale = 0.5
         # decimation: Number of control action updates @ sim DT per policy DT
@@ -122,6 +133,3 @@ class CassieRoughCfgPPO(LeggedRobotCfgPPO):
 
     class algorithm(LeggedRobotCfgPPO.algorithm):
         entropy_coef = 0.01
-
-
-

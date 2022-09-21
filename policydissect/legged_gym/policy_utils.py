@@ -1,7 +1,6 @@
 import numpy as np
 
-
-elu = lambda Z: np.where(Z>0, Z, np.exp(Z)-1)
+elu = lambda Z: np.where(Z > 0, Z, np.exp(Z) - 1)
 
 
 def control_neuron_activation(layer_out_put, layer, conditional_control_map, command, legged=False):
@@ -15,20 +14,16 @@ def control_neuron_activation(layer_out_put, layer, conditional_control_map, com
                     x[0][neuron] = activation_score
 
 
-def ppo_inference_tf(weights,
-                     obs,
-                     hidden_layer_num,
-                     conditional_control_map,
-                     command,
-                     deterministic=False,
-                     activation="tanh"):
+def ppo_inference_tf(
+    weights, obs, hidden_layer_num, conditional_control_map, command, deterministic=False, activation="tanh"
+):
     step_activation_value = []
     obs = obs.reshape(1, -1)
     x = obs
     activate_func = np.tanh if activation == "tanh" else relu
     for layer in range(1, hidden_layer_num + 1):
-        x = np.matmul(x, weights["default_policy/fc_{}/kernel".format(layer)]) + weights[
-            "default_policy/fc_{}/bias".format(layer)]
+        x = np.matmul(x, weights["default_policy/fc_{}/kernel".format(layer)
+                                 ]) + weights["default_policy/fc_{}/bias".format(layer)]
         before_tanh = x
         x = activate_func(x)
         control_neuron_activation(x, layer - 1, conditional_control_map, command)
@@ -43,13 +38,16 @@ def ppo_inference_tf(weights,
     return np.random.normal(mean, std)
 
 
-def ppo_inference_torch(weights, obs,
-                        conditional_control_map,
-                        command,
-                        deterministic=False,
-                        activation="elu",
-                        tanh_action=False,
-                        print_value=False):
+def ppo_inference_torch(
+    weights,
+    obs,
+    conditional_control_map,
+    command,
+    deterministic=False,
+    activation="elu",
+    tanh_action=False,
+    print_value=False
+):
     if print_value:
         print("===== numpy =====")
     step_activation_value = []
@@ -58,8 +56,7 @@ def ppo_inference_torch(weights, obs,
     x = obs[0]
     layers = ["actor.0", "actor.2", "actor.4", "actor.6"]
     for layer_index, layer in enumerate(layers):
-        x = np.matmul(weights["{}.weight".format(layer)], x) + weights[
-            "{}.bias".format(layer)]
+        x = np.matmul(weights["{}.weight".format(layer)], x) + weights["{}.bias".format(layer)]
         if layer_index < len(layers) - 1:
             x = activate_func(x)
             control_neuron_activation(x, layer_index, conditional_control_map, command, legged=True)

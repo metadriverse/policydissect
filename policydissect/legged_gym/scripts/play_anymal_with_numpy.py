@@ -54,7 +54,7 @@ def play(args, activation_func="elu", model_name=None):
     train_cfg.runner.num_steps_per_env = 1
 
     # !!!!!!!!!!!!!! Turn on this configure for comparison with pd !!!!!!!!!!!!!!!!!
-    env_cfg.commands.heading_command= True
+    env_cfg.commands.heading_command = True
     # prepare environment
     env, _ = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
     obs = env.get_observations()
@@ -66,9 +66,9 @@ def play(args, activation_func="elu", model_name=None):
     for i in range(10 * int(env.max_episode_length)):
         obs[..., 10:12] = torch.Tensor([1., 0.])
         env.commands[:, 3] = -0.9
-        actions, _ = ppo_inference_torch(policy_weights, obs.clone().cpu().numpy(), {}, "None",
-                                         activation=activation_func,
-                                         deterministic=True)
+        actions, _ = ppo_inference_torch(
+            policy_weights, obs.clone().cpu().numpy(), {}, "None", activation=activation_func, deterministic=True
+        )
         actions = torch.unsqueeze(torch.from_numpy(actions.astype(np.float32)), dim=0)
         obs, _, rews, dones, infos = env.step(actions)
 

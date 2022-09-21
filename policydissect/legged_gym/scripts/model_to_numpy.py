@@ -1,7 +1,7 @@
 import torch as th
 import numpy as np
 
-if __name__=="__main__":
+if __name__ == "__main__":
     path = "/home/quanyi/legged_gym/logs/flat_anymal_c/Aug01_16-05-26_/model_300.pt"
     weights = th.load(path)["model_state_dict"]
     ret = {}

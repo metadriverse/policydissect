@@ -12,7 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Utility functions for processing motion clips."""
 
 import os
@@ -28,7 +27,7 @@ from pybullet_utils import transformations
 
 
 def standardize_quaternion(q):
-  """Returns a quaternion where q.w >= 0 to remove redundancy due to q = -q.
+    """Returns a quaternion where q.w >= 0 to remove redundancy due to q = -q.
 
   Args:
     q: A quaternion to be standardized.
@@ -37,13 +36,13 @@ def standardize_quaternion(q):
     A quaternion with q.w >= 0.
 
   """
-  if q[-1] < 0:
-    q = -q
-  return q
+    if q[-1] < 0:
+        q = -q
+    return q
 
 
 def normalize_rotation_angle(theta):
-  """Returns a rotation angle normalized between [-pi, pi].
+    """Returns a rotation angle normalized between [-pi, pi].
 
   Args:
     theta: angle of rotation (radians).
@@ -52,19 +51,19 @@ def normalize_rotation_angle(theta):
     An angle of rotation normalized between [-pi, pi].
 
   """
-  norm_theta = theta
-  if np.abs(norm_theta) > np.pi:
-    norm_theta = np.fmod(norm_theta, 2 * np.pi)
-    if norm_theta >= 0:
-      norm_theta += -2 * np.pi
-    else:
-      norm_theta += 2 * np.pi
+    norm_theta = theta
+    if np.abs(norm_theta) > np.pi:
+        norm_theta = np.fmod(norm_theta, 2 * np.pi)
+        if norm_theta >= 0:
+            norm_theta += -2 * np.pi
+        else:
+            norm_theta += 2 * np.pi
 
-  return norm_theta
+    return norm_theta
 
 
 def calc_heading(q):
-  """Returns the heading of a rotation q, specified as a quaternion.
+    """Returns the heading of a rotation q, specified as a quaternion.
 
   The heading represents the rotational component of q along the vertical
   axis (z axis).
@@ -76,14 +75,14 @@ def calc_heading(q):
     An angle representing the rotation about the z axis.
 
   """
-  ref_dir = np.array([1, 0, 0])
-  rot_dir = pose3d.QuaternionRotatePoint(ref_dir, q)
-  heading = np.arctan2(rot_dir[1], rot_dir[0])
-  return heading
+    ref_dir = np.array([1, 0, 0])
+    rot_dir = pose3d.QuaternionRotatePoint(ref_dir, q)
+    heading = np.arctan2(rot_dir[1], rot_dir[0])
+    return heading
 
 
 def calc_heading_rot(q):
-  """Return a quaternion representing the heading rotation of q along the vertical axis (z axis).
+    """Return a quaternion representing the heading rotation of q along the vertical axis (z axis).
 
   Args:
     q: A quaternion that the heading is to be computed from.
@@ -92,6 +91,6 @@ def calc_heading_rot(q):
     A quaternion representing the rotation about the z axis.
 
   """
-  heading = calc_heading(q)
-  q_heading = transformations.quaternion_about_axis(heading, [0, 0, 1])
-  return q_heading
+    heading = calc_heading(q)
+    q_heading = transformations.quaternion_about_axis(heading, [0, 0, 1])
+    return q_heading

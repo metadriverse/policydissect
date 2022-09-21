@@ -39,8 +39,7 @@ def test_named_arguments(msg):
     with pytest.raises(TypeError) as excinfo:
         # noinspection PyArgumentList
         m.kw_func2(x=5, y=10, z=12)
-    assert excinfo.match(
-        r'(?s)^kw_func2\(\): incompatible.*Invoked with: kwargs: ((x=5|y=10|z=12)(, |$))' + '{3}$')
+    assert excinfo.match(r'(?s)^kw_func2\(\): incompatible.*Invoked with: kwargs: ((x=5|y=10|z=12)(, |$))' + '{3}$')
 
     assert m.kw_func4() == "{13 17}"
     assert m.kw_func4(myList=[1, 2, 3]) == "{1 2 3}"
@@ -84,14 +83,12 @@ def test_mixed_args_and_kwargs(msg):
     """  # noqa: E501 line too long
 
     assert mpk(-2, 3.5, pi=3.14159, e=2.71828) == (-2, 3.5, {'e': 2.71828, 'pi': 3.14159})
-    assert mpak(7, 7.7, 7.77, 7.777, 7.7777, minusseven=-7) == (
-        7, 7.7, (7.77, 7.777, 7.7777), {'minusseven': -7})
+    assert mpak(7, 7.7, 7.77, 7.777, 7.7777, minusseven=-7) == (7, 7.7, (7.77, 7.777, 7.7777), {'minusseven': -7})
     assert mpakd() == (1, 3.14159, (), {})
     assert mpakd(3) == (3, 3.14159, (), {})
     assert mpakd(j=2.71828) == (1, 2.71828, (), {})
     assert mpakd(k=42) == (1, 3.14159, (), {'k': 42})
-    assert mpakd(1, 1, 2, 3, 5, 8, then=13, followedby=21) == (
-        1, 1, (2, 3, 5, 8), {'then': 13, 'followedby': 21})
+    assert mpakd(1, 1, 2, 3, 5, 8, then=13, followedby=21) == (1, 1, (2, 3, 5, 8), {'then': 13, 'followedby': 21})
     # Arguments specified both positionally and via kwargs should fail:
     with pytest.raises(TypeError) as excinfo:
         assert mpakd(1, i=1)
@@ -116,7 +113,7 @@ def test_keyword_only_args(msg):
     assert m.kw_only_all(j=1, i=2) == (2, 1)
 
     with pytest.raises(TypeError) as excinfo:
-        assert m.kw_only_all(i=1) == (1,)
+        assert m.kw_only_all(i=1) == (1, )
     assert "incompatible function arguments" in str(excinfo.value)
 
     with pytest.raises(TypeError) as excinfo:
@@ -139,12 +136,14 @@ def test_keyword_only_args(msg):
     assert m.kw_only_plus_more(2, k=3, extra=4) == (2, -1, 3, {'extra': 4})
 
     with pytest.raises(TypeError) as excinfo:
-        assert m.kw_only_mixed(i=1) == (1,)
+        assert m.kw_only_mixed(i=1) == (1, )
     assert "incompatible function arguments" in str(excinfo.value)
 
     with pytest.raises(RuntimeError) as excinfo:
         m.register_invalid_kw_only(m)
-    assert msg(excinfo.value) == """
+    assert msg(
+        excinfo.value
+    ) == """
         arg(): cannot specify an unnamed argument after an kw_only() annotation
     """
 
@@ -219,7 +218,7 @@ def test_args_refcount():
     assert m.args_function(-1, myval) == (-1, myval)
     assert refcount(myval) == expected
 
-    assert m.mixed_plus_args_kwargs(5, 6.0, myval, a=myval) == (5, 6.0, (myval,), {"a": myval})
+    assert m.mixed_plus_args_kwargs(5, 6.0, myval, a=myval) == (5, 6.0, (myval, ), {"a": myval})
     assert refcount(myval) == expected
 
     assert m.args_kwargs_function(7, 8, myval, a=1, b=myval) == \

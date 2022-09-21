@@ -65,25 +65,16 @@ def play(args, map, activation_func="elu", model_name=None):
     obs = env.get_observations()
     env.max_episode_length = 10000
 
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_W, "Forward")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_A, "Left")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_S, "Stop")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_C, "Crouch")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_X, "Tiptoe")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_SPACE, "Back Flip")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_Q, "Jump")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_R, "Reset")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_W, "Forward")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_A, "Left")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_S, "Stop")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_C, "Crouch")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_X, "Tiptoe")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_SPACE, "Back Flip")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_Q, "Jump")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_R, "Reset")
 
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_D, "Right")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_D, "Right")
 
     self = env
     name = model_name or ("anymal" if "anymal" in args.task else "cassie")
@@ -113,11 +104,9 @@ def play(args, map, activation_func="elu", model_name=None):
         obs[..., 10] = 1.
         obs[..., 11] = 0.
         # obs[..., -121:] = 0.
-        actions, _ = ppo_inference_torch(policy_weights, obs.clone().cpu().numpy(),
-                                         map,
-                                         command,
-                                         activation=activation_func,
-                                         deterministic=True)
+        actions, _ = ppo_inference_torch(
+            policy_weights, obs.clone().cpu().numpy(), map, command, activation=activation_func, deterministic=True
+        )
         actions = torch.unsqueeze(torch.from_numpy(actions.astype(np.float32)), dim=0)
         obs, _, rews, dones, infos, = env.step(actions)
         x, y, z = env.base_pos[0]

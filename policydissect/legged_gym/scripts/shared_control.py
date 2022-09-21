@@ -72,7 +72,6 @@ def play(args, map, activation_func="elu", model_name=None):
     # 2nd parameter is size of the font
     font = pygame.font.Font('freesansbold.ttf', 32)
 
-
     assert activation_func == "elu" or activation_func == "tanh", "only support elu or tanh"
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
     # override some parameters for testing
@@ -92,25 +91,16 @@ def play(args, map, activation_func="elu", model_name=None):
     obs = env.get_observations()
     env.max_episode_length = 10000
 
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_W, "Forward")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_A, "Left")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_S, "Stop")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_C, "Crouch")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_X, "Tiptoe")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_SPACE, "Back Flip")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_Q, "Jump")
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_R, "Reset")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_W, "Forward")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_A, "Left")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_S, "Stop")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_C, "Crouch")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_X, "Tiptoe")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_SPACE, "Back Flip")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_Q, "Jump")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_R, "Reset")
 
-    env.gym.subscribe_viewer_keyboard_event(
-        env.viewer, gymapi.KEY_D, "Right")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_D, "Right")
 
     self = env
     name = model_name or ("anymal" if "anymal" in args.task else "cassie")
@@ -138,15 +128,13 @@ def play(args, map, activation_func="elu", model_name=None):
 
         obs[..., 10] = 0.1
         # obs[..., -121:] = 0.
-        actions, _ = ppo_inference_torch(policy_weights, obs.clone().cpu().numpy(),
-                                         map,
-                                         command,
-                                         activation=activation_func,
-                                         deterministic=True)
+        actions, _ = ppo_inference_torch(
+            policy_weights, obs.clone().cpu().numpy(), map, command, activation=activation_func, deterministic=True
+        )
         actions = torch.unsqueeze(torch.from_numpy(actions.astype(np.float32)), dim=0)
         obs, _, rews, dones, infos, = env.step(actions)
-        x,y,z = env.base_pos[0]
-        env.set_camera((x-3, y, 2), (x, y, z))
+        x, y, z = env.base_pos[0]
+        env.set_camera((x - 3, y, 2), (x, y, z))
         # env.render()
         counter -= 1
         display_surface.fill(white)
@@ -170,29 +158,48 @@ def play(args, map, activation_func="elu", model_name=None):
 
 
 if __name__ == '__main__':
-    cassie_elu = {"Right": {1: [(169, 10)]},
-                  "Forward": {2: [(2, 5)]},
-                  "z": {0: [(267, 7), (497, 10)]}
-                  }
-    z_0_cassie_elu = {"Right": {1: [(169, 10)]},
-                      "Forward": {1: [(40, 28)], 0: [(487, -10)]},
-                      "z": {0: [(394, 146), (170, 143), (487, -100)]}
-                      }
+    cassie_elu = {"Right": {1: [(169, 10)]}, "Forward": {2: [(2, 5)]}, "z": {0: [(267, 7), (497, 10)]}}
+    z_0_cassie_elu = {
+        "Right": {
+            1: [(169, 10)]
+        },
+        "Forward": {
+            1: [(40, 28)],
+            0: [(487, -10)]
+        },
+        "z": {
+            0: [(394, 146), (170, 143), (487, -100)]
+        }
+    }
     anymal_elu = {"Forward": {0: [(143, -15)]}}
 
     forward_cassie = {
         # 0
-        "Tiptoe": {0: [(261, 10), (212, 5), (395, 5), (260, 10), (30, -1)]},
-        "Crouch": {0: [(261, -12), (260, 6)]},
+        "Tiptoe": {
+            0: [(261, 10), (212, 5), (395, 5), (260, 10), (30, -1)]
+        },
+        "Crouch": {
+            0: [(261, -12), (260, 6)]
+        },
         # 0,3
-        "Back Flip": {0: [(47, 50), (479, 40), (261, 45)]},
+        "Back Flip": {
+            0: [(47, 50), (479, 40), (261, 45)]
+        },
         # 2
-        "Left": {0: [(30, 10)]},
-        "Right": {0: [(30, -9), (452, 20), (261, -9)]},
+        "Left": {
+            0: [(30, 10)]
+        },
+        "Right": {
+            0: [(30, -9), (452, 20), (261, -9)]
+        },
         # 1
-        "Forward": {0: [(452, 20), (30, -1), (227, 8)]},
+        "Forward": {
+            0: [(452, 20), (30, -1), (227, 8)]
+        },
         # 21/15 hip flexion
-        "Jump": {0: [(212, 25), (395, 25), (261, 10), (260, 5), (30, -15), (227, 12)]},
+        "Jump": {
+            0: [(212, 25), (395, 25), (261, 10), (260, 5), (30, -15), (227, 12)]
+        },
         "Stop": {}
     }
     # (479, 30) (47, 32)

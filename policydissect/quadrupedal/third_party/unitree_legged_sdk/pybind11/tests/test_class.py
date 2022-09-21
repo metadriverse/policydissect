@@ -73,14 +73,18 @@ def test_docstrings(doc):
     assert UserType.get_value.__name__ == "get_value"
     assert UserType.get_value.__module__ == "pybind11_tests"
 
-    assert doc(UserType.get_value) == """
+    assert doc(
+        UserType.get_value
+    ) == """
         get_value(self: m.UserType) -> int
 
         Get value using a method
     """
     assert doc(UserType.value) == "Get/set value using a property"
 
-    assert doc(m.NoConstructor.new_instance) == """
+    assert doc(
+        m.NoConstructor.new_instance
+    ) == """
         new_instance() -> m.class_.NoConstructor
 
         Return an instance
@@ -132,7 +136,9 @@ def test_inheritance(msg):
 
     with pytest.raises(TypeError) as excinfo:
         m.dog_bark(polly)
-    assert msg(excinfo.value) == """
+    assert msg(
+        excinfo.value
+    ) == """
         dog_bark(): incompatible function arguments. The following argument types are supported:
             1. (arg0: m.class_.Dog) -> str
 
@@ -150,6 +156,7 @@ def test_inheritance_init(msg):
     class Python(m.Pet):
         def __init__(self):
             pass
+
     with pytest.raises(TypeError) as exc_info:
         Python()
     expected = "m.class_.Pet.__init__() must be called when overriding __init__"
@@ -191,13 +198,17 @@ def test_mismatched_holder():
 
     with pytest.raises(RuntimeError) as excinfo:
         m.mismatched_holder_1()
-    assert re.match('generic_type: type ".*MismatchDerived1" does not have a non-default '
-                    'holder type while its base ".*MismatchBase1" does', str(excinfo.value))
+    assert re.match(
+        'generic_type: type ".*MismatchDerived1" does not have a non-default '
+        'holder type while its base ".*MismatchBase1" does', str(excinfo.value)
+    )
 
     with pytest.raises(RuntimeError) as excinfo:
         m.mismatched_holder_2()
-    assert re.match('generic_type: type ".*MismatchDerived2" has a non-default holder type '
-                    'while its base ".*MismatchBase2" does not', str(excinfo.value))
+    assert re.match(
+        'generic_type: type ".*MismatchDerived2" has a non-default holder type '
+        'while its base ".*MismatchBase2" does not', str(excinfo.value)
+    )
 
 
 def test_override_static():
@@ -221,7 +232,6 @@ def test_implicit_conversion_life_support():
 
 def test_operator_new_delete(capture):
     """Tests that class-specific operator new/delete functions are invoked"""
-
     class SubAliased(m.AliasedHasOpNewDelSize):
         pass
 
@@ -239,10 +249,7 @@ def test_operator_new_delete(capture):
     with capture:
         c = m.AliasedHasOpNewDelSize()
         c2 = SubAliased()
-    assert capture == (
-        "C new " + sz_noalias + "\n" +
-        "C new " + sz_alias + "\n"
-    )
+    assert capture == ("C new " + sz_noalias + "\n" + "C new " + sz_alias + "\n")
 
     with capture:
         del a
@@ -262,10 +269,7 @@ def test_operator_new_delete(capture):
         pytest.gc_collect()
         del c2
         pytest.gc_collect()
-    assert capture == (
-        "C delete " + sz_noalias + "\n" +
-        "C delete " + sz_alias + "\n"
-    )
+    assert capture == ("C delete " + sz_noalias + "\n" + "C delete " + sz_alias + "\n")
 
 
 def test_bind_protected_functions():
@@ -325,7 +329,9 @@ def test_reentrant_implicit_conversion_failure(msg):
     # ensure that there is no runaway reentrant implicit conversion (#1035)
     with pytest.raises(TypeError) as excinfo:
         m.BogusImplicitConversion(0)
-    assert msg(excinfo.value) == '''
+    assert msg(
+        excinfo.value
+    ) == '''
         __init__(): incompatible constructor arguments. The following argument types are supported:
             1. m.class_.BogusImplicitConversion(arg0: m.class_.BogusImplicitConversion)
 
@@ -336,8 +342,7 @@ def test_reentrant_implicit_conversion_failure(msg):
 def test_error_after_conversions():
     with pytest.raises(TypeError) as exc_info:
         m.test_error_after_conversions("hello")
-    assert str(exc_info.value).startswith(
-        "Unable to convert function return value to a Python type!")
+    assert str(exc_info.value).startswith("Unable to convert function return value to a Python type!")
 
 
 def test_aligned():
@@ -350,8 +355,10 @@ def test_aligned():
 @pytest.mark.xfail("env.PYPY")
 def test_final():
     with pytest.raises(TypeError) as exc_info:
+
         class PyFinalChild(m.IsFinal):
             pass
+
     assert str(exc_info.value).endswith("is not an acceptable base type")
 
 
@@ -359,8 +366,10 @@ def test_final():
 @pytest.mark.xfail("env.PYPY")
 def test_non_final_final():
     with pytest.raises(TypeError) as exc_info:
+
         class PyNonFinalFinalChild(m.IsNonFinalFinal):
             pass
+
     assert str(exc_info.value).endswith("is not an acceptable base type")
 
 
@@ -399,8 +408,7 @@ def test_register_duplicate_class():
     module_scope = types.ModuleType("module_scope")
     with pytest.raises(RuntimeError) as exc_info:
         m.register_duplicate_class_name(module_scope)
-    expected = ('generic_type: cannot initialize type "Duplicate": '
-                'an object with that name is already defined')
+    expected = ('generic_type: cannot initialize type "Duplicate": ' 'an object with that name is already defined')
     assert str(exc_info.value) == expected
     with pytest.raises(RuntimeError) as exc_info:
         m.register_duplicate_class_type(module_scope)
@@ -409,10 +417,13 @@ def test_register_duplicate_class():
 
     class ClassScope:
         pass
+
     with pytest.raises(RuntimeError) as exc_info:
         m.register_duplicate_nested_class_name(ClassScope)
-    expected = ('generic_type: cannot initialize type "DuplicateNested": '
-                'an object with that name is already defined')
+    expected = (
+        'generic_type: cannot initialize type "DuplicateNested": '
+        'an object with that name is already defined'
+    )
     assert str(exc_info.value) == expected
     with pytest.raises(RuntimeError) as exc_info:
         m.register_duplicate_nested_class_type(ClassScope)
