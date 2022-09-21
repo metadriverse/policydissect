@@ -22,25 +22,34 @@ The policy dissection method and training code will be updated soon.
 
 - [x] MetaDrive
 - [x] Pybullet-Quadrupedal Robot (Forked from: https://github.com/Mehooz/vision4leg.git)
-- [ ] Isaacgym-Cassie
-- [ ] Isaacgym-ANYmal
+- [x] Isaacgym-Cassie
+- [x] Isaacgym-ANYmal
 - [ ] Gym-Walker
 - [ ] Gym-BipedalWalker
 - [ ] Gym-Ant
 
 ## Installation
-
+### Basic Installation
 ```bash
 # Clone the code to local
 git clone https://github.com/metadriverse/policydissect.git
 cd policydissect
 
 # Create virtual environment
-conda create -n haco python=3.7
+conda create -n policydissect python=3.7
 conda activate policydissect
+
+# install torch
+pip3 install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
 
 # Install basic dependency
 pip install -e .
+```
+
+### IsaacGym Installation (Optional) 
+For playing with agents trained in IsaacGym, follow the instructions below to install IsaacGym 
+- Download and install Isaac Gym Preview 3 (Preview 2 will not work!) from https://developer.nvidia.com/isaac-gym
+- cd ```isaacgym/python && pip install -e .``` 
 ```
 
 ## Play
