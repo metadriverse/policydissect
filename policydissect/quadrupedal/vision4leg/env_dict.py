@@ -10,7 +10,6 @@ SETTING_DICT = {
 
 ENV_DICT = {
     "A1MoveGround": eb.build_a1_ground_env,
-    "A1MoveGroundMPC": eb.build_a1_ground_mpc_env,
 }
 
 NO_PATH_LILST = [

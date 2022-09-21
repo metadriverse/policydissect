@@ -224,10 +224,8 @@ setup(
     name="policydissect",
     install_requires=[
         "metadrive-simulator==0.2.5.1",
-        "pygame",
         "setuptools==50.0.0",
         "tensorboard",
-        "keyboard",
         "yapf==0.30.0",
         "toolz",
         'numpy',
