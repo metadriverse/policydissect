@@ -126,9 +126,7 @@ def test_bytes(doc):
     assert m.bytes_from_string().decode() == "foo"
     assert m.bytes_from_str().decode() == "bar"
 
-    assert doc(m.bytes_from_str) == "bytes_from_str() -> {}".format(
-        "str" if env.PY2 else "bytes"
-    )
+    assert doc(m.bytes_from_str) == "bytes_from_str() -> {}".format("str" if env.PY2 else "bytes")
 
 
 def test_capsule(capture):
@@ -254,8 +252,7 @@ def test_non_converting_constructors():
     for t, v in non_converting_test_cases:
         with pytest.raises(TypeError) as excinfo:
             m.nonconverting_constructor(t, v)
-        expected_error = "Object of type '{}' is not an instance of '{}'".format(
-            type(v).__name__, t)
+        expected_error = "Object of type '{}' is not an instance of '{}'".format(type(v).__name__, t)
         assert str(excinfo.value) == expected_error
 
 
@@ -271,7 +268,7 @@ def test_pybind11_str_raw_str():
     assert cvt(2**65) == u"36893488147419103232"
     assert cvt(-1.50) == u"-1.5"
     assert cvt(()) == u"()"
-    assert cvt((18,)) == u"(18,)"
+    assert cvt((18, )) == u"(18,)"
     assert cvt([]) == u"[]"
     assert cvt([28]) == u"[28]"
     assert cvt({}) == u"{}"
@@ -295,9 +292,18 @@ def test_implicit_casting():
     """Tests implicit casting when assigning or appending to dicts and lists."""
     z = m.get_implicit_casting()
     assert z['d'] == {
-        'char*_i1': 'abc', 'char*_i2': 'abc', 'char*_e': 'abc', 'char*_p': 'abc',
-        'str_i1': 'str', 'str_i2': 'str1', 'str_e': 'str2', 'str_p': 'str3',
-        'int_i1': 42, 'int_i2': 42, 'int_e': 43, 'int_p': 44
+        'char*_i1': 'abc',
+        'char*_i2': 'abc',
+        'char*_e': 'abc',
+        'char*_p': 'abc',
+        'str_i1': 'str',
+        'str_i2': 'str1',
+        'str_e': 'str2',
+        'str_p': 'str3',
+        'int_i1': 42,
+        'int_i2': 42,
+        'int_e': 43,
+        'int_p': 44
     }
     assert z['l'] == [3, 6, 9, 12, 15]
 
@@ -319,8 +325,7 @@ def test_print(capture):
         m.print_failure()
     assert str(excinfo.value) == "make_tuple(): unable to convert " + (
         "argument of type 'UnregisteredType' to Python object"
-        if debug_enabled else
-        "arguments to Python object (compile in debug mode for details)"
+        if debug_enabled else "arguments to Python object (compile in debug mode for details)"
     )
 
 
@@ -342,8 +347,10 @@ def test_hash():
 
 def test_number_protocol():
     for a, b in [(1, 1), (3, 5)]:
-        li = [a == b, a != b, a < b, a <= b, a > b, a >= b, a + b,
-              a - b, a * b, a / b, a | b, a & b, a ^ b, a >> b, a << b]
+        li = [
+            a == b, a != b, a < b, a <= b, a > b, a >= b, a + b, a - b, a * b, a / b, a | b, a & b, a ^ b, a >> b,
+            a << b
+        ]
         assert m.test_number_protocol(a, b) == li
 
 
@@ -360,13 +367,15 @@ def test_issue2361():
     assert "'NoneType' object is not iterable" in str(excinfo.value)
 
 
-@pytest.mark.parametrize('method, args, fmt, expected_view', [
-    (m.test_memoryview_object, (b'red',), 'B', b'red'),
-    (m.test_memoryview_buffer_info, (b'green',), 'B', b'green'),
-    (m.test_memoryview_from_buffer, (False,), 'h', [3, 1, 4, 1, 5]),
-    (m.test_memoryview_from_buffer, (True,), 'H', [2, 7, 1, 8]),
-    (m.test_memoryview_from_buffer_nativeformat, (), '@i', [4, 7, 5]),
-])
+@pytest.mark.parametrize(
+    'method, args, fmt, expected_view', [
+        (m.test_memoryview_object, (b'red', ), 'B', b'red'),
+        (m.test_memoryview_buffer_info, (b'green', ), 'B', b'green'),
+        (m.test_memoryview_from_buffer, (False, ), 'h', [3, 1, 4, 1, 5]),
+        (m.test_memoryview_from_buffer, (True, ), 'H', [2, 7, 1, 8]),
+        (m.test_memoryview_from_buffer_nativeformat, (), '@i', [4, 7, 5]),
+    ]
+)
 def test_memoryview(method, args, fmt, expected_view):
     view = method(*args)
     assert isinstance(view, memoryview)

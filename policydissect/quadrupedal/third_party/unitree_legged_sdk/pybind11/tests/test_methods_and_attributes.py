@@ -40,12 +40,12 @@ def test_methods_and_attributes():
     assert instance1.overloaded(0) == "(int)"
     assert instance1.overloaded(1, 1.0) == "(int, float)"
     assert instance1.overloaded(2.0, 2) == "(float, int)"
-    assert instance1.overloaded(3,   3) == "(int, int)"
+    assert instance1.overloaded(3, 3) == "(int, int)"
     assert instance1.overloaded(4., 4.) == "(float, float)"
     assert instance1.overloaded_const(-3) == "(int) const"
     assert instance1.overloaded_const(5, 5.0) == "(int, float) const"
     assert instance1.overloaded_const(6.0, 6) == "(float, int) const"
-    assert instance1.overloaded_const(7,   7) == "(int, int) const"
+    assert instance1.overloaded_const(7, 7) == "(int, int) const"
     assert instance1.overloaded_const(8., 8.) == "(float, float) const"
     assert instance1.overloaded_float(1, 1) == "(float, float)"
     assert instance1.overloaded_float(1, 1.) == "(float, float)"
@@ -206,22 +206,24 @@ def test_no_mixed_overloads():
 
     with pytest.raises(RuntimeError) as excinfo:
         m.ExampleMandA.add_mixed_overloads1()
-    assert (str(excinfo.value) ==
-            "overloading a method with both static and instance methods is not supported; " +
-            ("compile in debug mode for more details" if not debug_enabled else
-             "error while attempting to bind static method ExampleMandA.overload_mixed1"
-             "(arg0: float) -> str")
-            )
+    assert (
+        str(excinfo.value) == "overloading a method with both static and instance methods is not supported; " + (
+            "compile in debug mode for more details"
+            if not debug_enabled else "error while attempting to bind static method ExampleMandA.overload_mixed1"
+            "(arg0: float) -> str"
+        )
+    )
 
     with pytest.raises(RuntimeError) as excinfo:
         m.ExampleMandA.add_mixed_overloads2()
-    assert (str(excinfo.value) ==
-            "overloading a method with both static and instance methods is not supported; " +
-            ("compile in debug mode for more details" if not debug_enabled else
-             "error while attempting to bind instance method ExampleMandA.overload_mixed2"
-             "(self: pybind11_tests.methods_and_attributes.ExampleMandA, arg0: int, arg1: int)"
-             " -> str")
-            )
+    assert (
+        str(excinfo.value) == "overloading a method with both static and instance methods is not supported; " + (
+            "compile in debug mode for more details"
+            if not debug_enabled else "error while attempting to bind instance method ExampleMandA.overload_mixed2"
+            "(self: pybind11_tests.methods_and_attributes.ExampleMandA, arg0: int, arg1: int)"
+            " -> str"
+        )
+    )
 
 
 @pytest.mark.parametrize("access", ["ro", "rw", "static_ro", "static_rw"])
@@ -333,8 +335,7 @@ def test_bad_arg_default(msg):
     assert msg(excinfo.value) == (
         "arg(): could not convert default argument 'a: UnregisteredType' in function "
         "'should_fail' into a Python object (type not registered yet?)"
-        if debug_enabled else
-        "arg(): could not convert default argument into a Python object (type not registered "
+        if debug_enabled else "arg(): could not convert default argument into a Python object (type not registered "
         "yet?). Compile in debug mode for more information."
     )
 
@@ -343,8 +344,7 @@ def test_bad_arg_default(msg):
     assert msg(excinfo.value) == (
         "arg(): could not convert default argument 'UnregisteredType' in function "
         "'should_fail' into a Python object (type not registered yet?)"
-        if debug_enabled else
-        "arg(): could not convert default argument into a Python object (type not registered "
+        if debug_enabled else "arg(): could not convert default argument into a Python object (type not registered "
         "yet?). Compile in debug mode for more information."
     )
 
@@ -381,7 +381,9 @@ def test_accepts_none(msg):
     # The first one still raises because you can't pass None as a lvalue reference arg:
     with pytest.raises(TypeError) as excinfo:
         assert m.ok_none1(None) == -1
-    assert msg(excinfo.value) == """
+    assert msg(
+        excinfo.value
+    ) == """
         ok_none1(): incompatible function arguments. The following argument types are supported:
             1. (arg0: m.methods_and_attributes.NoneTester) -> int
 
@@ -402,7 +404,9 @@ def test_str_issue(msg):
 
     with pytest.raises(TypeError) as excinfo:
         str(m.StrIssue("no", "such", "constructor"))
-    assert msg(excinfo.value) == """
+    assert msg(
+        excinfo.value
+    ) == """
         __init__(): incompatible constructor arguments. The following argument types are supported:
             1. m.methods_and_attributes.StrIssue(arg0: int)
             2. m.methods_and_attributes.StrIssue()

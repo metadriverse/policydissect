@@ -140,9 +140,7 @@ def test_ctypes_array_2d():
         assert not info.readonly
 
 
-@pytest.mark.skipif(
-    "env.PYPY and env.PY2", reason="PyPy2 bytes buffer not reported as readonly"
-)
+@pytest.mark.skipif("env.PYPY and env.PY2", reason="PyPy2 bytes buffer not reported as readonly")
 def test_ctypes_from_buffer():
     test_pystr = b"0123456789"
     for pyarray in (test_pystr, bytearray(test_pystr)):

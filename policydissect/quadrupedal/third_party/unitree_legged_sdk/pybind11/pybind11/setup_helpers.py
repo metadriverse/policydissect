@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 This module provides helpers for C++11+ projects using pybind11.
 
@@ -51,12 +50,10 @@ except ImportError:
 import distutils.errors
 import distutils.ccompiler
 
-
 WIN = sys.platform.startswith("win32")
 PY2 = sys.version_info[0] < 3
 MACOS = sys.platform.startswith("darwin")
 STD_TMPL = "/std:c++{}" if WIN else "-std=c++{}"
-
 
 # It is recommended to use PEP 518 builds if using this module. However, this
 # file explicitly supports being copied into a user's project directory
@@ -91,7 +88,6 @@ class Pybind11Extension(_Extension):
     Warning: do not use property-based access to the instance on Python 2 -
     this is an ugly old-style class due to Distutils.
     """
-
     def _add_cflags(self, *flags):
         for flag in flags:
             if flag not in self.extra_compile_args:
@@ -266,7 +262,6 @@ class build_ext(_build_ext):  # noqa: N801
     Customized build_ext that allows an auto-search for the highest supported
     C++ level for Pybind11Extension.
     """
-
     def build_extensions(self):
         """
         Build extensions, injecting C++ std for Pybind11Extension if needed.
@@ -318,7 +313,6 @@ class ParallelCompile(object):
         """
         Builds a function object usable as distutils.ccompiler.CCompiler.compile.
         """
-
         def compile_function(
             compiler,
             sources,

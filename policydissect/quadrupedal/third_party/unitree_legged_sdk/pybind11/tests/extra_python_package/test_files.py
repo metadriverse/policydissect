@@ -13,7 +13,6 @@ import zipfile
 DIR = os.path.abspath(os.path.dirname(__file__))
 MAIN_DIR = os.path.dirname(os.path.dirname(DIR))
 
-
 main_headers = {
     "include/pybind11/attr.h",
     "include/pybind11/buffer_info.h",
@@ -66,7 +65,6 @@ headers = main_headers | detail_headers
 src_files = headers | cmake_files
 all_files = src_files | py_files
 
-
 sdist_files = {
     "pybind11",
     "pybind11/include",
@@ -98,34 +96,28 @@ def test_build_sdist(monkeypatch, tmpdir):
 
     monkeypatch.chdir(MAIN_DIR)
 
-    out = subprocess.check_output(
-        [
-            sys.executable,
-            "setup.py",
-            "sdist",
-            "--formats=tar",
-            "--dist-dir",
-            str(tmpdir),
-        ]
-    )
+    out = subprocess.check_output([
+        sys.executable,
+        "setup.py",
+        "sdist",
+        "--formats=tar",
+        "--dist-dir",
+        str(tmpdir),
+    ])
     if hasattr(out, "decode"):
         out = out.decode()
 
-    (sdist,) = tmpdir.visit("*.tar")
+    (sdist, ) = tmpdir.visit("*.tar")
 
     with tarfile.open(str(sdist)) as tar:
         start = tar.getnames()[0] + "/"
         version = start[9:-1]
         simpler = set(n.split("/", 1)[-1] for n in tar.getnames()[1:])
 
-        with contextlib.closing(
-            tar.extractfile(tar.getmember(start + "setup.py"))
-        ) as f:
+        with contextlib.closing(tar.extractfile(tar.getmember(start + "setup.py"))) as f:
             setup_py = f.read()
 
-        with contextlib.closing(
-            tar.extractfile(tar.getmember(start + "pyproject.toml"))
-        ) as f:
+        with contextlib.closing(tar.extractfile(tar.getmember(start + "pyproject.toml"))) as f:
             pyproject_toml = f.read()
 
     files = set("pybind11/{}".format(n) for n in all_files)
@@ -136,11 +128,7 @@ def test_build_sdist(monkeypatch, tmpdir):
     assert simpler == files
 
     with open(os.path.join(MAIN_DIR, "tools", "setup_main.py.in"), "rb") as f:
-        contents = (
-            string.Template(f.read().decode())
-            .substitute(version=version, extra_cmd="")
-            .encode()
-        )
+        contents = (string.Template(f.read().decode()).substitute(version=version, extra_cmd="").encode())
         assert setup_py == contents
 
     with open(os.path.join(MAIN_DIR, "tools", "pyproject.toml"), "rb") as f:
@@ -153,34 +141,28 @@ def test_build_global_dist(monkeypatch, tmpdir):
     monkeypatch.chdir(MAIN_DIR)
     monkeypatch.setenv("PYBIND11_GLOBAL_SDIST", "1")
 
-    out = subprocess.check_output(
-        [
-            sys.executable,
-            "setup.py",
-            "sdist",
-            "--formats=tar",
-            "--dist-dir",
-            str(tmpdir),
-        ]
-    )
+    out = subprocess.check_output([
+        sys.executable,
+        "setup.py",
+        "sdist",
+        "--formats=tar",
+        "--dist-dir",
+        str(tmpdir),
+    ])
     if hasattr(out, "decode"):
         out = out.decode()
 
-    (sdist,) = tmpdir.visit("*.tar")
+    (sdist, ) = tmpdir.visit("*.tar")
 
     with tarfile.open(str(sdist)) as tar:
         start = tar.getnames()[0] + "/"
         version = start[16:-1]
         simpler = set(n.split("/", 1)[-1] for n in tar.getnames()[1:])
 
-        with contextlib.closing(
-            tar.extractfile(tar.getmember(start + "setup.py"))
-        ) as f:
+        with contextlib.closing(tar.extractfile(tar.getmember(start + "setup.py"))) as f:
             setup_py = f.read()
 
-        with contextlib.closing(
-            tar.extractfile(tar.getmember(start + "pyproject.toml"))
-        ) as f:
+        with contextlib.closing(tar.extractfile(tar.getmember(start + "pyproject.toml"))) as f:
             pyproject_toml = f.read()
 
     files = set("pybind11/{}".format(n) for n in all_files)
@@ -189,11 +171,7 @@ def test_build_global_dist(monkeypatch, tmpdir):
     assert simpler == files
 
     with open(os.path.join(MAIN_DIR, "tools", "setup_global.py.in"), "rb") as f:
-        contents = (
-            string.Template(f.read().decode())
-            .substitute(version=version, extra_cmd="")
-            .encode()
-        )
+        contents = (string.Template(f.read().decode()).substitute(version=version, extra_cmd="").encode())
         assert setup_py == contents
 
     with open(os.path.join(MAIN_DIR, "tools", "pyproject.toml"), "rb") as f:
@@ -204,11 +182,9 @@ def test_build_global_dist(monkeypatch, tmpdir):
 def tests_build_wheel(monkeypatch, tmpdir):
     monkeypatch.chdir(MAIN_DIR)
 
-    subprocess.check_output(
-        [sys.executable, "-m", "pip", "wheel", ".", "-w", str(tmpdir)]
-    )
+    subprocess.check_output([sys.executable, "-m", "pip", "wheel", ".", "-w", str(tmpdir)])
 
-    (wheel,) = tmpdir.visit("*.whl")
+    (wheel, ) = tmpdir.visit("*.whl")
 
     files = set("pybind11/{}".format(n) for n in all_files)
     files |= {
@@ -224,9 +200,7 @@ def tests_build_wheel(monkeypatch, tmpdir):
         names = z.namelist()
 
     trimmed = set(n for n in names if "dist-info" not in n)
-    trimmed |= set(
-        "dist-info/{}".format(n.split("/", 1)[-1]) for n in names if "dist-info" in n
-    )
+    trimmed |= set("dist-info/{}".format(n.split("/", 1)[-1]) for n in names if "dist-info" in n)
     assert files == trimmed
 
 
@@ -234,11 +208,9 @@ def tests_build_global_wheel(monkeypatch, tmpdir):
     monkeypatch.chdir(MAIN_DIR)
     monkeypatch.setenv("PYBIND11_GLOBAL_SDIST", "1")
 
-    subprocess.check_output(
-        [sys.executable, "-m", "pip", "wheel", ".", "-w", str(tmpdir)]
-    )
+    subprocess.check_output([sys.executable, "-m", "pip", "wheel", ".", "-w", str(tmpdir)])
 
-    (wheel,) = tmpdir.visit("*.whl")
+    (wheel, ) = tmpdir.visit("*.whl")
 
     files = set("data/data/{}".format(n) for n in src_files)
     files |= set("data/headers/{}".format(n[8:]) for n in headers)
@@ -254,6 +226,6 @@ def tests_build_global_wheel(monkeypatch, tmpdir):
         names = z.namelist()
 
     beginning = names[0].split("/", 1)[0].rsplit(".", 1)[0]
-    trimmed = set(n[len(beginning) + 1 :] for n in names)
+    trimmed = set(n[len(beginning) + 1:] for n in names)
 
     assert files == trimmed

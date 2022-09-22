@@ -16,20 +16,16 @@ def control_neuron_activation(layer_out_put, layer, conditional_control_map, com
                     x[0][neuron] = activation_score
 
 
-def ppo_inference_tf(weights,
-                     obs,
-                     hidden_layer_num,
-                     conditional_control_map,
-                     command,
-                     deterministic=False,
-                     activation="tanh"):
+def ppo_inference_tf(
+    weights, obs, hidden_layer_num, conditional_control_map, command, deterministic=False, activation="tanh"
+):
     step_activation_value = []
     obs = obs.reshape(1, -1)
     x = obs
     activate_func = np.tanh if activation == "tanh" else relu
     for layer in range(1, hidden_layer_num + 1):
-        x = np.matmul(x, weights["default_policy/fc_{}/kernel".format(layer)]) + weights[
-            "default_policy/fc_{}/bias".format(layer)]
+        x = np.matmul(x, weights["default_policy/fc_{}/kernel".format(layer)
+                                 ]) + weights["default_policy/fc_{}/bias".format(layer)]
         before_tanh = x
         x = activate_func(x)
         control_neuron_activation(x, layer - 1, conditional_control_map, command)
@@ -44,19 +40,16 @@ def ppo_inference_tf(weights,
     return np.random.normal(mean, std)
 
 
-def ppo_inference_torch(weights, obs,
-                        conditional_control_map,
-                        command,
-                        deterministic=False, activation="tanh",
-                        tanh_action=True):
+def ppo_inference_torch(
+    weights, obs, conditional_control_map, command, deterministic=False, activation="tanh", tanh_action=True
+):
     step_activation_value = []
     activate_func = relu if activation == "relu" else np.tanh
     obs = obs.reshape(1, -1)
     x = obs[0]
     layers = ["base.seq_fcs.0", "base.seq_fcs.2", "seq_append_fcs.0", "seq_append_fcs.2", "seq_append_fcs.4"]
     for layer_index, layer in enumerate(layers):
-        x = np.matmul(weights["{}.weight".format(layer)], x) + weights[
-            "{}.bias".format(layer)]
+        x = np.matmul(weights["{}.weight".format(layer)], x) + weights["{}.bias".format(layer)]
         if layer_index < len(layers) - 1:
             x = activate_func(x)
             control_neuron_activation(x, layer_index, conditional_control_map, command, legged=True)

@@ -12,13 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """This file implements the robot specific pose tools."""
 
 import os
 import inspect
-currentdir = os.path.dirname(os.path.abspath(
-  inspect.getfile(inspect.currentframe())))
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
 
@@ -49,7 +47,7 @@ _MINI_CHEETAH_SWING_CONVERSION_MULTIPLIER = 1.0
 
 
 def get_neutral_motor_angles(robot_class):
-  """Return a neutral (standing) pose for a given robot type.
+    """Return a neutral (standing) pose for a given robot type.
 
   Args:
     robot_class: This returns the class (not the instance) for the robot.
@@ -62,29 +60,32 @@ def get_neutral_motor_angles(robot_class):
   Raises:
     ValueError: If the given robot_class is different than the supported robots.
   """
-  if str(robot_class) == str(laikago.Laikago):
-    init_pose = np.array(
-      attr.astuple(
-        laikago_pose_utils.LaikagoPose(
-          abduction_angle_0=0,
-          hip_angle_0=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
-          knee_angle_0=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE,
-          abduction_angle_1=0,
-          hip_angle_1=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
-          knee_angle_1=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE,
-          abduction_angle_2=0,
-          hip_angle_2=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
-          knee_angle_2=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE,
-          abduction_angle_3=0,
-          hip_angle_3=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
-          knee_angle_3=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE)))
-  else:
-    init_pose = robot_class.get_neutral_motor_angles()
-  return init_pose
+    if str(robot_class) == str(laikago.Laikago):
+        init_pose = np.array(
+            attr.astuple(
+                laikago_pose_utils.LaikagoPose(
+                    abduction_angle_0=0,
+                    hip_angle_0=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
+                    knee_angle_0=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE,
+                    abduction_angle_1=0,
+                    hip_angle_1=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
+                    knee_angle_1=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE,
+                    abduction_angle_2=0,
+                    hip_angle_2=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
+                    knee_angle_2=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE,
+                    abduction_angle_3=0,
+                    hip_angle_3=_LAIKAGO_NEUTRAL_POSE_HIP_ANGLE,
+                    knee_angle_3=_LAIKAGO_NEUTRAL_POSE_KNEE_ANGLE
+                )
+            )
+        )
+    else:
+        init_pose = robot_class.get_neutral_motor_angles()
+    return init_pose
 
 
 def convert_leg_pose_to_motor_angles(robot_class, leg_poses):
-  """Convert swing-extend coordinate space to motor angles for a robot type.
+    """Convert swing-extend coordinate space to motor angles for a robot type.
 
   Args:
     robot_class: This returns the class (not the instance) for the robot.
@@ -106,29 +107,29 @@ def convert_leg_pose_to_motor_angles(robot_class, leg_poses):
   Raises:
     ValueError: Conversion fails due to wrong inputs.
   """
-  if len(leg_poses) not in [8, 12]:
-    raise ValueError("Dimension of the leg pose provided is not 8 or 12.")
-  neutral_motor_angles = get_neutral_motor_angles(robot_class)
-  motor_angles = leg_poses
-  # If it is a robot with 12 motors but the provided leg pose does not contain
-  # abduction, extend the pose to include abduction.
-  if len(neutral_motor_angles) == 12 and len(leg_poses) == 8:
-    for i in _ABDUCTION_ACTION_INDEXES:
-      motor_angles.insert(i, 0)
-  # If the robot does not have abduction (minitaur) but the input contains them,
-  # ignore the abduction angles for the conversion.
-  elif len(neutral_motor_angles) == 8 and len(leg_poses) == 12:
-    del leg_poses[::3]
+    if len(leg_poses) not in [8, 12]:
+        raise ValueError("Dimension of the leg pose provided is not 8 or 12.")
+    neutral_motor_angles = get_neutral_motor_angles(robot_class)
+    motor_angles = leg_poses
+    # If it is a robot with 12 motors but the provided leg pose does not contain
+    # abduction, extend the pose to include abduction.
+    if len(neutral_motor_angles) == 12 and len(leg_poses) == 8:
+        for i in _ABDUCTION_ACTION_INDEXES:
+            motor_angles.insert(i, 0)
+    # If the robot does not have abduction (minitaur) but the input contains them,
+    # ignore the abduction angles for the conversion.
+    elif len(neutral_motor_angles) == 8 and len(leg_poses) == 12:
+        del leg_poses[::3]
 
-  # Minitaur specific conversion calculations using minitaur-specific safety
-  # limits.
-  if str(robot_class) == str(laikago.Laikago):
-    swing_scale = 1.0
-    extension_scale = 1.0
-    # Laikago specific conversion multipliers.
-    swing_scale = _LAIKAGO_SWING_CONVERSION_MULTIPLIER
-    extension_scale = _LAIKAGO_EXTENSION_CONVERSION_MULTIPLIER
-  else:
-    motor_angles = robot_class.convert_leg_pose_to_motor_angles(leg_poses)
+    # Minitaur specific conversion calculations using minitaur-specific safety
+    # limits.
+    if str(robot_class) == str(laikago.Laikago):
+        swing_scale = 1.0
+        extension_scale = 1.0
+        # Laikago specific conversion multipliers.
+        swing_scale = _LAIKAGO_SWING_CONVERSION_MULTIPLIER
+        extension_scale = _LAIKAGO_EXTENSION_CONVERSION_MULTIPLIER
+    else:
+        motor_angles = robot_class.convert_leg_pose_to_motor_angles(leg_poses)
 
-  return motor_angles
+    return motor_angles

@@ -31,8 +31,7 @@ class MetaDriveEnv(SafeMetaDriveEnv):
 
 
 if __name__ == "__main__":
-    env = MetaDriveEnv({"manual_control": True,
-                        "use_render": True})
+    env = MetaDriveEnv({"manual_control": True, "use_render": True})
     env.reset()
     while True:
         o, r, d, i = env.step([0, 0])

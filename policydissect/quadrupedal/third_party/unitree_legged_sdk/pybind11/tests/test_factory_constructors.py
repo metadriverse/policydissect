@@ -41,9 +41,7 @@ def test_init_factory_basic():
     z3 = m.TestFactory3("bye")
     assert z3.value == "bye"
 
-    for null_ptr_kind in [tag.null_ptr,
-                          tag.null_unique_ptr,
-                          tag.null_shared_ptr]:
+    for null_ptr_kind in [tag.null_ptr, tag.null_unique_ptr, tag.null_shared_ptr]:
         with pytest.raises(TypeError) as excinfo:
             m.TestFactory3(null_ptr_kind)
         assert str(excinfo.value) == "pybind11::init(): factory function returned nullptr"
@@ -58,11 +56,7 @@ def test_init_factory_basic():
     assert [i.alive() for i in cstats] == [0, 0, 0]
     assert ConstructorStats.detail_reg_inst() == n_inst
 
-    assert [i.values() for i in cstats] == [
-        ["3", "hi!"],
-        ["7", "hi again"],
-        ["42", "bye"]
-    ]
+    assert [i.values() for i in cstats] == [["3", "hi!"], ["7", "hi again"], ["42", "bye"]]
     assert [i.default_constructions for i in cstats] == [1, 1, 1]
 
 
@@ -131,11 +125,7 @@ def test_init_factory_casting():
     assert [i.alive() for i in cstats] == [0, 0, 0]
     assert ConstructorStats.detail_reg_inst() == n_inst
 
-    assert [i.values() for i in cstats] == [
-        ["4", "5", "6", "7", "8"],
-        ["4", "5", "8"],
-        ["6", "7"]
-    ]
+    assert [i.values() for i in cstats] == [["4", "5", "6", "7", "8"], ["4", "5", "8"], ["6", "7"]]
 
 
 def test_init_factory_alias():
@@ -268,9 +258,10 @@ def test_init_factory_dual():
     assert not g1.has_alias()
     with pytest.raises(TypeError) as excinfo:
         PythFactory7(tag.shared_ptr, tag.invalid_base, 14)
-    assert (str(excinfo.value) ==
-            "pybind11::init(): construction failed: returned holder-wrapped instance is not an "
-            "alias instance")
+    assert (
+        str(excinfo.value) == "pybind11::init(): construction failed: returned holder-wrapped instance is not an "
+        "alias instance"
+    )
 
     assert [i.alive() for i in cstats] == [13, 7]
     assert ConstructorStats.detail_reg_inst() == n_inst + 13
@@ -345,7 +336,9 @@ def test_reallocation_a(capture, msg):
 
     with capture:
         create_and_destroy(1)
-    assert msg(capture) == """
+    assert msg(
+        capture
+    ) == """
         noisy new
         noisy placement new
         NoisyAlloc(int 1)
@@ -358,7 +351,8 @@ def test_reallocation_a(capture, msg):
 def test_reallocation_b(capture, msg):
     with capture:
         create_and_destroy(1.5)
-    assert msg(capture) == strip_comments("""
+    assert msg(capture) == strip_comments(
+        """
         noisy new               # allocation required to attempt first overload
         noisy delete            # have to dealloc before considering factory init overload
         noisy new               # pointer factory calling "new", part 1: allocation
@@ -366,51 +360,59 @@ def test_reallocation_b(capture, msg):
         ---
         ~NoisyAlloc()  # Destructor
         noisy delete   # operator delete
-    """)
+    """
+    )
 
 
 def test_reallocation_c(capture, msg):
     with capture:
         create_and_destroy(2, 3)
-    assert msg(capture) == strip_comments("""
+    assert msg(capture) == strip_comments(
+        """
         noisy new          # pointer factory calling "new", allocation
         NoisyAlloc(int 2)  # constructor
         ---
         ~NoisyAlloc()  # Destructor
         noisy delete   # operator delete
-    """)
+    """
+    )
 
 
 def test_reallocation_d(capture, msg):
     with capture:
         create_and_destroy(2.5, 3)
-    assert msg(capture) == strip_comments("""
+    assert msg(capture) == strip_comments(
+        """
         NoisyAlloc(double 2.5)  # construction (local func variable: operator_new not called)
         noisy new               # return-by-value "new" part 1: allocation
         ~NoisyAlloc()           # moved-away local func variable destruction
         ---
         ~NoisyAlloc()  # Destructor
         noisy delete   # operator delete
-    """)
+    """
+    )
 
 
 def test_reallocation_e(capture, msg):
     with capture:
         create_and_destroy(3.5, 4.5)
-    assert msg(capture) == strip_comments("""
+    assert msg(capture) == strip_comments(
+        """
         noisy new               # preallocation needed before invoking placement-new overload
         noisy placement new     # Placement new
         NoisyAlloc(double 3.5)  # construction
         ---
         ~NoisyAlloc()  # Destructor
         noisy delete   # operator delete
-    """)
+    """
+    )
 
 
 def test_reallocation_f(capture, msg):
     with capture:
         create_and_destroy(4, 0.5)
-    assert msg(capture) == strip_comments("""
+    assert msg(capture) == strip_comments(
+        """
         noisy new          # preallocation needed before invoking placement-new overload
         noisy delete       # deallocation of preallocated storage
         noisy new          # Factory pointer allocation
@@ -418,13 +420,15 @@ def test_reallocation_f(capture, msg):
         ---
         ~NoisyAlloc()  # Destructor
         noisy delete   # operator delete
-    """)
+    """
+    )
 
 
 def test_reallocation_g(capture, msg):
     with capture:
         create_and_destroy(5, "hi")
-    assert msg(capture) == strip_comments("""
+    assert msg(capture) == strip_comments(
+        """
         noisy new            # preallocation needed before invoking first placement new
         noisy delete         # delete before considering new-style constructor
         noisy new            # preallocation for second placement new
@@ -433,7 +437,8 @@ def test_reallocation_g(capture, msg):
         ---
         ~NoisyAlloc()  # Destructor
         noisy delete   # operator delete
-    """)
+    """
+    )
 
 
 @pytest.mark.skipif("env.PY2")

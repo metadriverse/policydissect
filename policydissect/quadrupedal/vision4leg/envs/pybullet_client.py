@@ -7,10 +7,9 @@ import pybullet
 
 
 class BulletClient(object):
-  """A wrapper for pybullet to manage different clients."""
-
-  def __init__(self, connection_mode=None, key_bias=0):
-    """Creates a Bullet client and connects to a simulation.
+    """A wrapper for pybullet to manage different clients."""
+    def __init__(self, connection_mode=None, key_bias=0):
+        """Creates a Bullet client and connects to a simulation.
     Args:
       connection_mode:
         `None` connects to an existing simulation or, if fails, creates a
@@ -19,32 +18,30 @@ class BulletClient(object):
         `pybullet.DIRECT` creates a headless simulation,
         `pybullet.SHARED_MEMORY` connects to an existing simulation.
     """
-    self._shapes = {}
-    if connection_mode is None:
-      self._client = pybullet.connect(
-        pybullet.SHARED_MEMORY, key=7105+key_bias)
-      print(7105+key_bias)
-      if self._client >= 0:
-        return
-      else:
-        connection_mode = pybullet.DIRECT
-    self._client = pybullet.connect(connection_mode)
+        self._shapes = {}
+        if connection_mode is None:
+            self._client = pybullet.connect(pybullet.SHARED_MEMORY, key=7105 + key_bias)
+            print(7105 + key_bias)
+            if self._client >= 0:
+                return
+            else:
+                connection_mode = pybullet.DIRECT
+        self._client = pybullet.connect(connection_mode)
 
-  def __del__(self):
-    """Clean up connection if not already done."""
-    if self._client >= 0:
-      try:
-        pybullet.disconnect(physicsClientId=self._client)
-        self._client = -1
-      except pybullet.error:
-        pass
+    def __del__(self):
+        """Clean up connection if not already done."""
+        if self._client >= 0:
+            try:
+                pybullet.disconnect(physicsClientId=self._client)
+                self._client = -1
+            except pybullet.error:
+                pass
 
-  def __getattr__(self, name):
-    """Inject the client id into Bullet functions."""
-    attribute = getattr(pybullet, name)
-    if inspect.isbuiltin(attribute):
-      attribute = functools.partial(
-        attribute, physicsClientId=self._client)
-    if name == "disconnect":
-      self._client = -1
-    return attribute
+    def __getattr__(self, name):
+        """Inject the client id into Bullet functions."""
+        attribute = getattr(pybullet, name)
+        if inspect.isbuiltin(attribute):
+            attribute = functools.partial(attribute, physicsClientId=self._client)
+        if name == "disconnect":
+            self._client = -1
+        return attribute

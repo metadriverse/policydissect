@@ -18,6 +18,7 @@ try:
     # Python 3.4
     from contextlib import redirect_stdout
 except ImportError:
+
     @contextmanager
     def redirect_stdout(target):
         original = sys.stdout
@@ -25,10 +26,12 @@ except ImportError:
         yield
         sys.stdout = original
 
+
 try:
     # Python 3.5
     from contextlib import redirect_stderr
 except ImportError:
+
     @contextmanager
     def redirect_stderr(target):
         original = sys.stderr
