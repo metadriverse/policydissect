@@ -124,7 +124,7 @@
             <img src="assets/overview.png">
             <div class="text">
                 <br>
-                Fig. 1 Overview of proposed method
+                Fig. 1 Overview of the proposed method
             </div>
         </div>
         <div class="text">
@@ -137,17 +137,19 @@
                 representation of the learned neural controller
                 with the kinematic attributes of the agent behavior. Without modifying the neural controller or
                 retraining the model, the proposed approach can convert a given RL-trained policy into a
-                goal-conditioned policy, which activates specific units to evoke desired behaviors and complete goals.
+                goal-conditioned policy, where specific units can be activated to evoke desired behaviors and complete
+                goals.
                 This, in turn, enables Human-AI shared control where human can control the trained AI and finish complex
                 tasks.
             </p>
             <div class="text" style="font-size: 10pt;" id="ref-1">
                 <p>
-                    1. <a href="https://reader.elsevier.com/reader/sd/pii/S0896627302010036?token=EE38E077CD5A6737DC1EEDF1309838A9B609E4A47110E15E53C9B42F1EA173094A37ACE7622CFC4B43C21E049E63B947&originRegion=eu-west-1&originCreation=20220920182935">
+                    1. <a
+                        href="https://reader.elsevier.com/reader/sd/pii/S0896627302010036?token=EE38E077CD5A6737DC1EEDF1309838A9B609E4A47110E15E53C9B42F1EA173094A37ACE7622CFC4B43C21E049E63B947&originRegion=eu-west-1&originCreation=20220920182935">
                     <em>Graziano,
-                    Michael SA, et al. "The cortical control of movement revisited." Neuron 36.3 (2002):
-                    349-362.</em>
-                    </a>
+                        Michael SA, et al. "The cortical control of movement revisited." Neuron 36.3 (2002):
+                        349-362.</em>
+                </a>
 
                 </p>
             </div>
@@ -193,9 +195,8 @@
 <!--&lt;!&ndash; === Result Section Ends === &ndash;&gt;-->
 <div class="section" style=" text-align: left">
     <div class="title" id="Demo Video">Demo Video</div>
-    We provide a demo video to show the built human-AI shared control systems empowered by policy dissection on various
-    tasks,
-    including quadrupedal robot locomotion, autonomous driving and several gym tasks.
+    We provide a demo video to show human-AI shared control systems empowered by <em>Policy Dissection</em>
+    can be built on various tasks, including quadrupedal robot locomotion, autonomous driving and classic gym tasks.
     <div class="body">
         <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
             <iframe width="900" height="506" src="https://www.youtube.com/embed/2Shqhwgom3A"
@@ -208,11 +209,17 @@
 
 <div class="section" style=" text-align: left">
     <div class="title" id="Parkour Demo">Parkour Demo</div>
-    We trained bipedal robots in IsaacGym. Though this robot can only move forward, activating the identified primitives
-    can evoke complex behaviors like crouching, forward jumping, back-flipping and so on.
+    <p>
+        We trained bipedal robots, Cassie, in <a href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
+        Though this robot is trained to move forward, activating the identified primitives can evoke complex behaviors
+        like crouching, forward jumping, back-flipping. In the following parkour demo, we show that with human
+        instruction, the robot can combine these skills and overcome complex situations.
+        This neural controller with probed primitives and the shared control interface are all released and can be
+        accessed at <a href="https://github.com/metadriverse/policydissect"> Code </a>.
+    </p>
     <div class="body">
         <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
-            <iframe width="900" height="508" src="https://www.youtube.com/embed/cqCmy-aNuD4"
+            <iframe width="900" height="506" src="https://www.youtube.com/embed/cqCmy-aNuD4"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
@@ -223,15 +230,26 @@
 
 <div class="section" style=" text-align: left">
     <div class="title" id="Tracking Demo">Comparison with goal-conditioned controller</div>
-    A goal-conditioned controller following a target yaw is trained in IsaacGym. For a fair comparison, we directly
-    identify the primitives related to yaw rate in this controller with the proposed method. After that, we employ
-    a PID controller can be used to decide the output of the yaw rate neuron so the neural controller can also track a
-    target yaw. Note that the explict target yaw command in the observation is set to 0 for this primitive activation
-    command tracking. The results show that the goal-conditioned control achieved by our method is compatible to the
-    explict goal-conditioned control.
+    <p>
+        To quantify the coarseness of the goal-conditioned control enabled by <em>Policy Dissection</em>,
+        a explicit goal-conditioned controller following a target yaw is trained in <a
+            href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
+        We directly identify the primitives related to yaw rate in this controller with the proposed method, and employ
+        a PID controller to decide the output of the neuron related to yaw rate. This enables a new way,
+        neural primitive activation, to track target command besides explicitly indicating the goal in the network
+        input.
+    </p>
+    <p>
+        As a result, experiments can be conducted to fairly compare these two methods and quantify the
+        coarseness of <em>Policy Dissection</em> enabled goal-conditioned control.
+        The results show that the goal-conditioned control achieved by our method is compatible to the
+        explict goal-conditioned control.
+        <br><br><em><b>Note</b>: the explict target yaw command in the observation is set to 0 for the primitive
+        activation command tracking.</em>
+    </p>
     <div class="body">
         <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
-            <iframe width="900" height="508" src="https://www.youtube.com/embed/T6qg3IYlc2A"
+            <iframe width="900" height="506" src="https://www.youtube.com/embed/T6qg3IYlc2A"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
