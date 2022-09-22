@@ -408,7 +408,7 @@ class LeggedRobot(BaseTask):
         control_type = self.cfg.control.control_type
         if control_type == "P":
             torques = self.p_gains * (
-                actions_scaled + self.default_dof_pos - self.dof_pos
+                    actions_scaled + self.default_dof_pos - self.dof_pos
             ) - self.d_gains * self.dof_vel
         elif control_type == "V":
             torques = self.p_gains * (actions_scaled - self.dof_vel
@@ -488,8 +488,8 @@ class LeggedRobot(BaseTask):
         move_up = distance > self.terrain.env_length / 2
         # robots that walked less than half of their required distance go to simpler terrains
         move_down = (
-            distance < torch.norm(self.commands[env_ids, :2], dim=1) * self.max_episode_length_s * 0.5
-        ) * ~move_up
+                            distance < torch.norm(self.commands[env_ids, :2], dim=1) * self.max_episode_length_s * 0.5
+                    ) * ~move_up
         self.terrain_levels[env_ids] += 1 * move_up - 1 * move_down
         # Robots that solve the last level are sent to a random one
         self.terrain_levels[env_ids] = torch.where(
@@ -812,7 +812,7 @@ class LeggedRobot(BaseTask):
             max_init_level = self.cfg.terrain.max_init_terrain_level
             if not self.cfg.terrain.curriculum:
                 max_init_level = self.cfg.terrain.num_rows - 1
-            self.terrain_levels = torch.randint(0, max_init_level + 1, (self.num_envs, ), device=self.device)
+            self.terrain_levels = torch.randint(0, max_init_level + 1, (self.num_envs,), device=self.device)
             self.terrain_types = torch.div(
                 torch.arange(self.num_envs, device=self.device), (self.num_envs / self.cfg.terrain.num_cols),
                 rounding_mode='floor'
@@ -1039,11 +1039,11 @@ class LeggedRobot(BaseTask):
         )
 
     def _additional_create(self, env_handle, env_index):
+        """
+        This function will create obstacles so that the robot have to sidestep them
+        """
         if self.cfg.no_obstacle:
             return
-        """
-             This function will create obstacles so that the robot have to sidestep them
-             """
         self.additional_actors[env_index] = []
 
         # 1. create two walls
@@ -1078,11 +1078,12 @@ class LeggedRobot(BaseTask):
             z = self.STONE_HEIGHT / 2
             if k == 0:
                 pos_x -= 0.5
+                z -= 0.2
             if k == 2:
                 length = 0.3
                 width = 6
                 height = 0.1
-                z = 0.7
+                z = 0.8
 
                 pos_x -= 1.0
 
@@ -1100,7 +1101,7 @@ class LeggedRobot(BaseTask):
                 (pos_y - self.REGION_WIDTH / 2) + self.env_origins[env_index][1], z
             )
             pose.r = gymapi.Quat(0, 0, 0, 1)
-            ahandle = self.gym.create_actor(env_handle, asset, pose, None, env_index, 1 if k != 1 else 0)
+            ahandle = self.gym.create_actor(env_handle, asset, pose, None, env_index, 0)
             self.gym.set_rigid_body_color(env_handle, ahandle, 0, gymapi.MESH_VISUAL_AND_COLLISION, color)
             self.additional_actors[env_index].append(ahandle)
 

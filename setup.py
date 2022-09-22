@@ -223,6 +223,7 @@ print(find_packages('.'))
 setup(
     name="policydissect",
     install_requires=[
+        "pygame",
         "metadrive-simulator==0.2.5.1",
         "setuptools==50.0.0",
         "tensorboard",

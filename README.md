@@ -69,7 +69,8 @@ The Cassie robot is trained with the code provided by https://github.com/leggedr
 command ```[1, 0, 0]```, and thus can only move forward. By applying *Policy Dissection*, primitives related to yaw
 rate, forward speed, height control and torque force can be identified. Activating these primitives
 enable various skills like crouching, forward jumping, back-flipping and so on.
-Run```python policydissect/scripts/play_quadrupedal.py``` to freerun.
+Run```python policydissect/scripts/play_quadrupedal.py``` for playing with the robot. Add flag```--parkour```to launch 
+a challenging parkour environment.
 ```
 Keymap:
 - KEY_W:Forward
@@ -82,6 +83,7 @@ Keymap:
 - KEY_SPACE:Back Flip
 - KEY_R:Reset
 ```
+*tips: Switch to Tiptoe state before pressing Key_Q for increasing the distance of jump*
 
 ### Comparison with explicit goal-conditioned control
 To measure the coarseness of the control approach enabled by *Policy Dissection*, we train a goal-conditioned
