@@ -4,13 +4,15 @@ from policydissect.legged_gym.utils import get_args
 from policydissect.utils.isaacgym_utils import play
 
 if __name__ == '__main__':
+    # This is a policy with Elu which is not a symmetric activation function.
+    # Use tanh will definitely improve the performance
     forward_cassie = {
         # 0
         "Tiptoe": {
             0: [(261, 10), (212, 5), (395, 5), (260, 10), (30, -1)]
         },
         "Crouch": {
-            0: [(261, -12), (260, 6)]
+            0: [(261, -12), (260, 14)]
         },
         # 0,3
         "Back Flip": {
@@ -18,10 +20,10 @@ if __name__ == '__main__':
         },
         # 2
         "Left": {
-            0: [(30, 10)]
+            0: [(30, 7)]
         },
         "Right": {
-            0: [(30, -9), (452, 20), (261, -9)]
+            0: [(30, -7.5), (452, 10), (261, -4)]
         },
         # 1
         "Forward": {
@@ -33,8 +35,15 @@ if __name__ == '__main__':
         },
         "Stop": {}
     }
-    args = get_args()
+    args = get_args(
+        [{
+            "name": "--parkour",
+            "action": "store_true",
+            "default": False,
+            "help": "Build a parkour environment"
+        }]
+    )
     args.num_envs = 1
     args.task = "cassie"
     activation = "elu"
-    play(args, activation_func=activation, map=forward_cassie, model_name="forward_cassie")
+    play(args, activation_func=activation, map=forward_cassie, model_name="forward_cassie", parkour=args.parkour)

@@ -1039,11 +1039,11 @@ class LeggedRobot(BaseTask):
         )
 
     def _additional_create(self, env_handle, env_index):
+        """
+        This function will create obstacles so that the robot have to sidestep them
+        """
         if self.cfg.no_obstacle:
             return
-        """
-             This function will create obstacles so that the robot have to sidestep them
-             """
         self.additional_actors[env_index] = []
 
         # 1. create two walls
@@ -1078,11 +1078,12 @@ class LeggedRobot(BaseTask):
             z = self.STONE_HEIGHT / 2
             if k == 0:
                 pos_x -= 0.5
+                z -= 0.2
             if k == 2:
                 length = 0.3
                 width = 6
                 height = 0.1
-                z = 0.7
+                z = 0.8
 
                 pos_x -= 1.0
 
@@ -1100,7 +1101,7 @@ class LeggedRobot(BaseTask):
                 (pos_y - self.REGION_WIDTH / 2) + self.env_origins[env_index][1], z
             )
             pose.r = gymapi.Quat(0, 0, 0, 1)
-            ahandle = self.gym.create_actor(env_handle, asset, pose, None, env_index, 1 if k != 1 else 0)
+            ahandle = self.gym.create_actor(env_handle, asset, pose, None, env_index, 0)
             self.gym.set_rigid_body_color(env_handle, ahandle, 0, gymapi.MESH_VISUAL_AND_COLLISION, color)
             self.additional_actors[env_index].append(ahandle)
 

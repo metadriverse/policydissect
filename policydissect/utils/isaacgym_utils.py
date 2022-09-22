@@ -102,7 +102,40 @@ def follow_command(
             pickle.dump(logger.state_log, file)
 
 
-def play(args, map, activation_func="elu", model_name=None):
+def play(args, map, activation_func="elu", model_name=None, parkour=False):
+    # env.reset()
+    # import pygame module in this program
+    import pygame
+
+    # activate the pygame library
+    # initiate pygame and give permission
+    # to use pygame's functionality.
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0, 1080)
+    pygame.init()
+
+    # define the RGB value for white,
+    #  green, blue colour .
+    white = (255, 255, 255)
+    green = (0, 255, 0)
+    blue = (0, 0, 128)
+
+    # assigning values to X and Y variable
+    X = 200
+    Y = 200
+
+    # create the display surface object
+    # of specific dimension..e(X, Y).
+    display_surface = pygame.display.set_mode((X, Y))
+
+    # set the pygame window name
+    pygame.display.set_caption('Show Text')
+
+    # create a font object.
+    # 1st parameter is the font file
+    # which is present in pygame.
+    # 2nd parameter is size of the font
+    font = pygame.font.Font('freesansbold.ttf', 32)
+
     assert activation_func == "elu" or activation_func == "tanh", "only support elu or tanh"
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
     # override some parameters for testing
@@ -110,7 +143,7 @@ def play(args, map, activation_func="elu", model_name=None):
     env_cfg.terrain.num_rows = 5
     env_cfg.terrain.num_cols = 5
     env_cfg.terrain.curriculum = False
-    env_cfg.no_obstacle = False
+    env_cfg.no_obstacle = not parkour
     env_cfg.noise.add_noise = False
     env_cfg.domain_rand.randomize_friction = False
     env_cfg.domain_rand.push_robots = False
@@ -165,5 +198,23 @@ def play(args, map, activation_func="elu", model_name=None):
         x, y, z = env.base_pos[0]
         env.set_camera((x - 3, y, 2), (x, y, z))
         counter -= 1
+
+        display_surface.fill(white)
+
+        # copying the text surface object
+        # to the display surface object
+        # at the center coordinate.
+        # on which text is drawn on it.
+        text = font.render(command, True, green, blue)
+
+        # create a rectangular object for the
+        # text surface object
+        textRect = text.get_rect()
+
+        # set the center of the rectangular object.
+        textRect.center = (X // 2, Y // 2)
+        display_surface.blit(text, textRect)
+        pygame.display.update()
+
         if dones[0]:
             command = "Stop"
