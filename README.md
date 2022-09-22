@@ -16,8 +16,8 @@ The policy dissection method and training code will be updated soon.
 
 - [x] MetaDrive
 - [x] Pybullet-Quadrupedal Robot (Forked from: https://github.com/Mehooz/vision4leg.git)
-- [x] Isaacgym-Cassie
-- [x] Isaacgym-ANYmal
+- [x] Isaacgym-Cassie (Forked from: https://github.com/leggedrobotics/legged_gym)
+- [x] Isaacgym-ANYmal (Forked from: https://github.com/leggedrobotics/legged_gym)
 - [ ] Gym-Walker
 - [ ] Gym-BipedalWalker
 - [ ] Gym-Ant
