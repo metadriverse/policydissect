@@ -408,7 +408,7 @@ class LeggedRobot(BaseTask):
         control_type = self.cfg.control.control_type
         if control_type == "P":
             torques = self.p_gains * (
-                    actions_scaled + self.default_dof_pos - self.dof_pos
+                actions_scaled + self.default_dof_pos - self.dof_pos
             ) - self.d_gains * self.dof_vel
         elif control_type == "V":
             torques = self.p_gains * (actions_scaled - self.dof_vel
@@ -488,8 +488,8 @@ class LeggedRobot(BaseTask):
         move_up = distance > self.terrain.env_length / 2
         # robots that walked less than half of their required distance go to simpler terrains
         move_down = (
-                            distance < torch.norm(self.commands[env_ids, :2], dim=1) * self.max_episode_length_s * 0.5
-                    ) * ~move_up
+            distance < torch.norm(self.commands[env_ids, :2], dim=1) * self.max_episode_length_s * 0.5
+        ) * ~move_up
         self.terrain_levels[env_ids] += 1 * move_up - 1 * move_down
         # Robots that solve the last level are sent to a random one
         self.terrain_levels[env_ids] = torch.where(
@@ -812,7 +812,7 @@ class LeggedRobot(BaseTask):
             max_init_level = self.cfg.terrain.max_init_terrain_level
             if not self.cfg.terrain.curriculum:
                 max_init_level = self.cfg.terrain.num_rows - 1
-            self.terrain_levels = torch.randint(0, max_init_level + 1, (self.num_envs,), device=self.device)
+            self.terrain_levels = torch.randint(0, max_init_level + 1, (self.num_envs, ), device=self.device)
             self.terrain_types = torch.div(
                 torch.arange(self.num_envs, device=self.device), (self.num_envs / self.cfg.terrain.num_cols),
                 rounding_mode='floor'

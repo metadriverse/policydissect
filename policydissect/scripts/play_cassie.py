@@ -35,14 +35,14 @@ if __name__ == '__main__':
         },
         "Stop": {}
     }
-    args = get_args([
-        {
+    args = get_args(
+        [{
             "name": "--parkour",
             "action": "store_true",
             "default": False,
             "help": "Build a parkour environment"
-        }
-    ])
+        }]
+    )
     args.num_envs = 1
     args.task = "cassie"
     activation = "elu"

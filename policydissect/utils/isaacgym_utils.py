@@ -17,14 +17,14 @@ import torch
 
 
 def follow_command(
-        args,
-        layer,
-        index,
-        activation_func="elu",
-        model_name=None,
-        target_heading_list=[0.5],
-        command_last_time=50,
-        trigger_neuron=True
+    args,
+    layer,
+    index,
+    activation_func="elu",
+    model_name=None,
+    target_heading_list=[0.5],
+    command_last_time=50,
+    trigger_neuron=True
 ):
     activation_pid_controller = ActivationPID(
         k_p=20,
@@ -170,7 +170,6 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False):
     policy_weights = np.load(os.path.join(PACKAGE_DIR, "weights", "{}_{}.npz".format(name, activation_func)))
     command = "Stop"
     counter = 0
-
 
     # env.gym.attach_camera_to_body(camera_handle, env.envs[0], env.gym.find_actor_rigid_body_handleenv.actor_handles[0])
     for i in range(10 * int(env.max_episode_length)):
