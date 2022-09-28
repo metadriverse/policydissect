@@ -6,7 +6,7 @@ from isaacgym.gymapi import *
 from isaacgym.gymtorch import *
 
 import numpy as np
-from isaacgym import gymapi
+from isaacgym import gymapi, gymtorch
 from isaacgym.torch_utils import quat_apply
 import random
 from policydissect import PACKAGE_DIR
@@ -251,3 +251,48 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False, log_l
                 with open("ok.pkl", "wb+") as file:
                     pickle.dump(root_state, file)
             root_state = []
+
+
+def replay_cassie(args, file_path, parkour=False, force_seed=None):
+    env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
+    # override some parameters for testing
+    env_cfg.env.num_envs = min(env_cfg.env.num_envs, 50)
+    env_cfg.terrain.num_rows = 5
+    env_cfg.terrain.num_cols = 5
+    env_cfg.terrain.curriculum = False
+    env_cfg.no_obstacle = not parkour
+    env_cfg.noise.add_noise = False
+    env_cfg.domain_rand.randomize_friction = False
+    env_cfg.domain_rand.push_robots = False
+    env_cfg.terrain.mesh_type = "plane"
+    train_cfg.runner.num_steps_per_env = 1
+
+    # prepare environment
+    env, _ = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
+    seed_env(env, force_seed)
+    env.max_episode_length = 10000
+
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_W, "Forward")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_A, "Left")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_S, "Stop")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_C, "Crouch")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_X, "Tiptoe")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_SPACE, "Back Flip")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_Q, "Jump")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_R, "Reset")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_D, "Right")
+
+    seed_env(env, force_seed)
+    obs, _ = env.reset()
+    with open(file_path, "rb+") as file:
+        data = pickle.load(file)
+    epi_length = len(data)
+
+    # env.gym.attach_camera_to_body(camera_handle, env.envs[0], env.gym.find_actor_rigid_body_handleenv.actor_handles[0])
+    for i in range(10 * int(env.max_episode_length)):
+        index = i % epi_length
+        x, y, z = env.base_pos[0]
+        env.set_camera((x - 3, y, 2), (x, y, z))
+        env.step(env.sample_actions())
+        print(data[index])
+        env.gym.set_actor_root_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]))
