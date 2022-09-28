@@ -1108,3 +1108,7 @@ class LeggedRobot(BaseTask):
     @property
     def metadata(self):
         return self.cfg
+
+    def sample_actions(self):
+        actions = 0. * torch.ones(self.num_envs, self.num_actions, device=self.device)
+        return actions

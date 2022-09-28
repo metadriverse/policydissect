@@ -7,14 +7,7 @@ import os
 
 if __name__ == "__main__":
     # replay the record
-    args = get_args(
-        [{
-            "name": "--parkour",
-            "action": "store_true",
-            "default": False,
-            "help": "Build a parkour environment"
-        }]
-    )
+    args = get_args()
     args.num_envs = 1
     args.task = "cassie"
     activation = "elu"

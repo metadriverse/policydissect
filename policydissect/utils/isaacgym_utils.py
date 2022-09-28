@@ -293,7 +293,9 @@ def replay_cassie(args, file_path, parkour=False, force_seed=None, frame_sus=Non
         index = i % epi_length
         x, y, z = env.base_pos[0]
         env.set_camera((x - 3, y, 2), (x, y, z))
-        env.gym.set_actor_root_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["root_state"]))
+        root_state = env.root_states
+        root_state[::env.skip] = data[index]["root_state"][::env.skip]
+        env.gym.set_actor_root_state_tensor(env.sim, gymtorch.unwrap_tensor(root_state))
         env.gym.set_dof_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["dof_state"]))
         env.step(env.sample_actions())
         if frame_sus is not None:
