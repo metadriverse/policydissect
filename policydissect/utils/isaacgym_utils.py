@@ -26,14 +26,14 @@ def seed_env(env, seed=100):
 
 
 def follow_command(
-        args,
-        layer,
-        index,
-        activation_func="elu",
-        model_name=None,
-        target_heading_list=[0.5],
-        command_last_time=50,
-        trigger_neuron=True
+    args,
+    layer,
+    index,
+    activation_func="elu",
+    model_name=None,
+    target_heading_list=[0.5],
+    command_last_time=50,
+    trigger_neuron=True
 ):
     activation_pid_controller = ActivationPID(
         k_p=20,
