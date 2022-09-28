@@ -16,4 +16,4 @@ if __name__ == "__main__":
     args.num_envs = 1
     args.task = "cassie"
     activation = "elu"
-    replay_cassie(args, "ok.pkl", parkour=True, force_seed=100)
+    replay_cassie(args, "demo.pkl", parkour=False, force_seed=100)

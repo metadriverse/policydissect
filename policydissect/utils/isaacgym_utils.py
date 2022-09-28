@@ -202,7 +202,7 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False, log_l
                 command = "Stop"
                 obs, _ = env.reset()
                 if log_last_epi:
-                    with open("ok.pkl", "wb+") as file:
+                    with open("demo.pkl", "wb+") as file:
                         pickle.dump(root_state, file)
                 root_state = []
 
@@ -212,7 +212,7 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False, log_l
         if command == "Jump" and counter == 0:
             command = "Stop"
 
-        root_state.append(env.root_states.clone())
+        root_state.append({"root_state": env.root_states.clone(), "dof_state": env.dof_state.clone()})
 
         obs[..., 10] = 0.1  # Default Stop
         actions, _ = ppo_inference_torch(
@@ -248,7 +248,7 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False, log_l
             command = "Stop"
             obs, _ = env.reset()
             if log_last_epi:
-                with open("ok.pkl", "wb+") as file:
+                with open("demo.pkl", "wb+") as file:
                     pickle.dump(root_state, file)
             root_state = []
 
@@ -293,6 +293,7 @@ def replay_cassie(args, file_path, parkour=False, force_seed=None):
         index = i % epi_length
         x, y, z = env.base_pos[0]
         env.set_camera((x - 3, y, 2), (x, y, z))
+        env.gym.set_actor_root_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["root_state"]))
+        env.gym.set_dof_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["dof_state"]))
         env.step(env.sample_actions())
         print(data[index])
-        env.gym.set_actor_root_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]))
