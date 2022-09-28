@@ -296,4 +296,3 @@ def replay_cassie(args, file_path, parkour=False, force_seed=None):
         env.gym.set_actor_root_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["root_state"]))
         env.gym.set_dof_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["dof_state"]))
         env.step(env.sample_actions())
-        print(data[index])
