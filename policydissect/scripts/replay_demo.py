@@ -18,4 +18,4 @@ if __name__ == "__main__":
     args.num_envs = 1
     args.task = "cassie"
     activation = "elu"
-    replay_cassie(args, os.path.join(PACKAGE_DIR, "scripts", "paper_demo.pkl"), parkour=True, force_seed=100)
+    replay_cassie(args, os.path.join(PACKAGE_DIR, "scripts", "paper_demo.pkl"), parkour=True, force_seed=100, frame_sus=0.03)

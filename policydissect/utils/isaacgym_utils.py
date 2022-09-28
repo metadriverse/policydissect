@@ -253,7 +253,7 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False, log_l
             root_state = []
 
 
-def replay_cassie(args, file_path, parkour=False, force_seed=None):
+def replay_cassie(args, file_path, parkour=False, force_seed=None, frame_sus=None):
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
     # override some parameters for testing
     env_cfg.env.num_envs = min(env_cfg.env.num_envs, 50)
@@ -296,3 +296,5 @@ def replay_cassie(args, file_path, parkour=False, force_seed=None):
         env.gym.set_actor_root_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["root_state"]))
         env.gym.set_dof_state_tensor(env.sim, gymtorch.unwrap_tensor(data[index]["dof_state"]))
         env.step(env.sample_actions())
+        if frame_sus is not None:
+            time.sleep(frame_sus)
