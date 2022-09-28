@@ -212,7 +212,7 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False, log_l
         if command == "Jump" and counter == 0:
             command = "Stop"
 
-        root_state.append(env.root_states)
+        root_state.append(env.root_states.clone())
 
         obs[..., 10] = 0.1  # Default Stop
         actions, _ = ppo_inference_torch(
