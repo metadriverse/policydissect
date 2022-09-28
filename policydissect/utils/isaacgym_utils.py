@@ -8,7 +8,7 @@ from isaacgym.gymtorch import *
 import numpy as np
 from isaacgym import gymapi
 from isaacgym.torch_utils import quat_apply
-
+import random
 from policydissect import PACKAGE_DIR
 from policydissect.legged_gym.pid import ActivationPID, PIDController
 from policydissect.legged_gym.policy_utils import ppo_inference_torch
@@ -16,15 +16,24 @@ from policydissect.legged_gym.utils import task_registry, Logger
 import torch
 
 
+def seed_env(env, seed=100):
+    if seed is None:
+        return
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    # env.seed(env.cfg.seed)
+
+
 def follow_command(
-    args,
-    layer,
-    index,
-    activation_func="elu",
-    model_name=None,
-    target_heading_list=[0.5],
-    command_last_time=50,
-    trigger_neuron=True
+        args,
+        layer,
+        index,
+        activation_func="elu",
+        model_name=None,
+        target_heading_list=[0.5],
+        command_last_time=50,
+        trigger_neuron=True
 ):
     activation_pid_controller = ActivationPID(
         k_p=20,
@@ -102,7 +111,7 @@ def follow_command(
             pickle.dump(logger.state_log, file)
 
 
-def play(args, map, activation_func="elu", model_name=None, parkour=False):
+def play(args, map, activation_func="elu", model_name=None, parkour=False, log_last_epi=False, force_seed=None):
     # env.reset()
     # import pygame module in this program
     import pygame
@@ -152,6 +161,7 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False):
 
     # prepare environment
     env, _ = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
+    seed_env(env, force_seed)
     obs = env.get_observations()
     env.max_episode_length = 10000
 
@@ -168,11 +178,16 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False):
     self = env
     name = model_name or ("anymal" if "anymal" in args.task else "cassie")
     policy_weights = np.load(os.path.join(PACKAGE_DIR, "weights", "{}_{}.npz".format(name, activation_func)))
-    command = "Stop"
     counter = 0
 
+    root_state = []
+    episode_length = 0
+    seed_env(env, force_seed)
+    command = "Stop"
+    obs, _ = env.reset()
     # env.gym.attach_camera_to_body(camera_handle, env.envs[0], env.gym.find_actor_rigid_body_handleenv.actor_handles[0])
     for i in range(10 * int(env.max_episode_length)):
+        episode_length += 1
         for evt in self.gym.query_viewer_action_events(self.viewer):
             if evt.value > 0 and evt.action in map.keys():
                 command = evt.action
@@ -180,14 +195,24 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False):
                     counter = 22
                 elif command == "Jump":
                     counter = 40
+                print("{}: {}".format(command, episode_length))
             if evt.value > 0 and evt.action == "Reset":
+                episode_length = 0
+                seed_env(env, force_seed)
+                command = "Stop"
                 obs, _ = env.reset()
+                if log_last_epi:
+                    with open("ok.pkl", "wb+") as file:
+                        pickle.dump(root_state, file)
+                root_state = []
 
         if command == "Back Flip" and counter == 0:
             command = "Stop"
 
         if command == "Jump" and counter == 0:
             command = "Stop"
+
+        root_state.append(env.root_states)
 
         obs[..., 10] = 0.1  # Default Stop
         actions, _ = ppo_inference_torch(
@@ -197,6 +222,7 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False):
         obs, _, rews, dones, infos, = env.step(actions)
         x, y, z = env.base_pos[0]
         env.set_camera((x - 3, y, 2), (x, y, z))
+        # env.set_camera((-1.5+10, -2.5, 1.8), (3.4+10, 1, 0.8))
         counter -= 1
 
         display_surface.fill(white)
@@ -217,4 +243,11 @@ def play(args, map, activation_func="elu", model_name=None, parkour=False):
         pygame.display.update()
 
         if dones[0]:
+            episode_length = 0
+            seed_env(env, force_seed)
             command = "Stop"
+            obs, _ = env.reset()
+            if log_last_epi:
+                with open("ok.pkl", "wb+") as file:
+                    pickle.dump(root_state, file)
+            root_state = []
