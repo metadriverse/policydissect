@@ -1,6 +1,6 @@
 # Policy Dissection
 
-[NeurIPS 2022] Official implementation of the paper: **Human-AI Shared Control via Frequency-based Policy Dissection**
+[NeurIPS 2022] Official implementation of the paper: **Human-AI Shared Control via Policy Dissection**
 
 [**Webpage**](https://metadriverse.github.io/policydissect/) |
 [**Code**](https://github.com/metadriverse/policydissect) |
@@ -101,7 +101,7 @@ will change to primitive-activation conditional control.
 
 ```
 @article{li2022human,
-  title={Human-AI Shared Control via Frequency-based Policy Dissection},
+  title={Human-AI Shared Control via Policy Dissection},
   author={Li, Quanyi and Peng, Zhenghao and Wu, Haibin and Feng, Lan and Zhou, Bolei},
   journal={arXiv preprint arXiv:2206.00152},
   year={2022}}
