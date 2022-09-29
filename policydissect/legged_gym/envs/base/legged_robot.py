@@ -1083,7 +1083,7 @@ class LeggedRobot(BaseTask):
                 length = 0.3
                 width = 6
                 height = 0.1
-                z = 0.8
+                z = 0.83
 
                 pos_x -= 1.0
 
@@ -1108,3 +1108,7 @@ class LeggedRobot(BaseTask):
     @property
     def metadata(self):
         return self.cfg
+
+    def sample_actions(self):
+        actions = 0. * torch.ones(self.num_envs, self.num_actions, device=self.device)
+        return actions
