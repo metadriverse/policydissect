@@ -1083,7 +1083,7 @@ class LeggedRobot(BaseTask):
                 length = 0.3
                 width = 6
                 height = 0.1
-                z = 0.8
+                z = 0.83
 
                 pos_x -= 1.0
 

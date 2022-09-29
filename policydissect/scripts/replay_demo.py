@@ -6,7 +6,7 @@ from policydissect import PACKAGE_DIR
 import os
 
 if __name__ == "__main__":
-    # replay the record
+    # replay the demo in paper
     args = get_args()
     args.num_envs = 1
     args.task = "cassie"
