@@ -62,6 +62,7 @@ Press ```w```,```a```,```s```,```d``` for changing the moving direction. and ```
 Also, you can collaborate with AI and challenge the hard environment consisting of obstacles and challenging terrains by
 running ```python policydissect/scripts/play_quadrupedal.py --hard```
 You can change to a different environment by adding ```--seed your_seed_int_type```.
+
 *tips: Avoid running fast!*
 
 ### IsaacGym Cassie
@@ -83,6 +84,7 @@ Keymap:
 - KEY_SPACE:Back Flip
 - KEY_R:Reset
 ```
+
 *tips: Switch to Tiptoe state before pressing Key_Q for increasing the distance of jump*
 
 ### Comparison with explicit goal-conditioned control
