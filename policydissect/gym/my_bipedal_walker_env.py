@@ -37,7 +37,7 @@ class MyBipedalWalker(BipedalWalkerHardcore):
         return self.viewer.window.command if self.viewer is not None else "straight"
 
     def render(self, mode="human"):
-        from drivingforce.policy_dissection.utils.pyglet_rendering import MyViewer
+        from policydissect.gym.pyglet_rendering import MyViewer
         if self.viewer is None:
             self.viewer = MyViewer(1200, 800)
         super(MyBipedalWalker, self).render(mode)

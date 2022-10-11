@@ -1,4 +1,4 @@
-from drivingforce.policy_dissection.utils.my_ant_env import CustomViewer
+from policydissect.gym.my_ant_env import CustomViewer
 from gym import error
 from gym.envs.mujoco.walker2d_v3 import Walker2dEnv
 

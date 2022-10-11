@@ -117,7 +117,7 @@ class CustomViewer(MjViewer):
         MjViewerBasic.key_callback(self, window, key, scancode, action, mods)
 
 
-class OmnipotentAntEnv(AntEnv):
+class MyAntEnv(AntEnv):
     def __init__(
             self,
             place_holder={},
@@ -273,7 +273,7 @@ class OmnipotentAntEnv(AntEnv):
         return observation
 
 if __name__=="__main__":
-    env=OmnipotentAntEnv()
+    env=MyAntEnv()
     env.reset()
     while True:
         o,r,d,i = env.step(env.action_space.sample())
