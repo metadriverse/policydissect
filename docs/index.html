@@ -23,7 +23,7 @@
 <body>
 
 <!-- === Home Section Starts === -->
-<div class="section" style="margin-top: 10pt">
+<div class="section" style="margin-top: 15pt">
     <!-- === Title Starts === -->
     <div class="header">
         <!--        <div class="logo">-->
@@ -39,7 +39,7 @@
             <tr>
                 <td>
                     <div style="padding-top: 0pt;padding-left: 140pt;padding-bottom: 12pt" class="title" id="lang">
-                        Human-AI Shared Control via Policy Dissection
+                        <b> Human-AI Shared Control via Policy Dissection </b>
                     </div>
                     <p style="text-align:center;padding-left: 155pt">Neural Information Processing Systems (NeurIPS)
                         2022</p>
@@ -73,19 +73,20 @@
             <td align="center" style="padding: 0pt 0 15pt 0">
                 <a class="bar" href="https://metadriverse.github.io/policydissect/"><b>Webpage</b></a> |
                 <a class="bar" href="https://github.com/metadriverse/policydissect"><b>Code</b></a> |
-                <a class="bar" href="https://youtu.be/2Shqhwgom3A"><b>Video</b></a> |
+                <a class="bar" href="https://youtu.be/7UmScmKMFE4"><b>Video</b></a> |
                 <a class="bar" href="https://arxiv.org/pdf/2206.00152.pdf"><b>Paper</b></a>
             </td>
         </tr>
     </table>
     <!--    <div class="video-container">-->
     <center>
-        <video class="video-container" width="90%" height="500" style="padding-left: 20pt;margin-top: -20pt" autoplay muted loop id="teaser_video">
+        <video class="video-container" width="90%" height="460" style="padding-left: 20pt;margin-top: 0pt" autoplay
+               muted loop id="teaser_video">
             <source src="assets/teaser_video.mp4" type=video/mp4>
         </video>
-<!--        <script>-->
-<!--            document.getElementById('teaser_video').play();-->
-<!--        </script>-->
+        <!--        <script>-->
+        <!--            document.getElementById('teaser_video').play();-->
+        <!--        </script>-->
     </center>
     <!--    </div>-->
 </div>
@@ -93,6 +94,7 @@
 
 <!-- === Overview Section Starts === -->
 <div class="section">
+    <div class="title" id="method">Method Overview</div>
     <div class="body">
         <div class="teaser">
             <img src="assets/overview.png">
@@ -102,7 +104,6 @@
             </div>
         </div>
         <div class="text">
-
             <p>
                 Inspired by the neuroscience approach to investigate the motor cortex in primates<a
                     href="ref-1"><sup>1</sup></a>, we
@@ -116,9 +117,37 @@
                 This, in turn, enables Human-AI shared control where human can control the trained AI and finish complex
                 tasks.
             </p>
+
+            <div class="teaser" style="width: 105%; margin-left: -25pt">
+                <img src="assets/record.png">
+                <div class="text">
+                    <br>
+                    Fig. 1 Identifying motor primitives from observational data
+                </div>
+            </div>
+
+            <p>
+                We first roll out the trained policy and record the neural activities and track kinematic attributes,
+                like yaw and velocity.
+                After frequency matching, kinematic attributes are associated with certain units, which are further
+                called motor primitives. The curves of kinematic attributes and the aligned motor
+                primitive are painted in the same colors.
+                For clarity, we only show the result of one recorded episode and a proportion of units, and the curves
+                of units are sorted by their amplitude.
+            </p>
+            <p>
+                A behavior can be described by changing a subset of kinematic attributes, which can be achieved by
+                activating a set of corresponding motor primitives. Therefore, these movement generation building
+                blocks, are associated with certain behaviors, yielding the stimulation-evoked map.
+                Taking back-flip shown as an example, this behavior can be described by increasing 1. height 2. pitch
+                and 3. knee force. Therefore, we can evoke this behavior by activating motor primitives related to
+                the three kinematic attributes.
+            </p>
+
             <div class="text" style="font-size: 10pt;" id="ref-1">
                 <p>
-                    1. <a
+                    1. Exerting electrical stimulation on different areas of motor cortex can elicit meaningful body
+                    movements <a
                         href="https://reader.elsevier.com/reader/sd/pii/S0896627302010036?token=EE38E077CD5A6737DC1EEDF1309838A9B609E4A47110E15E53C9B42F1EA173094A37ACE7622CFC4B43C21E049E63B947&originRegion=eu-west-1&originCreation=20220920182935">
                     <em>Graziano,
                         Michael SA, et al. "The cortical control of movement revisited." Neuron 36.3 (2002):
@@ -132,171 +161,85 @@
 </div>
 
 
-<!--&lt;!&ndash; === Result Section Starts === &ndash;&gt;-->
-<!--<div class="section">-->
-<!--    <div class="title" id="lang">Experiment Result</div>-->
-<!--    <div class="body">-->
-<!--                <div class="teaser"><img-->
-<!--                src="images/haco_exp.jpg">-->
-<!--                        <div class="text">-->
-<!--                <br>-->
-<!--                Fig. 2 Learning Dynamics </div>-->
-<!--        </div>-->
-<!--        <div class="text">-->
-<!--            The experiments conducted on <a href="https://github.com/decisionforce/metadrive">MetaDrive Simulator</a>-->
-<!--            show the efficient training as well as the low safety violation, when compared with RL, Offline RL,-->
-<!--            Imitation Learning and human-in-the-loop baselines. Results are reported in the Table 1.-->
-<!--            Compared to other data-hungry baselines, HACO utilizes less transitions and achieve highest success rate.-->
-<!--            Also, with the human protection, HACO yields only 30.14 total safety violations in the whole-->
-<!--            training process, two orders of magnitude less than other RL baselines, even though HACO access neither-->
-<!--            the cost or reward signal.-->
-<!--            In the human-in-the-loop paradigm, another concern is the expensive human budget consuming.-->
-<!--            As shown in Fig. 2 <b>B</b>., expensive human budget decreases along with the training.-->
-<!--        </div>-->
-<!--        <div class="teaser">-->
-<!--                     <div class="text">-->
+<div class="section" style="">
+    <div class="title" id="Parkour Demo">Case Study: Parkour</div>
+    <p>
+        We trained bipedal robots, Cassie, in <a href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
+        Though this robot is trained to <b>move forward only</b>, activating identified primitives can evoke complex
+        behaviors
+        like crouching, forward jumping and back-flipping. Please refer to <a
+            href="https://arxiv.org/pdf/2206.00152.pdf">our paper</a> for how to discover these skills.
+    </p>
+    <center>
+        <video class="video-container" width="100%" height="500" style="" autoplay
+               muted loop id="parkour_video">
+            <source src="assets/Motion_Primitive_Grids.mp4" type=video/mp4>
+        </video>
+    </center>
+    <p>
+        In the following parkour video, we show that with human
+        instruction, the robot can combine these skills and overcome complex situations.
+        This neural controller with probed primitives and the shared control interface are all released <a
+            href="https://github.com/metadriverse/policydissect"> here </a>.
+    </p>
+    <center>
+        <video class="video-container" width="100%" height="508" style="padding-right: 10pt" autoplay
+               muted loop id="parkour_demo">
+            <source src="assets/parkour.mp4" type=video/mp4>
+        </video>
+    </center>
+</div>
 
-<!--                Table. 1 Comparison results-->
-<!--                          <br>-->
-<!--                     </div>-->
-<!--            <img-->
-<!--                src="images/exp_table.png">-->
-<!--        </div>-->
+<div class="section" style="">
+    <div class="title" id="Tracking Demo">Ablation Study: Comparison with goal-conditioned controller</div>
+    <div class="text">
+        <p>
+            To quantify the coarseness of the goal-tracking controller empowered by <em>Policy Dissection</em>,
+            an explicit goal-conditioned controller following a target yaw is trained in <a
+                href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
+            We directly identify the primitives related to yaw rate in this controller with the proposed method, and
+            employ
+            a PID controller to determine the output of the neuron related to yaw rate. This enables a new way,
+            neural primitive activation, to track target command besides explicitly indicating the goal in the network
+            input.
+        </p>
+        <p>
+            Consequently, experiments can be conducted to fairly compare these two methods for quantifying the
+            coarseness of <em>Policy Dissection</em> enabled goal-conditioned control.
+            As shown in the video, the tracking precision of the goal-conditioned controller achieved by our method is
+            compatible to the explict goal-conditioned control method.
+            <br><br><em><b>Note</b>: the explict target yaw command in the observation is set to 0 for the primitive
+            activation command tracking.</em>
+        </p>
+    </div>
+    <center>
+        <video class="video-container" width="100%" height="508" style="padding-right: 10pt" autoplay
+               muted loop id="tracking_video">
+            <source src="assets/acc_tracking.mp4" type=video/mp4>
+        </video>
+    </center>
+</div>
 
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--&lt;!&ndash; === Result Section Ends === &ndash;&gt;-->
 <div class="section" style=" text-align: left">
     <div class="title" id="Demo Video">Demo Video</div>
     We provide a demo video to show human-AI shared control systems empowered by <em>Policy Dissection</em>
     can be built on various tasks, including quadrupedal robot locomotion, autonomous driving and classic gym tasks.
     <div class="body">
         <div class="video-container" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
-            <iframe width="900" height="506" src="https://www.youtube.com/embed/2Shqhwgom3A"
+            <iframe width="900" height="506" src="https://www.youtube.com/embed/7UmScmKMFE4"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
         </div>
     </div>
 </div>
-
-<div class="section" style=" text-align: left">
-    <div class="title" id="Parkour Demo">Parkour Demo</div>
-    <p>
-        We trained bipedal robots, Cassie, in <a href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
-        Though this robot is trained to move forward, activating identified primitives can evoke complex behaviors
-        like crouching, forward jumping and back-flipping. In the following parkour video, we show that with human
-        instruction, the robot can combine these skills and overcome complex situations.
-        This neural controller with probed primitives and the shared control interface are all released <a href="https://github.com/metadriverse/policydissect"> here </a>.
-    </p>
-    <div class="body">
-        <div class="video-container" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
-            <iframe width="900" height="506" src="https://www.youtube.com/embed/cqCmy-aNuD4"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-            ></iframe>
-        </div>
-    </div>
-</div>
-
-
-<div class="section" style=" text-align: left">
-    <div class="title" id="Tracking Demo">Comparison with goal-conditioned controller</div>
-    <p>
-        To quantify the coarseness of the goal-conditioned control enabled by <em>Policy Dissection</em>,
-        a explicit goal-conditioned controller following a target yaw is trained in <a
-            href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
-        We directly identify the primitives related to yaw rate in this controller with the proposed method, and employ
-        a PID controller to determine the output of the neuron related to yaw rate. This enables a new way,
-        neural primitive activation, to track target command besides explicitly indicating the goal in the network
-        input.
-    </p>
-    <p>
-        Consequently, experiments can be conducted to fairly compare these two methods for quantifying the
-        coarseness of <em>Policy Dissection</em> enabled goal-conditioned control.
-        As shown in the video, the tracking precision of the goal-conditioned controller achieved by our method is compatible to the
-        explict goal-conditioned control method.
-        <br><br><em><b>Note</b>: the explict target yaw command in the observation is set to 0 for the primitive
-        activation command tracking.</em>
-    </p>
-    <div class="body">
-        <div class="video-container" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
-            <iframe width="900" height="506" src="https://www.youtube.com/embed/T6qg3IYlc2A"
-                    title="YouTube video player" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-        </div>
-    </div>
-</div>
-
-<!--<div class="section">-->
-<!--    <div class="title" id="talk">Talk</div>-->
-<!--    <div class="text">-->
-<!--        <br>-->
-<!--        <p>-->
-<!--            We summarize our core technical comtribution in this talk.-->
-<!--        </p>-->
-<!--    </div>-->
-<!--    <div class="body">-->
-<!--        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">-->
-<!--            <iframe width="900" height="506" src="https://www.youtube.com/embed/PiJv4wtp8T8"-->
-<!--                    title="YouTube video player" frameborder="0"-->
-<!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
-<!--                    allowfullscreen></iframe>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    </div>-->
-
-
-<!--<div class="section">-->
-<!--    <div class="title" id="video">Demo Video</div>-->
-<!--    <div class="text">-->
-<!--        <br>-->
-<!--        <p>-->
-<!--            HACO is tested on <a href="https://github.com/decisionforce/metadrive">MetaDrive Simulator</a>, which is-->
-<!--            efficient and allows generating various scenarios. Here, we provide the full training process of HACO and-->
-<!--            compare it with RL, IL and Offline RL baselines. As a result, HACO achieves superior sample efficiency-->
-<!--            with safety guarantee and outperform all baselines.-->
-<!--        </p>-->
-<!--    </div>-->
-<!--    <div class="body">-->
-<!--        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">-->
-<!--            <iframe width="900" height="506" src="https://www.youtube.com/embed/Mp37zErSXwk"-->
-<!--                    title="YouTube video player" frameborder="0"-->
-<!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
-<!--                    allowfullscreen></iframe>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    </div>-->
-<!--<div class="section">-->
-<!--    <div class="title" id="video_carla">Benchmark HACO on CARLA</div>-->
-<!--    <div class="text">-->
-<!--        <br>-->
-<!--        <p>-->
-<!--            Furthermore, we benchmark HACO on <a href=https://github.com/carla-simulator/carla>CARLA Simulator</a>,-->
-<!--            where agent takes semantic top-down view as observation. Equipped with 3-layer convolution neural network,-->
-<!--            HACO agent learns not only the feature extractor but the driving policy with human involvement in 10 minutes.-->
-<!--        </p>-->
-<!--    </div>-->
-<!--    <div class="body">-->
-<!--        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">-->
-<!--            <iframe width="900" height="506" src="https://www.youtube.com/embed/vm-Cog-9feY"-->
-<!--                    title="YouTube video player" frameborder="0"-->
-<!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
-<!--                    allowfullscreen></iframe>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
 
 <!-- === Reference Section Starts === -->
 <div class="section">
     <div class="bibtex">
         <div class="text">Reference</div>
     </div>
-    <!--    If you find this work useful in your project, please consider to cite it through:-->
+    If you find this work useful in your project, please consider to cite it through:
     <pre>
  @article{li2022human,
   title={Human-AI Shared Control via Policy Dissection},
