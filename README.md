@@ -4,7 +4,7 @@
 
 [**Webpage**](https://metadriverse.github.io/policydissect/) |
 [**Code**](https://github.com/metadriverse/policydissect) |
-[**Video**](https://youtu.be/2Shqhwgom3A) |
+[**Video**](https://youtu.be/7UmScmKMFE4) |
 [**Paper**](https://arxiv.org/pdf/2206.00152.pdf) |
 
 [comment]: <> ([**Poster**]&#40;https://github.com/decisionforce/HACO/blob/main/docs/iclr_poster.pdf&#41; )
