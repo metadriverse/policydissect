@@ -23,7 +23,7 @@
 <body>
 
 <!-- === Home Section Starts === -->
-<div class="section">
+<div class="section" style="margin-top: 10pt">
     <!-- === Title Starts === -->
     <div class="header">
         <!--        <div class="logo">-->
@@ -38,40 +38,11 @@
         <table>
             <tr>
                 <td>
-                    <!--
-                                        <div class="logo"
-                                             style="
-                                             width: 100pt;
-                                             vertical-align: text-top;
-                                             text-align: center;
-                                             ">
-                                            <a href="https://decisionforce.github.io/" target="_blank">
-                                                <img src="images/deciforce.png">
-                                            </a>
-                                        </div>-->
-
-                </td>
-                <td>
-                    <div style="padding-top: 20pt;padding-left: 125pt;padding-bottom: 10pt" class="title" id="lang">
+                    <div style="padding-top: 0pt;padding-left: 140pt;padding-bottom: 12pt" class="title" id="lang">
                         Human-AI Shared Control via Policy Dissection
                     </div>
-                    <p style="text-align:center;padding-left: 130pt">Neural Information Processing Systems (NeurIPS)
+                    <p style="text-align:center;padding-left: 155pt">Neural Information Processing Systems (NeurIPS)
                         2022</p>
-                </td>
-                <td>
-                    <!--
-                                        <div class="logo"
-                                             style="
-                                             width: 100pt;
-                                             padding-top: 10pt;
-                                             vertical-align: center;
-                                             text-align: center;
-                                             ">
-                                            <a href="https://github.com/decisionforce/metadrive" target="_blank">
-                                                <img style=" width: 120pt;" src="images/metadrive.png">
-                                            </a>
-                                        </div>
-                    -->
                 </td>
             </tr>
         </table>
@@ -80,7 +51,7 @@
     </div>
     <!-- === Title Ends === -->
     <div class="author">
-        <a href="https://Quanyili.github.io">Quanyi Li</a><sup>1</sup>,&nbsp;
+        <a href="https://Quanyili.github.io">Quanyi Li</a><sup>1,4</sup>,&nbsp;
         <a href="https://pengzhenghao.github.io" target="_blank">Zhenghao Peng</a><sup>3</sup>,&nbsp;&nbsp;
         <a href="https://hbwu-ntu.github.io/" target="_blank">Haibin Wu</a><sup>1</sup>,
         <a href="#" target="_blank">Lan Feng</a><sup>2</sup>,
@@ -91,9 +62,9 @@
     <div class="institution" style="font-size: 11pt;">
         <div>
             <sup>1</sup>Centre for Perceptual and Interactive Intelligence,
-            <!--            <sup>2</sup>SenseTime Research <br>-->
             <sup>2</sup>ETH Zurich, <br>
             <sup>3</sup>University of California, Los Angeles
+            <sup>4</sup>University of Edinburgh<br>
 
         </div>
     </div>
@@ -103,18 +74,21 @@
                 <a class="bar" href="https://metadriverse.github.io/policydissect/"><b>Webpage</b></a> |
                 <a class="bar" href="https://github.com/metadriverse/policydissect"><b>Code</b></a> |
                 <a class="bar" href="https://youtu.be/2Shqhwgom3A"><b>Video</b></a> |
-                <!--                                <a class="bar" href="#talk"><b>Talk</b></a> |-->
-
-                <!--                                <a class="bar" href="https://github.com/decisionforce/HACO/blob/main/docs/iclr_poster.pdf"><b>Poster</b></a>-->
                 <a class="bar" href="https://arxiv.org/pdf/2206.00152.pdf"><b>Paper</b></a>
-
-
             </td>
         </tr>
     </table>
-
+    <!--    <div class="video-container">-->
+    <center>
+        <video class="video-container" width="90%" height="550" style="padding-left: 20pt;margin-top: -50pt" autoplay muted loop id="teaser_video">
+            <source src="assets/teaser_video.mp4" type=video/mp4>
+        </video>
+<!--        <script>-->
+<!--            document.getElementById('teaser_video').play();-->
+<!--        </script>-->
+    </center>
+    <!--    </div>-->
 </div>
-<!-- === Home Section Ends === -->
 
 
 <!-- === Overview Section Starts === -->
@@ -198,7 +172,7 @@
     We provide a demo video to show human-AI shared control systems empowered by <em>Policy Dissection</em>
     can be built on various tasks, including quadrupedal robot locomotion, autonomous driving and classic gym tasks.
     <div class="body">
-        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
+        <div class="video-container" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
             <iframe width="900" height="506" src="https://www.youtube.com/embed/2Shqhwgom3A"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -211,18 +185,18 @@
     <div class="title" id="Parkour Demo">Parkour Demo</div>
     <p>
         We trained bipedal robots, Cassie, in <a href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
-        Though this robot is trained to move forward, activating the identified primitives can evoke complex behaviors
-        like crouching, forward jumping, back-flipping. In the following parkour demo, we show that with human
+        Though this robot is trained to move forward, activating identified primitives can evoke complex behaviors
+        like crouching, forward jumping and back-flipping. In the following parkour video, we show that with human
         instruction, the robot can combine these skills and overcome complex situations.
-        This neural controller with probed primitives and the shared control interface are all released and can be
-        accessed at <a href="https://github.com/metadriverse/policydissect"> Code </a>.
+        This neural controller with probed primitives and the shared control interface are all released <a href="https://github.com/metadriverse/policydissect"> here </a>.
     </p>
     <div class="body">
-        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
+        <div class="video-container" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
             <iframe width="900" height="506" src="https://www.youtube.com/embed/cqCmy-aNuD4"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
+                    allowfullscreen
+            ></iframe>
         </div>
     </div>
 </div>
@@ -235,20 +209,20 @@
         a explicit goal-conditioned controller following a target yaw is trained in <a
             href="https://github.com/NVIDIA-Omniverse/IsaacGymEnvs">IsaacGym </a>.
         We directly identify the primitives related to yaw rate in this controller with the proposed method, and employ
-        a PID controller to decide the output of the neuron related to yaw rate. This enables a new way,
+        a PID controller to determine the output of the neuron related to yaw rate. This enables a new way,
         neural primitive activation, to track target command besides explicitly indicating the goal in the network
         input.
     </p>
     <p>
-        As a result, experiments can be conducted to fairly compare these two methods and quantify the
+        Consequently, experiments can be conducted to fairly compare these two methods for quantifying the
         coarseness of <em>Policy Dissection</em> enabled goal-conditioned control.
-        The results show that the goal-conditioned control achieved by our method is compatible to the
-        explict goal-conditioned control.
+        As shown in the video, the tracking precision of the goal-conditioned controller achieved by our method is compatible to the
+        explict goal-conditioned control method.
         <br><br><em><b>Note</b>: the explict target yaw command in the observation is set to 0 for the primitive
         activation command tracking.</em>
     </p>
     <div class="body">
-        <div class="vedio" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
+        <div class="video-container" style="position: relative; padding-top: 2%; margin: 0pt auto; text-align: center;">
             <iframe width="900" height="506" src="https://www.youtube.com/embed/T6qg3IYlc2A"
                     title="YouTube video player" frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

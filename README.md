@@ -19,7 +19,7 @@ The policy dissection method and training code will be updated soon.
 - [x] Isaacgym-Cassie (Forked from: https://github.com/leggedrobotics/legged_gym)
 - [x] Isaacgym-ANYmal (Forked from: https://github.com/leggedrobotics/legged_gym)
 - [ ] Gym-Walker
-- [ ] Gym-BipedalWalker
+- [x] Gym-BipedalWalker
 - [ ] Gym-Ant
 
 ## Installation
@@ -45,6 +45,8 @@ For playing with agents trained in IsaacGym, follow the instructions below to in
 - Download and install Isaac Gym Preview 3 (Preview 2 will not work!) from https://developer.nvidia.com/isaac-gym
 - cd ```isaacgym/python && pip install -e .``` 
 
+### Mujoco Installation (Optional)
+For playing with the Mujoco-Ant and Mujoco-Walker, please install **mujoco-210** according to https://github.com/openai/mujoco-py#install-mujoco and run ```pip install mujoco_py```  
 
 ## Play
 
@@ -86,6 +88,11 @@ Keymap:
 ```
 
 *tips: Switch to Tiptoe state before pressing Key_Q for increasing the distance of jump*
+
+### Gym Environments
+We also discover motor primitives in three gym environments: Box2d-BipedalWalker, Mujoco-Ant and Mujoco-Walker.
+Please refer to corresponding scripts in ```policydissect/scripts``` for discovered motor primitives, behaviors and keys
+keyboard interfaces.
 
 ### Comparison with explicit goal-conditioned control
 To measure the coarseness of the control approach enabled by *Policy Dissection*, we train a goal-conditioned
