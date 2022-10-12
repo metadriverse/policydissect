@@ -12,9 +12,8 @@ try:
     import mujoco_py
 except ImportError as e:
     raise error.DependencyNotInstalled(
-        "{}. (HINT: you need to install mujoco_py, and also perform the setup instructions here: https://github.com/openai/mujoco-py/.)".format(
-            e
-        )
+        "{}. (HINT: you need to install mujoco_py, and also perform the setup instructions here: https://github.com/openai/mujoco-py/.)"
+        .format(e)
     )
 import mujoco_py
 from gym.envs.mujoco.ant_v3 import AntEnv
@@ -24,6 +23,7 @@ from mujoco_py.mjviewer import MjViewer, MjViewerBasic
 class CustomViewer(MjViewer):
     need_reset = False
     keyboard_action = "straight"
+
     def __init__(self, sim):
         super(CustomViewer, self).__init__(sim)
         # video record is useless
@@ -106,12 +106,10 @@ class CustomViewer(MjViewer):
                         if body_idx1 == body_idx2:
                             if not self._show_mocap:
                                 # Store transparency for later to show it.
-                                self.sim.extras[
-                                    geom_idx] = self.sim.model.geom_rgba[geom_idx, 3]
+                                self.sim.extras[geom_idx] = self.sim.model.geom_rgba[geom_idx, 3]
                                 self.sim.model.geom_rgba[geom_idx, 3] = 0
                             else:
-                                self.sim.model.geom_rgba[
-                                    geom_idx, 3] = self.sim.extras[geom_idx]
+                                self.sim.model.geom_rgba[geom_idx, 3] = self.sim.extras[geom_idx]
         elif key in (glfw.KEY_0, glfw.KEY_1, glfw.KEY_2, glfw.KEY_3, glfw.KEY_4):
             self.vopt.geomgroup[key - glfw.KEY_0] ^= 1
         MjViewerBasic.key_callback(self, window, key, scancode, action, mods)
@@ -119,24 +117,23 @@ class CustomViewer(MjViewer):
 
 class MyAntEnv(AntEnv):
     def __init__(
-            self,
-            place_holder={},
-            ctrl_cost_weight=0.5,
-            contact_cost_weight=5e-4,
-            healthy_reward=1.0,
-            terminate_when_unhealthy=True,
-            healthy_z_range=(0.2, 1.0),
-            contact_force_range=(-1.0, 1.0),
-            reset_noise_scale=0.1,
-            exclude_current_positions_from_observation=True,
-            frame_skip=5,
-            random_reset_position=True
+        self,
+        place_holder={},
+        ctrl_cost_weight=0.5,
+        contact_cost_weight=5e-4,
+        healthy_reward=1.0,
+        terminate_when_unhealthy=True,
+        healthy_z_range=(0.2, 1.0),
+        contact_force_range=(-1.0, 1.0),
+        reset_noise_scale=0.1,
+        exclude_current_positions_from_observation=True,
+        frame_skip=5,
+        random_reset_position=True
     ):
         xml_file = os.path.join(os.path.dirname(__file__), "my_ant.xml")
         utils.EzPickle.__init__(**locals())
 
-
-        self.random_reset_position=random_reset_position
+        self.random_reset_position = random_reset_position
         self._ctrl_cost_weight = ctrl_cost_weight
         self._contact_cost_weight = contact_cost_weight
 
@@ -148,9 +145,7 @@ class MyAntEnv(AntEnv):
 
         self._reset_noise_scale = reset_noise_scale
 
-        self._exclude_current_positions_from_observation = (
-            exclude_current_positions_from_observation
-        )
+        self._exclude_current_positions_from_observation = (exclude_current_positions_from_observation)
 
         # if model_path.startswith("/"):
         #     fullpath = model_path
@@ -254,29 +249,25 @@ class MyAntEnv(AntEnv):
         noise_low = -self._reset_noise_scale
         noise_high = self._reset_noise_scale
 
-
-        qpos = self.init_qpos + self.np_random.uniform(
-            low=noise_low, high=noise_high, size=self.model.nq
-        )
+        qpos = self.init_qpos + self.np_random.uniform(low=noise_low, high=noise_high, size=self.model.nq)
 
         # random orientation
         if self.random_reset_position:
             qpos[6] = self.np_random.uniform(low=-6.28, high=6.28)
 
-        qvel = self.init_qvel + self._reset_noise_scale * self.np_random.randn(
-            self.model.nv
-        )
+        qvel = self.init_qvel + self._reset_noise_scale * self.np_random.randn(self.model.nv)
         self.set_state(qpos, qvel)
 
         observation = self._get_obs()
 
         return observation
 
-if __name__=="__main__":
-    env=MyAntEnv()
+
+if __name__ == "__main__":
+    env = MyAntEnv()
     env.reset()
     while True:
-        o,r,d,i = env.step(env.action_space.sample())
+        o, r, d, i = env.step(env.action_space.sample())
         env.render()
         if d:
             env.reset()

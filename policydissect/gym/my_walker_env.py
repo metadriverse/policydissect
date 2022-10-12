@@ -6,19 +6,14 @@ try:
     import mujoco_py
 except ImportError as e:
     raise error.DependencyNotInstalled(
-        "{}. (HINT: you need to install mujoco_py, and also perform the setup instructions here: https://github.com/openai/mujoco-py/.)".format(
-            e
-        )
+        "{}. (HINT: you need to install mujoco_py, and also perform the setup instructions here: https://github.com/openai/mujoco-py/.)"
+        .format(e)
     )
 import mujoco_py
 
 
 class MyWalker(Walker2dEnv):
-    def __init__(
-            self,
-            place_holder={},
-            *args, **kwargs
-    ):
+    def __init__(self, place_holder={}, *args, **kwargs):
         super(MyWalker, self).__init__(*args, **kwargs)
 
     # def reset_model(self):
@@ -38,7 +33,6 @@ class MyWalker(Walker2dEnv):
     #
     #     observation = self._get_obs()
     #     return observation
-
 
     def _get_viewer(self, mode):
         self.viewer = self._viewers.get(mode)
@@ -74,9 +68,9 @@ class MyWalker(Walker2dEnv):
 if __name__ == "__main__":
     env = MyWalker()
     env.reset()
-    for i in  range(100000):
+    for i in range(100000):
 
         env.step(env.action_space.sample())
         env.render()
-        if i % 100 ==0:
+        if i % 100 == 0:
             env.reset()

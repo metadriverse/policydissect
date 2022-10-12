@@ -3,6 +3,7 @@ from gym.envs.classic_control.rendering import Viewer, get_display, Transform, g
 import pyglet
 key = pyglet.window.key
 
+
 def get_window(width, height, display, **kwargs):
     """
     Will create a pyglet window from the display specification provided.
@@ -11,14 +12,8 @@ def get_window(width, height, display, **kwargs):
     config = screen[0].get_best_config()  # selecting the first screen
     context = config.create_context(None)  # create GL context
 
-    return MyWindow(
-        width=width,
-        height=height,
-        display=display,
-        config=config,
-        context=context,
-        **kwargs
-    )
+    return MyWindow(width=width, height=height, display=display, config=config, context=context, **kwargs)
+
 
 class MyWindow(pyglet.window.Window):
     command = "straight"
@@ -36,6 +31,7 @@ class MyWindow(pyglet.window.Window):
 
         if symbol == key.R:
             self.need_reset = True
+
 
 class MyViewer(Viewer):
     def __init__(self, width, height, display=None):

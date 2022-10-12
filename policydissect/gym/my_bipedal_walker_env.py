@@ -64,21 +64,13 @@ class MyBipedalWalker(BipedalWalkerHardcore):
             self.joints[3].motorSpeed = float(SPEED_KNEE * np.clip(action[3], -1, 1))
         else:
             self.joints[0].motorSpeed = float(SPEED_HIP * np.sign(action[0]))
-            self.joints[0].maxMotorTorque = float(
-                TORQUE * np.clip(np.abs(action[0]), 0, 1)
-            )
+            self.joints[0].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[0]), 0, 1))
             self.joints[1].motorSpeed = float(SPEED_KNEE * np.sign(action[1]))
-            self.joints[1].maxMotorTorque = float(
-                TORQUE * np.clip(np.abs(action[1]), 0, 1)
-            )
+            self.joints[1].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[1]), 0, 1))
             self.joints[2].motorSpeed = float(SPEED_HIP * np.sign(action[2]))
-            self.joints[2].maxMotorTorque = float(
-                TORQUE * np.clip(np.abs(action[2]), 0, 1)
-            )
+            self.joints[2].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[2]), 0, 1))
             self.joints[3].motorSpeed = float(SPEED_KNEE * np.sign(action[3]))
-            self.joints[3].maxMotorTorque = float(
-                TORQUE * np.clip(np.abs(action[3]), 0, 1)
-            )
+            self.joints[3].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[3]), 0, 1))
 
         self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
 
@@ -99,9 +91,7 @@ class MyBipedalWalker(BipedalWalkerHardcore):
             2.0 * self.hull.angularVelocity / FPS,
             0.3 * vel.x * (VIEWPORT_W / SCALE) / FPS,  # Normalized to get -1..1 range
             0.3 * vel.y * (VIEWPORT_H / SCALE) / FPS,
-            self.joints[
-                0
-            ].angle,
+            self.joints[0].angle,
             # This will give 1.1 on high up, but it's still OK (and there should be spikes on hiting the ground, that's normal too)
             self.joints[0].speed / SPEED_HIP,
             self.joints[1].angle + 1.0,
@@ -119,11 +109,9 @@ class MyBipedalWalker(BipedalWalkerHardcore):
         self.scroll = pos.x - VIEWPORT_W / SCALE / 5
 
         shaping = (
-                130 * pos[0] / SCALE
+            130 * pos[0] / SCALE
         )  # moving forward is a way to receive reward (normalized to get 300 on completion)
-        shaping -= 5.0 * abs(
-            state[0]
-        )  # keep head straight, other than that and falling, any behavior is unpunished
+        shaping -= 5.0 * abs(state[0])  # keep head straight, other than that and falling, any behavior is unpunished
 
         reward = 0
         if self.prev_shaping is not None:

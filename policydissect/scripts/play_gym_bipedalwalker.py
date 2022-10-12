@@ -7,9 +7,14 @@ from policydissect.utils.policy import sac_inference_tf
 
 jump = {
     "left": {
-        0: [(150, 10), (189, 10), (249, 10), (235, 10)]},  # key_a: stand up from split
-    "down": {0: [(202, 40)]},  # key_s: restore running after jumping
-    "up": {0: [(32, 12), (98, -8)]}  # key_w: jump
+        0: [(150, 10), (189, 10), (249, 10), (235, 10)]
+    },  # key_a: stand up from split
+    "down": {
+        0: [(202, 40)]
+    },  # key_s: restore running after jumping
+    "up": {
+        0: [(32, 12), (98, -8)]
+    }  # key_w: jump
 }
 
 if __name__ == "__main__":
