@@ -229,6 +229,7 @@ setup(
         "tensorboard",
         "yapf==0.30.0",
         "toolz",
+        "box2d",
         'numpy',
         'pybullet',
         "librosa",
@@ -236,5 +237,6 @@ setup(
         "protobuf==3.20",
         "tensorflow==2.3.1",
         "gym==0.19.0",
+        "pyglet"
     ],
 )

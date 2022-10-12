@@ -17,7 +17,7 @@ def control_neuron_activation(layer_out_put, layer, conditional_control_map, com
 
 
 def ppo_inference_tf(
-    weights, obs, hidden_layer_num, conditional_control_map, command, deterministic=False, activation="tanh"
+        weights, obs, hidden_layer_num, conditional_control_map, command, deterministic=False, activation="tanh"
 ):
     step_activation_value = []
     obs = obs.reshape(1, -1)
@@ -25,7 +25,7 @@ def ppo_inference_tf(
     activate_func = np.tanh if activation == "tanh" else relu
     for layer in range(1, hidden_layer_num + 1):
         x = np.matmul(x, weights["default_policy/fc_{}/kernel".format(layer)
-                                 ]) + weights["default_policy/fc_{}/bias".format(layer)]
+        ]) + weights["default_policy/fc_{}/bias".format(layer)]
         before_tanh = x
         x = activate_func(x)
         control_neuron_activation(x, layer - 1, conditional_control_map, command)
@@ -41,7 +41,7 @@ def ppo_inference_tf(
 
 
 def ppo_inference_torch(
-    weights, obs, conditional_control_map, command, deterministic=False, activation="tanh", tanh_action=True
+        weights, obs, conditional_control_map, command, deterministic=False, activation="tanh", tanh_action=True
 ):
     step_activation_value = []
     activate_func = relu if activation == "relu" else np.tanh
@@ -68,3 +68,24 @@ def ppo_inference_torch(
 def _normalize_obs(obs_mid, obs_scale, obs):
     ret = (obs - obs_mid) / obs_scale
     return ret
+
+
+def sac_inference_tf(weights, obs, hidden_layer_num, conditional_control_map, command, deterministic=False,
+                     activation="tanh"):
+    obs = np.asarray(obs)
+    if obs.ndim == 1:
+        obs = np.expand_dims(obs, axis=0)
+    assert obs.ndim == 2
+    x = obs
+    for layer in range(1, hidden_layer_num + 1):
+        x = np.matmul(x, weights["default_policy/sequential/action_{}/kernel".format(layer)]) + \
+            weights["default_policy/sequential/action_{}/bias".format(layer)]
+        x = np.tanh(x) if activation == "tanh" else relu(x)
+        control_neuron_activation(x, layer - 1, conditional_control_map, command)
+    x = np.matmul(x, weights["default_policy/sequential/action_out/kernel"]) + \
+        weights["default_policy/sequential/action_out/bias"]
+    mean, log_std = np.split(x, 2, axis=1)
+    std = np.exp(log_std)
+    action = np.random.normal(mean, std) if not deterministic else mean
+    squashed = ((np.tanh(action) + 1.0) / 2.0) * 2 - 1
+    return squashed[0]

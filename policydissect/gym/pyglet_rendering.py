@@ -25,14 +25,14 @@ class MyWindow(pyglet.window.Window):
     need_reset = False
 
     def on_key_press(self, symbol, modifiers):
-        if symbol == key.NUM_4:
-            self.command = "left"
-        elif symbol == key.NUM_6:
+        if symbol == key.W:
+            self.command = "up"
+        elif symbol == key.S:
+            self.command = "down"
+        elif symbol == key.D:
             self.command = "right"
-        elif symbol == key.NUM_5:
-            self.command = "brake"
-        elif symbol == key.NUM_8:
-            self.command = "straight"
+        elif symbol == key.A:
+            self.command = "left"
 
         if symbol == key.R:
             self.need_reset = True
