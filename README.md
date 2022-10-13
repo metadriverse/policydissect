@@ -45,16 +45,14 @@ pip install -e .
 ### IsaacGym Installation (Optional)
 
 For playing with agents trained in IsaacGym, follow the instructions below to install IsaacGym
-
 - Download and install Isaac Gym Preview 3 (Preview 2 will not work!) from https://developer.nvidia.com/isaac-gym
 - cd ```isaacgym/python && pip install -e .```
 
 ### Mujoco Installation (Optional)
 
-For playing with the Mujoco-Ant and Mujoco-Walker, please install **mujoco200** according
-to https://www.roboti.us/download.html and run ```pip install mujoco-py==2.0.2.7```.
-Also, Mujoco licence can be found at https://www.roboti.us/license.html. Some compiling errors may happen when
-installing it. Solutions can be easily found at https://github.com/openai/mujoco-py
+For playing with the Mujoco-Ant and Mujoco-Walker, please
+- install **mujoco200** according to https://www.roboti.us/download.html (Mujoco licence can be found at https://www.roboti.us/license.html)
+- run ```pip install mujoco-py==2.0.2.7``` (Solutions of compiling error can be easily found at https://github.com/openai/mujoco-py/issues)
 
 ## Play
 
