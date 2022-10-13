@@ -7,19 +7,21 @@ from policydissect.utils.policy import sac_inference_tf
 
 WALKER_MAP = {
     "up": {
-        # 5: [(219, -10)],
-        # 0: [(182, -6)]  # for up/down
-        0: [(117, -5), (182, -4)]
-    },
-    "down": {
         0: [(191, -6), (172, -8)]
     },  # stiff
-    "left": {
-        2: [(198, 14)]
+    "brake": {
+        0: [(117, -2.8), (182, -7.5)]
     },
 }
 
 if __name__ == "__main__":
+    """
+    KEY_R: reset
+    KEY_A: stop
+    KEY_W: freeze red knee
+    KEY_D: restore running
+    """
+
     env = MyWalker()
     # 11/14 two tigh
     policy_weights = np.load(os.path.join(PACKAGE_DIR, "weights", "walker.npz"))
@@ -33,3 +35,4 @@ if __name__ == "__main__":
         env.render()
         if d:
             o = env.reset()
+            env.viewer.keyboard_action = "restore"

@@ -11,10 +11,10 @@
   <asset>
     <texture builtin="gradient" height="100" rgb1="1 1 1" rgb2="1 1 1" type="skybox" width="100"/>
     <texture builtin="flat" height="1278" mark="cross" markrgb="1 1 1" name="texgeom" random="0.01" rgb1="0.8 0.6 0.4" rgb2="0.8 0.6 0.4" type="cube" width="127"/>
-<!--    <texture builtin="checker" height="100" name="texplane" rgb1="0.6 0.6 0.6" rgb2="0.8 0.8 0.8" type="2d" width="100"/>-->
-<!--    <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="30 30" texture="texplane"/>-->
-    <texture builtin="checker" height="100" name="texplane" rgb1="1 1 1" rgb2="1 1 1" type="2d" width="100"/>
-    <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="0 0" texture="texplane"/>
+    <texture builtin="checker" height="100" name="texplane" rgb1="0.6 0.6 0.6" rgb2="0.8 0.8 0.8" type="2d" width="100"/>
+    <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="30 30" texture="texplane"/>
+<!--    <texture builtin="checker" height="100" name="texplane" rgb1="1 1 1" rgb2="1 1 1" type="2d" width="100"/>-->
+<!--    <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="0 0" texture="texplane"/>-->
     <material name="geom" texture="texgeom" texuniform="true"/>
   </asset>
   <worldbody>
@@ -22,7 +22,7 @@
     <geom conaffinity="1" condim="3" material="MatPlane" name="floor" pos="0 0 0" rgba="1 1 1 1" size="40 40 40" type="plane"/>
     <body name="torso" pos="0 0 0.75">
       <camera name="track" mode="trackcom" pos="-3 0 0.3" xyaxes="0 -1 0 0 0 1"/>
-<!--       <camera name="track" mode="trackcom" pos="0 0 10"/>-->
+<!--       <camera name="track" mode="trackcom" pos="0 0 50"/>-->
       <geom name="torso_geom" pos="0 0 0" size="0.25" type="sphere"/>
       <joint armature="0" damping="0" limited="false" margin="0.01" name="root" pos="0 0 0" type="free"/>
       <body name="front_left_leg" pos="0 0 0">

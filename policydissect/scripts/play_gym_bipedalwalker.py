@@ -18,6 +18,12 @@ jump = {
 }
 
 if __name__ == "__main__":
+    """
+    KEY_R: reset
+    KEY_W: jump
+    KEY_S: restore running after jumping
+    KEY_A: stand up from split
+    """
     env = MyBipedalWalker()
     policy_weights = np.load(os.path.join(PACKAGE_DIR, "weights", "bipedal_walker.npz"))
     # 0-21 position
@@ -30,3 +36,4 @@ if __name__ == "__main__":
         env.render()
         if d:
             o = env.reset()
+            env.viewer.window.command = "right"
