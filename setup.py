@@ -22,15 +22,15 @@ import multiprocessing.pool
 
 
 def parallelCCompile(
-    self,
-    sources,
-    output_dir=None,
-    macros=None,
-    include_dirs=None,
-    debug=0,
-    extra_preargs=None,
-    extra_postargs=None,
-    depends=None
+        self,
+        sources,
+        output_dir=None,
+        macros=None,
+        include_dirs=None,
+        debug=0,
+        extra_preargs=None,
+        extra_postargs=None,
+        depends=None
 ):
     # those lines are copied from distutils.ccompiler.CCompiler directly
     macros, objects, extra_postargs, pp_opts, build = self._setup_compile(
@@ -49,7 +49,7 @@ def parallelCCompile(
         # equipped Windows / Mac OS X box)
         pass
     else:
-        mem = max(1, int(round(mem / 1024**3)))  # convert to Gb
+        mem = max(1, int(round(mem / 1024 ** 3)))  # convert to Gb
         N = min(mem, N)
 
     def _single_compile(obj):
@@ -223,7 +223,8 @@ print(find_packages('.'))
 setup(
     name="policydissect",
     install_requires=[
-        "pygame", "metadrive-simulator==0.2.5.1", "setuptools==50.0.0", "tensorboard", "yapf==0.30.0", "toolz", "box2d",
-        'numpy==1.21.6', 'pybullet', "librosa", "torch==1.10.0", "protobuf==3.20", "gym==0.19.0", "pyglet"
+        "pygame", "metadrive-simulator==0.2.5.2", "setuptools==50.0.0", "tensorboard", "yapf==0.30.0", "toolz", "box2d",
+        'numpy==1.21.6', 'pybullet', "librosa", "torch==1.10.0", "gym==0.19.0", "pyglet",
+        "tensorflow==2.10.0"
     ],
 )

@@ -1,5 +1,5 @@
 import numpy as np
-from isaacgym.gymapi import *
+import os
 
 from policydissect import PACKAGE_DIR
 from policydissect.gym.my_bipedal_walker_env import MyBipedalWalker
