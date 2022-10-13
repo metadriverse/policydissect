@@ -18,9 +18,9 @@ The policy dissection method and training code will be updated soon.
 - [x] Pybullet-Quadrupedal Robot (Forked from: https://github.com/Mehooz/vision4leg.git)
 - [x] Isaacgym-Cassie (Forked from: https://github.com/leggedrobotics/legged_gym)
 - [x] Isaacgym-ANYmal (Forked from: https://github.com/leggedrobotics/legged_gym)
-- [ ] Gym-Walker
-- [x] Gym-BipedalWalker
-- [ ] Gym-Ant
+- [x] Gym-Walker (Mujoco-200)
+- [x] Gym-BipedalWalker (Box2D)
+- [x] Gym-Ant (Mujoco-200)
 
 ## Installation
 
@@ -51,9 +51,10 @@ For playing with agents trained in IsaacGym, follow the instructions below to in
 
 ### Mujoco Installation (Optional)
 
-For playing with the Mujoco-Ant and Mujoco-Walker, please install **mujoco-200** according
-to https://www.roboti.us/download.html and run ```pip install mujoco-py==2.0.2.7```. Also, Mujoco licence can be found
-at https://www.roboti.us/license.html
+For playing with the Mujoco-Ant and Mujoco-Walker, please install **mujoco200** according
+to https://www.roboti.us/download.html and run ```pip install mujoco-py==2.0.2.7```.
+Also, Mujoco licence can be found at https://www.roboti.us/license.html. Some compiling errors may happen when
+installing it. Solutions can be easily found at https://github.com/openai/mujoco-py
 
 ## Play
 
