@@ -45,7 +45,7 @@ pip install -e .
 ### IsaacGym Installation (Optional)
 
 For playing with agents trained in IsaacGym, follow the instructions below to install IsaacGym
-- Download and install Isaac Gym Preview 3 (Preview 2 will not work!) from https://developer.nvidia.com/isaac-gym
+- Download and install Isaac Gym Preview 3 from https://developer.nvidia.com/isaac-gym
 - cd ```isaacgym/python && pip install -e .```
 
 ### Mujoco Installation (Optional)
