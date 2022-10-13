@@ -224,6 +224,6 @@ setup(
     name="policydissect",
     install_requires=[
         "pygame", "metadrive-simulator==0.2.5.1", "setuptools==50.0.0", "tensorboard", "yapf==0.30.0", "toolz", "box2d",
-        'numpy==1.21.6', 'pybullet', "librosa", "torch==1.10.0", "protobuf==3.20", "tensorflow==2.3.1", "gym==0.19.0", "pyglet"
+        'numpy==1.21.6', 'pybullet', "librosa", "torch==1.10.0", "protobuf==3.20", "gym==0.19.0", "pyglet"
     ],
 )
