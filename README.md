@@ -51,8 +51,9 @@ For playing with agents trained in IsaacGym, follow the instructions below to in
 
 ### Mujoco Installation (Optional)
 
-For playing with the Mujoco-Ant and Mujoco-Walker, please install **mujoco-210** according
-to https://github.com/openai/mujoco-py#install-mujoco and run ```pip install mujoco-py```
+For playing with the Mujoco-Ant and Mujoco-Walker, please install **mujoco-200** according
+to https://www.roboti.us/download.html and run ```pip install mujoco-py==2.0.2.7```. Also, Mujoco licence can be found
+at https://www.roboti.us/license.html
 
 ## Play
 
