@@ -22,15 +22,15 @@ import multiprocessing.pool
 
 
 def parallelCCompile(
-        self,
-        sources,
-        output_dir=None,
-        macros=None,
-        include_dirs=None,
-        debug=0,
-        extra_preargs=None,
-        extra_postargs=None,
-        depends=None
+    self,
+    sources,
+    output_dir=None,
+    macros=None,
+    include_dirs=None,
+    debug=0,
+    extra_preargs=None,
+    extra_postargs=None,
+    depends=None
 ):
     # those lines are copied from distutils.ccompiler.CCompiler directly
     macros, objects, extra_postargs, pp_opts, build = self._setup_compile(
@@ -49,7 +49,7 @@ def parallelCCompile(
         # equipped Windows / Mac OS X box)
         pass
     else:
-        mem = max(1, int(round(mem / 1024 ** 3)))  # convert to Gb
+        mem = max(1, int(round(mem / 1024**3)))  # convert to Gb
         N = min(mem, N)
 
     def _single_compile(obj):

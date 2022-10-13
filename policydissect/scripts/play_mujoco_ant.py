@@ -15,7 +15,9 @@ ANT_MAP = {
         0: [(156, -20)]
     },  # stop
     "restore": {},  # restore
-    "rotation": {0: [(24, -43)]}  # for rotation
+    "rotation": {
+        0: [(24, -43)]
+    }  # for rotation
 }
 
 if __name__ == "__main__":

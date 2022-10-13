@@ -192,7 +192,7 @@ class MyAntEnv(AntEnv):
             self.viewer_setup()
             self._viewers[mode] = self.viewer
 
-            self.viewer.cam.lookat[0] =0  # x,y,z offset from the object (works if trackbodyid=-1)
+            self.viewer.cam.lookat[0] = 0  # x,y,z offset from the object (works if trackbodyid=-1)
             self.viewer.cam.lookat[1] = 0
             self.viewer.cam.lookat[2] = 0
             self.viewer.cam.distance = 80
