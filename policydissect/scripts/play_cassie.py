@@ -6,6 +6,18 @@ from policydissect.utils.isaacgym_utils import play
 if __name__ == '__main__':
     # This is a policy with Elu which is not a symmetric activation function.
     # Use tanh will definitely improve the performance
+    """
+    Keymap:
+    - KEY_W:Forward
+    - KEY_A:Left
+    - KEY_S:Stop
+    - KEY_C:Crouch
+    - KEY_X:Tiptoe
+    - KEY_Q:Jump
+    - KEY_D:Right
+    - KEY_SPACE:Back Flip
+    - KEY_R:Reset
+    """
     forward_cassie = {
         # 0
         "Tiptoe": {

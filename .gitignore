@@ -5,3 +5,4 @@
 **.pkl
 **.pyc
 **/logs
+/policydissect/scripts/MUJOCO_LOG.TXT

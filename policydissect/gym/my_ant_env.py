@@ -29,20 +29,23 @@ class CustomViewer(MjViewer):
         # video record is useless
         self._video_path = "F:\\hk\\drivingforce\\drivingforce\\policy_dissection\\video_%07d.mp4"
         self._image_path = "F:\\hk\\drivingforce\\drivingforce\\policy_dissection\\frame_%07d.png"
+        self._run_speed /= 2.0
 
     def key_callback(self, window, key, scancode, action, mods):
         # always set to fallse
 
-        if key == glfw.KEY_KP_5:
+        if key == glfw.KEY_A:
             self.keyboard_action = "brake"
-        if key == glfw.KEY_KP_8:
-            self.keyboard_action = "straight"
-        if key == glfw.KEY_KP_4:
-            self.keyboard_action = "left"
-        if key == glfw.KEY_KP_6:
-            self.keyboard_action = "right"
-        if key == glfw.KEY_KP_7:
+        if key == glfw.KEY_D:
+            self.keyboard_action = "restore"
+        if key == glfw.KEY_W:
+            self.keyboard_action = "up"
+        if key == glfw.KEY_S:
+            self.keyboard_action = "down"
+        if key == glfw.KEY_R:
             self.need_reset = True
+        if key == glfw.KEY_Q:
+            self.keyboard_action = "rotation"
         if action != glfw.RELEASE:
             return
         elif key == glfw.KEY_TAB:  # Switches cameras.
@@ -80,24 +83,24 @@ class CustomViewer(MjViewer):
             print('You can access the simulator by self.sim')
             import ipdb
             ipdb.set_trace()
-        elif key == glfw.KEY_S:  # Slows down simulation.
-            self._run_speed /= 2.0
-        elif key == glfw.KEY_F:  # Speeds up simulation.
-            self._run_speed *= 2.0
+        # elif key == glfw.KEY_S:  # Slows down simulation.
+        #     self._run_speed /= 2.0
+        # elif key == glfw.KEY_F:  # Speeds up simulation.
+        #     self._run_speed *= 2.0
         elif key == glfw.KEY_C:  # Displays contact forces.
             vopt = self.vopt
             vopt.flags[10] = vopt.flags[11] = not vopt.flags[10]
-        elif key == glfw.KEY_D:  # turn off / turn on rendering every frame.
-            self._render_every_frame = not self._render_every_frame
+        # elif key == glfw.KEY_D:  # turn off / turn on rendering every frame.
+        #     self._render_every_frame = not self._render_every_frame
         elif key == glfw.KEY_E:
             vopt = self.vopt
             vopt.frame = 1 - vopt.frame
-        elif key == glfw.KEY_R:  # makes everything little bit transparent.
-            self._transparent = not self._transparent
-            if self._transparent:
-                self.sim.model.geom_rgba[:, 3] /= 5.0
-            else:
-                self.sim.model.geom_rgba[:, 3] *= 5.0
+        # elif key == glfw.KEY_R:  # makes everything little bit transparent.
+        #     self._transparent = not self._transparent
+        #     if self._transparent:
+        #         self.sim.model.geom_rgba[:, 3] /= 5.0
+        #     else:
+        #         self.sim.model.geom_rgba[:, 3] *= 5.0
         elif key == glfw.KEY_M:  # Shows / hides mocap bodies
             self._show_mocap = not self._show_mocap
             for body_idx1, val in enumerate(self.sim.model.body_mocapid):
@@ -189,15 +192,15 @@ class MyAntEnv(AntEnv):
             self.viewer_setup()
             self._viewers[mode] = self.viewer
 
-            # self.viewer.cam.lookat[0] =0  # x,y,z offset from the object (works if trackbodyid=-1)
+            self.viewer.cam.lookat[0] = 0  # x,y,z offset from the object (works if trackbodyid=-1)
+            self.viewer.cam.lookat[1] = 0
+            self.viewer.cam.lookat[2] = 0
+            self.viewer.cam.distance = 80
+
+            # self.viewer.cam.lookat[0] = 12  # x,y,z offset from the object (works if trackbodyid=-1)
             # self.viewer.cam.lookat[1] = 0
             # self.viewer.cam.lookat[2] = 0
             # self.viewer.cam.distance = 18
-
-            self.viewer.cam.lookat[0] = 12  # x,y,z offset from the object (works if trackbodyid=-1)
-            self.viewer.cam.lookat[1] = 0
-            self.viewer.cam.lookat[2] = 0
-            self.viewer.cam.distance = 18
 
             self.viewer.cam.elevation = -90  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
             # self.viewer.cam.azimuth = 0

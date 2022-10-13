@@ -13,6 +13,8 @@ import mujoco_py
 
 
 class MyWalker(Walker2dEnv):
+    count = 30
+
     def __init__(self, place_holder={}, *args, **kwargs):
         super(MyWalker, self).__init__(*args, **kwargs)
 
@@ -48,7 +50,7 @@ class MyWalker(Walker2dEnv):
             self.viewer.cam.lookat[0] = 10  # x,y,z offset from the object (works if trackbodyid=-1)
             self.viewer.cam.lookat[1] = 0
             self.viewer.cam.lookat[2] = 2
-            self.viewer.cam.distance = 15
+            self.viewer.cam.distance = 20
 
             self.viewer.cam.elevation = 0  # camera rotation around the axis in the plane going through the frame origin (if 0 you just see a line)
             # self.viewer.cam.azimuth = 0
@@ -62,6 +64,11 @@ class MyWalker(Walker2dEnv):
         if self.viewer is not None and self.viewer.need_reset:
             self.reset()
             self.viewer.need_reset = False
+        if self.command == "brake":
+            self.count += 1
+            if self.count > 250:
+                self.viewer.keyboard_action = "restore"
+                self.count = 0
         return super(MyWalker, self).step(action)
 
 

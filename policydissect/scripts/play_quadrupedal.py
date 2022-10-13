@@ -39,6 +39,13 @@ def legged_control():
 LEGGED_MAP = {"Turn Left": {3: [(239, 85)]}, "Turn Right": {3: [(239, -75)]}, "Stop": {1: [(76, -70)]}}
 
 if __name__ == "__main__":
+    """
+    KEY_R: reset
+    KEY_W: move forward
+    KEY_A: move left
+    KEY_S: stop
+    KEY_D: move right
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('--hard', action="store_true")
     parser.add_argument('--seed', default=3, type=int)
