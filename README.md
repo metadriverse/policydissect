@@ -110,7 +110,7 @@ quadrupedal ANYmal robot controller with code provided by https://github.com/leg
 primitive-activation conditional control system on this controller with a PID
 controller determining the unit output according to the tracking error. As a result, it can track the target yaw command
 and can achieve the similar control precision, compared to explicitly indicating the goal in the network input.
-Video is available [here](https://metadriverse.github.io/policydissect/#Tracking%20Demo)
+Video is available [here](https://metadriverse.github.io/policydissect/#Tracking%20Demo).
 
 The experiment script can be found at ```policydissect/scripts/run_tracking_experiment.py```. The default yaw tracking
 is
