@@ -49,34 +49,16 @@ For playing with agents trained in IsaacGym, follow the instructions below to in
 - cd ```isaacgym/python && pip install -e .```
 
 Please review the file `isaacgym/docs/install.html` for more information on installation.
+See the [Troubleshooting](#troubleshooting) section for debugging.
 
-
-If you encounter `ImportError: libpython3.7m.so.1.0: cannot open shared object file: No such file or directory`, run
-this:
-
-```bash
-export LD_LIBRARY_PATH=/path/to/libpython/directory
-# If you are using Conda, the path should be /path/to/conda/envs/your_env/lib.
-# For example:
-export LD_LIBRARY_PATH=/home/zhenghao/anaconda3/envs/policydissect/lib
-```
-
-If you encounter `CalledProcessError: Command '['which', 'c++']' returned non-zero exit status 1.`, try this:
-```bash
-sudo apt-get install build-essential
-```
-
-
-If you encounter `AttributeError: module 'distutils' has no attribute 'version'` from tensorboard,
-try this:
-```bash
-pip install -U setuptools==50.0.0
-```
 
 ### Mujoco Installation (Optional)
 
 For playing with the Mujoco-Ant and Mujoco-Walker, please
-- install **mujoco200** according to https://www.roboti.us/download.html (Mujoco licence can be found at https://www.roboti.us/license.html)
+- install **mujoco200** according to https://www.roboti.us/download.html (Mujoco licence can be found at **https://www.roboti.us/license.html**)
+- copy contents in the folder to `~/.mujoco/mujoco200`
+- copy licence from https://www.roboti.us/license.html to `~/.mujoco/`
+- add this line to `.bashrc`: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/zhenghao/.mujoco/mujoco200/bin`
 - run ```pip install mujoco-py==2.0.2.7``` (Solutions of compiling error can be easily found at https://github.com/openai/mujoco-py/issues)
 
 ## Play with AI
@@ -144,7 +126,7 @@ python policydissect/scripts/play_cassie.py
 python policydissect/scripts/play_cassie.py --parkour
 ```
 
-*tips: Switch to Tiptoe state before pressing Key_Q for increasing the distance of jump*
+*tips: Switch to Tiptoe state before pressing Key_Q to increase the distance of jump.*
 
 
 > **Note**
@@ -198,6 +180,56 @@ The experiment script can be found at ```policydissect/scripts/run_tracking_expe
 The default yaw tracking is achieved by explicit goal-conditioned control, while
 running ```python policydissect/scripts/run_tracking_experiment.py --primitive_activation```
 will change to primitive-activation conditional control.
+
+
+
+## Troubleshooting
+
+### Installing IsaacGym
+
+If you encounter `ImportError: libpython3.7m.so.1.0: cannot open shared object file: No such file or directory`, run
+this:
+
+```bash
+export LD_LIBRARY_PATH=/path/to/libpython/directory
+# If you are using Conda, the path should be /path/to/conda/envs/your_env/lib.
+# For example:
+export LD_LIBRARY_PATH=/home/zhenghao/anaconda3/envs/policydissect/lib
+```
+
+If you encounter `CalledProcessError: Command '['which', 'c++']' returned non-zero exit status 1.`, try this:
+```bash
+sudo apt-get install build-essential
+```
+
+
+If you encounter `AttributeError: module 'distutils' has no attribute 'version'` from tensorboard,
+try this:
+```bash
+pip install -U setuptools==50.0.0
+```
+
+### Installing Mujoco
+
+
+If you encounter: `fatal error: GL/osmesa.h: No such file or directory`:
+
+```bash
+sudo apt-get install libosmesa6-dev
+```
+
+If you encounter: `error: [Errno 2] No such file or directory: 'patchelf': 'patchelf'`:
+
+```bash
+sudo apt-get install patchelf
+```
+
+If you encounter: `ERROR: GLEW initalization error: Missing GL version`:
+
+```bash
+sudo apt-get install -y libglew-dev
+```
+
 
 ## Reference
 
