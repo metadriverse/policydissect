@@ -12,7 +12,7 @@
 Currently, we provide some interactive neural controllers enabled by *Policy Dissection*.
 The policy dissection method and training code will be updated soon.
 
-**Environments**:
+**Supported Environments**:
 
 - [x] MetaDrive
 - [x] Pybullet-Quadrupedal Robot (Forked from: https://github.com/Mehooz/vision4leg.git)
@@ -54,21 +54,43 @@ For playing with the Mujoco-Ant and Mujoco-Walker, please
 - install **mujoco200** according to https://www.roboti.us/download.html (Mujoco licence can be found at https://www.roboti.us/license.html)
 - run ```pip install mujoco-py==2.0.2.7``` (Solutions of compiling error can be easily found at https://github.com/openai/mujoco-py/issues)
 
-## Play
+## Play with AI
 
 ### MetaDrive
 
-Run```python policydissect/scripts/play_metadrive.py``` to collaborate with the AI driver.
-Press ```w```,```a```,```s```,```d``` for triggering lane following, left/right lane changing and braking, and
-```r``` for resetting the environment.
+To collaborate with the AI driver in [MetaDrive environment](https://github.com/metadriverse/metadrive), run:
+
+```bash
+# MetaDrive
+# Keymap:
+# - KEY_W: lane following
+# - KEY_A: left lane changing
+# - KEY_S: braking
+# - KEY_D: right lane changing
+# - KEY_R:Reset
+python policydissect/scripts/play_metadrive.py
+``` 
+
 
 ### Pybullet Quadrupedal Robot
 
 The quadrupedal robot is trained with the code provided by https://github.com/Mehooz/vision4leg.git.
-For playing with legged robot, run```python policydissect/scripts/play_quadrupedal.py```.
+For playing with legged robot, run:
+
+```bash
+python policydissect/scripts/play_quadrupedal.py
+```
+
 Press ```w```,```a```,```s```,```d``` for changing the moving direction. and ```r``` for reset.
+
 Also, you can collaborate with AI and challenge the hard environment consisting of obstacles and challenging terrains by
-running ```python policydissect/scripts/play_quadrupedal.py --hard```
+running:
+
+```bash
+python policydissect/scripts/play_quadrupedal.py --hard
+python policydissect/scripts/play_quadrupedal.py --seed 1001
+```
+
 You can change to a different environment by adding ```--seed your_seed_int_type```.
 
 *tips: Avoid running fast!*
@@ -79,29 +101,58 @@ The Cassie robot is trained with the code provided by https://github.com/leggedr
 command ```[1, 0, 0]```, and thus can only move forward. By applying *Policy Dissection*, primitives related to yaw
 rate, forward speed, height control and torque force can be identified. Activating these primitives
 enable various skills like crouching, forward jumping, back-flipping and so on.
-Run```python policydissect/scripts/play_quadrupedal.py``` for playing with the robot. Add flag```--parkour```to launch
-a challenging parkour environment.
+Run the following command to play with the robot. Add flag```--parkour```to launch a challenging parkour environment.
 
-```
-Keymap:
-- KEY_W:Forward
-- KEY_A:Left
-- KEY_S:Stop
-- KEY_C:Crouch
-- KEY_X:Tiptoe
-- KEY_Q:Jump
-- KEY_D:Right
-- KEY_SPACE:Back Flip
-- KEY_R:Reset
+```bash
+# Keymap:
+# - KEY_W:Forward
+# - KEY_A:Left
+# - KEY_S:Stop
+# - KEY_C:Crouch
+# - KEY_X:Tiptoe
+# - KEY_Q:Jump
+# - KEY_D:Right
+# - KEY_SPACE:Back Flip
+# - KEY_R:Reset
+python policydissect/scripts/play_cassie.py
+python policydissect/scripts/play_cassie.py --parkour
 ```
 
 *tips: Switch to Tiptoe state before pressing Key_Q for increasing the distance of jump*
 
 ### Gym Environments
 
-We also discover motor primitives in three gym environments: Box2d-BipedalWalker, Mujoco-Ant and Mujoco-Walker.
-Please refer to corresponding scripts in ```policydissect/scripts``` for discovered motor primitives, behaviors and keys
-keyboard interfaces.
+We also discover motor primitives in three gym environments: Box2d-BipedalWalker, Mujoco-Ant and Mujoco-Walker. 
+You can try them via:
+
+
+```bash
+# BipedalWalker
+# Keymap:
+# - KEY_W: jump
+# - KEY_A: stand up from split
+# - KEY_S: restore running after jumping
+# - KEY_R: reset
+python policydissect/scripts/play_gym_bipedalwalker.py
+
+# Mujoco-Ant
+# Keymap:
+# - KEY_W: move up
+# - KEY_A: move left
+# - KEY_S: move down
+# - KEY_D: move right
+# - KEY_Q: rotation
+# - KEY_R: reset
+python policydissect/scripts/play_mujoco_ant.py
+    
+# Mujoco-Walker
+# Keymap:
+# - KEY_R: reset
+# - KEY_A: stop
+# - KEY_W: freeze red knee
+# - KEY_D: restore running
+python policydissect/scripts/play_mujoco_walker.py
+```
 
 ### Comparison with explicit goal-conditioned control
 
@@ -112,9 +163,8 @@ controller determining the unit output according to the tracking error. As a res
 and can achieve the similar control precision, compared to explicitly indicating the goal in the network input.
 Video is available [here](https://metadriverse.github.io/policydissect/#Tracking%20Demo).
 
-The experiment script can be found at ```policydissect/scripts/run_tracking_experiment.py```. The default yaw tracking
-is
-achieved by explicit goal-conditioned control, while
+The experiment script can be found at ```policydissect/scripts/run_tracking_experiment.py```. 
+The default yaw tracking is achieved by explicit goal-conditioned control, while
 running ```python policydissect/scripts/run_tracking_experiment.py --primitive_activation```
 will change to primitive-activation conditional control.
 
