@@ -366,7 +366,7 @@ class LocomotionGymEnv(gym.Env):
 
         return self._get_observation(reset=True)
 
-    def step(self, action):
+    def step(self, action, text=None):
         """Step forward the simulation, given the action.
 
     Args:
@@ -398,7 +398,7 @@ class LocomotionGymEnv(gym.Env):
             env_randomizer.randomize_step(self)
 
         # robot class and put the logics here.
-        self._robot.Step(action)
+        self._robot.Step(action, text)
 
         for s in self.all_sensors():
             s.on_step(self)
@@ -415,7 +415,7 @@ class LocomotionGymEnv(gym.Env):
         return self._get_observation(), reward, done, {}
 
     def render(self, mode='rgb_array'):
-        if mode != 'rgb_array':
+        if (mode != 'rgb_array') and (mode is not None):
             raise ValueError('Unsupported render mode:{}'.format(mode))
         base_pos = self._robot.GetBasePosition()
         view_matrix = self._pybullet_client.computeViewMatrixFromYawPitchRoll(

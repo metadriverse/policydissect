@@ -29,6 +29,9 @@ import collections
 import sys
 import os
 import inspect
+
+import pybullet
+
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(os.path.dirname(currentdir))
 os.sys.path.insert(0, parentdir)
@@ -64,6 +67,19 @@ MINITAUR_DOFS_PER_LEG = 2
 #     "target_position": [],
 #     "torque": [],
 # }
+
+
+def update_render(robot, text):
+    pos = robot.GetBasePosition()
+    text_pos = [pos[0] - 0.5, pos[1], pos[2] + 0.5]
+    pybullet.addUserDebugText(
+        text=text,
+        textPosition=text_pos,
+        textSize=4,
+        textColorRGB=[0.7, 0.05, 0.05],
+        replaceItemUniqueId=True,
+        # lifeTime=0.1
+    )
 
 
 def MapToMinusPiToPi(angles):
@@ -270,7 +286,7 @@ class Minitaur(object):
         self.ReceiveObservation()
         self._state_action_counter += 1
 
-    def Step(self, action):
+    def Step(self, action, text=None):
         """Steps simulation."""
         if self._enable_action_filter:
             action = self._FilterAction(action)
@@ -279,6 +295,9 @@ class Minitaur(object):
             proc_action = self.ProcessAction(action, i)
             self._StepInternal(proc_action, self._motor_control_mode)
             self._step_counter += 1
+
+            if text is not None:
+                update_render(robot=self, text=text)
 
         self._last_action = action
 

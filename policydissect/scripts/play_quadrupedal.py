@@ -17,7 +17,12 @@ def update_render(env):
     pos = env.env.env.env.env.env.env._gym_env._robot.GetBasePosition()
     text_pos = [pos[0] - 0.5, pos[1], pos[2] + 0.5]
     pybullet.addUserDebugText(
-        legged_robot_command, text_pos, textSize=4, textColorRGB=[1, 0, 0], replaceItemUniqueId=True
+        text=legged_robot_command,
+        textPosition=text_pos,
+        textSize=4,
+        textColorRGB=[1, 0, 0],
+        replaceItemUniqueId=True,
+        lifeTime=0.1
     )
 
 
@@ -82,7 +87,8 @@ if __name__ == "__main__":
             legged_robot_command = "Forward"
         action = ppo_inference_torch(policy_weights, o, LEGGED_MAP, legged_robot_command)
         o, r, d, i = env.step(action)
-        update_render(env)
+        env.render(mode=None, text=legged_robot_command)
+        # update_render(env)
         if d:
             seed_env(env, seed)
             env.reset()

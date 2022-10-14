@@ -25,6 +25,7 @@ class ObservationDictionaryToArrayWrapper(gym.Env):
         self._gym_env = gym_env
         self.observation_space = self._flatten_observation_spaces(self._gym_env.observation_space)
         self.action_space = self._gym_env.action_space
+        self._render_text = None
 
     def __getattr__(self, attr):
         return getattr(self._gym_env, attr)
@@ -43,6 +44,7 @@ class ObservationDictionaryToArrayWrapper(gym.Env):
 
     def reset(self, initial_motor_angles=None, reset_duration=0.0):
         observation = self._gym_env.reset(initial_motor_angles=initial_motor_angles, reset_duration=reset_duration)
+        self._render_text = None
         return self._flatten_observation(observation)
 
     def step(self, action):
@@ -55,8 +57,10 @@ class ObservationDictionaryToArrayWrapper(gym.Env):
       The tuple containing the flattened observation, the reward, the epsiode
         end indicator.
     """
-        observation_dict, reward, done, _ = self._gym_env.step(action)
+        text = self._render_text
+        observation_dict, reward, done, _ = self._gym_env.step(action, text)
         return self._flatten_observation(observation_dict), reward, done, _
 
-    def render(self, mode='human'):
+    def render(self, mode='human', text=None):
+        self._render_text = text
         return self._gym_env.render(mode)
