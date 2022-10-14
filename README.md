@@ -48,6 +48,18 @@ For playing with agents trained in IsaacGym, follow the instructions below to in
 - Download and install Isaac Gym Preview 3 from https://developer.nvidia.com/isaac-gym
 - cd ```isaacgym/python && pip install -e .```
 
+If you encounter `ImportError: libpython3.7m.so.1.0: cannot open shared object file: No such file or directory`, run
+this:
+
+```bash
+export LD_LIBRARY_PATH=/path/to/libpython/directory
+# If you are using Conda, the path should be /path/to/conda/envs/your_env/lib.
+# For example:
+export LD_LIBRARY_PATH=/home/zhenghao/anaconda3/envs/policydissect/lib
+```
+
+If other issues persist, please review the file `isaacgym/docs/install.html` for more information.
+
 ### Mujoco Installation (Optional)
 
 For playing with the Mujoco-Ant and Mujoco-Walker, please
