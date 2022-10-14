@@ -146,10 +146,10 @@ python policydissect/scripts/play_cassie.py --parkour
 
 *tips: Switch to Tiptoe state before pressing Key_Q for increasing the distance of jump*
 
-```
-**Note**
-Do not draw the windows or close the pygame window during running.
-```
+
+> **Note**
+> Do not draw the windows or close the pygame window during running.
+
 
 ### Gym Environments
 
