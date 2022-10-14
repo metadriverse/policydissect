@@ -48,6 +48,9 @@ For playing with agents trained in IsaacGym, follow the instructions below to in
 - Download and install Isaac Gym Preview 3 from https://developer.nvidia.com/isaac-gym
 - cd ```isaacgym/python && pip install -e .```
 
+Please review the file `isaacgym/docs/install.html` for more information on installation.
+
+
 If you encounter `ImportError: libpython3.7m.so.1.0: cannot open shared object file: No such file or directory`, run
 this:
 
@@ -58,7 +61,17 @@ export LD_LIBRARY_PATH=/path/to/libpython/directory
 export LD_LIBRARY_PATH=/home/zhenghao/anaconda3/envs/policydissect/lib
 ```
 
-If other issues persist, please review the file `isaacgym/docs/install.html` for more information.
+If you encounter `CalledProcessError: Command '['which', 'c++']' returned non-zero exit status 1.`, try this:
+```bash
+sudo apt-get install build-essential
+```
+
+
+If you encounter `AttributeError: module 'distutils' has no attribute 'version'` from tensorboard,
+try this:
+```bash
+pip install -U setuptools==50.0.0
+```
 
 ### Mujoco Installation (Optional)
 
