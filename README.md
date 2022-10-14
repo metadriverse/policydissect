@@ -58,7 +58,7 @@ For playing with the Mujoco-Ant and Mujoco-Walker, please
 
 ### MetaDrive
 
-Run```python policydissect/scripts/play_metadriv.py``` to collaborate with the AI driver.
+Run```python policydissect/scripts/play_metadrive.py``` to collaborate with the AI driver.
 Press ```w```,```a```,```s```,```d``` for triggering lane following, left/right lane changing and braking, and
 ```r``` for resetting the environment.
 
