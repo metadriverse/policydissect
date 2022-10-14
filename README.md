@@ -78,20 +78,21 @@ The quadrupedal robot is trained with the code provided by https://github.com/Me
 For playing with legged robot, run:
 
 ```bash
+# Pybullet Quadrupedal Robot
+# Keymap:
+# - KEY_W: forward
+# - KEY_A: moving left
+# - KEY_S: stop
+# - KEY_D: moving right
+# - KEY_R: reset
 python policydissect/scripts/play_quadrupedal.py
+python policydissect/scripts/play_quadrupedal.py --hard
+python policydissect/scripts/play_quadrupedal.py --hard --seed 1001
 ```
 
-Press ```w```,```a```,```s```,```d``` for changing the moving direction. and ```r``` for reset.
 
 Also, you can collaborate with AI and challenge the hard environment consisting of obstacles and challenging terrains by
-running:
-
-```bash
-python policydissect/scripts/play_quadrupedal.py --hard
-python policydissect/scripts/play_quadrupedal.py --seed 1001
-```
-
-You can change to a different environment by adding ```--seed your_seed_int_type```.
+adding `--hard` flag. You can change to a different environment by adding ```--seed your_seed_int_type```.
 
 *tips: Avoid running fast!*
 
