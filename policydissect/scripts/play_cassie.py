@@ -1,5 +1,5 @@
-from isaacgym import gymapi
-from policydissect.legged_gym.envs import *
+from isaacgym import gymapi  # We have to put this line here!
+from policydissect.legged_gym.envs import *  # We have to put this line here!
 from policydissect.legged_gym.utils import get_args
 from policydissect.utils.isaacgym_utils import play
 
