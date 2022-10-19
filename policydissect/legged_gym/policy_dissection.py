@@ -309,7 +309,7 @@ if __name__ == "__main__":
 
         while True:
             if command is not None:
-                o[..., 9:12] = torch.Tensor(command)
+                o[..., 10:13] = torch.Tensor(command)
             action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func)
             o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
             episode_activation_values.append(activation)
