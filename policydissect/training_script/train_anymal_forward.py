@@ -38,11 +38,7 @@ from policydissect.legged_gym.utils import get_args, task_registry
 import torch
 
 
-def train(args):
-    args.task = "anymal_c_flat"
-    args.headless = True
-    env_cfg, train_cfg, = task_registry.get_cfgs(args.task)
-
+def update_env_cfg(env_cfg):
     # Only leadn to move forward
     env_cfg.commands.ranges.lin_vel_x = [0.5, 1.5]
     env_cfg.commands.ranges.lin_vel_y = [0., 0.]
@@ -51,7 +47,17 @@ def train(args):
 
     # only reward tracking lin_vel
     env_cfg.rewards.scales.tracking_ang_vel = 0.
+    return env_cfg
 
+
+def train(args):
+    """
+    This script is for training an ANYmal_C robot, which can only move forward
+    """
+    args.task = "anymal_c_flat"
+    args.headless = True
+    env_cfg, train_cfg, = task_registry.get_cfgs(args.task)
+    env_cfg = update_env_cfg(env_cfg)
     env, env_cfg = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
     ppo_runner, train_cfg = task_registry.make_alg_runner(env=env, name=args.task, args=args)
     ppo_runner.learn(num_learning_iterations=train_cfg.runner.max_iterations, init_at_random_ep_len=True)

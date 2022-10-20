@@ -40,7 +40,7 @@ import torch
 
 def train(args):
     """
-    This script is totally the same to the one used in legged_gym for training an ANYmal_c robot on flat terrain.
+    This script is totally the same to the one used in legged_gym for training an ANYmal_C robot on flat terrain.
     The trained goal-conditioned robot is finally used for doing comparison experiment on control precision.
     """
     args.task = "anymal_c_flat"

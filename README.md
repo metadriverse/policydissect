@@ -92,9 +92,9 @@ For playing with legged robot, run:
 # - KEY_S: stop
 # - KEY_D: moving right
 # - KEY_R: reset
-python policydissect/scripts/play_quadrupedal.py
-python policydissect/scripts/play_quadrupedal.py --hard
-python policydissect/scripts/play_quadrupedal.py --hard --seed 1001
+python policydissect/scripts/play_pybullet_a1.py
+python policydissect/scripts/play_pybullet_a1.py --hard
+python policydissect/scripts/play_pybullet_a1.py --hard --seed 1001
 ```
 
 

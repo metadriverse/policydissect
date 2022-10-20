@@ -1,38 +1,16 @@
-from policydissect.legged_gym import LEGGED_GYM_ROOT_DIR
-import os
-
-import isaacgym
-from policydissect.legged_gym.envs import *
-from policydissect.legged_gym.utils import get_args, export_policy_as_jit, task_registry, Logger
-from policydissect.legged_gym.policy_utils import ppo_inference_torch, control_neuron_activation
-import numpy as np
-import torch
 import pickle
 import time
-from isaacgym import *
-from policydissect.legged_gym import *
 
+import librosa
+import matplotlib.pyplot as plt
 import numpy as np
+import torch
+
 from policydissect.legged_gym.policy_utils import ppo_inference_torch
 from policydissect.legged_gym.utils import get_args, task_registry
 
-import os
-import librosa
-import matplotlib.pyplot as plt
-
-import pickle
-import numpy as np
-
 
 def cal_relation(data_1, data_2):
-    # if np.linalg.norm(data_1) != 0:
-    #     data_1 = data_1 / np.linalg.norm(data_1)
-    # if np.linalg.norm(data_2) != 0:
-    #     data_2 = data_2 / np.linalg.norm(data_2)
-    # assert len(data_1) == len(data_2), "d_1:{}, d_2:{}".format(len(data_1), len(data_2))
-    # error = 0
-    # for i in range(len(data_1)):
-    #     error += abs(data_1[i] - data_2[i])
     return np.linalg.norm(data_1 - data_2)
 
 
@@ -262,12 +240,11 @@ def do_policy_dissection(collect_episodes, specific_neuron=None, specific_obs=No
     return ckpt_ret
 
 
-def make_env(task_name="cassie"):
+def make_env(env_cfg, train_cfg, task_name="cassie"):
     args = get_args()
     args.num_envs = 1
     args.task = task_name
     args.headless = True
-    env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
     # override some parameters for testing
     env_cfg.env.num_envs = min(env_cfg.env.num_envs, 50)
     env_cfg.terrain.num_rows = 5
@@ -285,18 +262,20 @@ def make_env(task_name="cassie"):
 
 
 if __name__ == "__main__":
+    from policydissect.training_script.train_anymal_forward import update_env_cfg
+
     policy_func = ppo_inference_torch
     # policy_func = ppo_inference
     seed_num = 10
     start_time = time.time()
 
-    path = "../weights/anymal_tanh.npz"
+    path = "../scripts/anymal_only_forward.npz"
     activation_func = "tanh"
     task_name = "anymal_c_flat"
-    # task_name = "cassie"
-    command = None
+    env_cfg, train_cfg = task_registry.get_cfgs(task_name)
+    env_cfg = update_env_cfg(env_cfg)
 
-    env = make_env(task_name=task_name)
+    env = make_env(env_cfg=env_cfg, train_cfg=train_cfg, task_name=task_name)
     weights = np.load(path)
     print("===== Do Policy Dissection for {} ckpt =====".format(path))
     collected_episodes = []
@@ -308,8 +287,8 @@ if __name__ == "__main__":
         total_r = 0
 
         while True:
-            if command is not None:
-                o[..., 9:12] = torch.Tensor(command)
+            o[..., 11:13] = torch.Tensor([0., 0.])
+
             action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func)
             o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
             episode_activation_values.append(activation)
