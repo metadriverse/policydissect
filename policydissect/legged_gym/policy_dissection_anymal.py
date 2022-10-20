@@ -3,6 +3,7 @@ import time
 
 import librosa
 import matplotlib.pyplot as plt
+import numpy
 import numpy as np
 import isaacgym
 from policydissect.legged_gym.envs import *
@@ -101,16 +102,23 @@ def axis_shift(epi_activation, label="after_tanh"):
     acivation_per_step = []
     for layers_per_step in epi_activation:
         layers = []
+        unit_num_per_layer = [len(x[label][0]) for x in layers_per_step]
         for layer in [x[label][0] for x in layers_per_step]:
-            if len(layer) != 512:
-                layers.append(np.concatenate([layer, np.zeros([512 - len(layer)])]))
+            # padding dim
+            if len(layer) != max(unit_num_per_layer):
+                layers.append(np.concatenate([layer, np.zeros([max(unit_num_per_layer) - len(layer)])]))
             else:
                 layers.append(layer)
         concat_ret = np.array(layers)
         acivation_per_step.append(concat_ret)
     acivation_per_step = np.array(acivation_per_step)
     acivation_per_step = np.moveaxis(acivation_per_step, 0, -1)
-    return acivation_per_step
+
+    # Remove padding dims
+    ret = []
+    for k, unit_num in enumerate(unit_num_per_layer):
+        ret.append(acivation_per_step[k][:unit_num][:])
+    return np.array(ret)
 
 
 def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=None):
