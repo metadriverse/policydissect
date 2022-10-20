@@ -9,7 +9,6 @@ if __name__ == '__main__':
     This experiment is designed to replicate the results reported in Pybullet-A1 experiment, where the A1 robot can only
     move forward, but can change moving direction by activating specific neurons.
     """
-
     """
     Keymap:
     - KEY_W:Forward
@@ -27,7 +26,10 @@ if __name__ == '__main__':
         },
         # 1
         "Forward": {},
-        "Stop": {2: [(15, 3)], 0: [(18, 5.5)]}
+        "Stop": {
+            2: [(15, 3)],
+            0: [(18, 5.5)]
+        }
     }
     args = get_args()
     args.num_envs = 1
