@@ -4,10 +4,12 @@ import time
 import librosa
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
+import isaacgym
+from policydissect.legged_gym.envs import *
 
 from policydissect.legged_gym.policy_utils import ppo_inference_torch
 from policydissect.legged_gym.utils import get_args, task_registry
+import torch
 
 
 def cal_relation(data_1, data_2):
@@ -113,7 +115,6 @@ def axis_shift(epi_activation, label="after_tanh"):
 
 def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=None):
     activation_after_tanh = axis_shift(epi_activation)
-    # activation_before_tanh = axis_shift(epi_activation, label="before_tanh")
     neurons_fft = []
     for layer in range(len(activation_after_tanh)):
         layer_fft = []
@@ -126,14 +127,10 @@ def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=
                     for_neuron=True,
                     n_fft=n_fft
                 )
-                strength_dist = activation_after_tanh[layer][neuron]
-                # positive_strength = np.quantile(strength_dist, strength_quantile)
-                # negative_strength = np.quantile(strength_dist, 1 - strength_quantile)
                 layer_fft.append(
                     {
                         "fft_amplitude": fft_ret,
                         "fft_phase": phase,
-                        # "strength": {"positive": positive_strength, "negative": negative_strength}
                     }
                 )
             elif specific_neuron is not None:
@@ -146,14 +143,10 @@ def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=
                         for_neuron=True,
                         n_fft=n_fft
                     )
-                    strength_dist = activation_after_tanh[layer][neuron]
-                    # positive_strength = np.quantile(strength_dist, strength_quantile)
-                    # negative_strength = np.quantile(strength_dist, 1 - strength_quantile)
                     layer_fft.append(
                         {
                             "fft_amplitude": fft_ret,
                             "fft_phase": phase,
-                            # "strength": {"positive": positive_strength, "negative": negative_strength}
                         }
                     )
                 else:
@@ -161,7 +154,6 @@ def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=
                         {
                             "fft_amplitude": np.inf,
                             "fft_phase": np.inf,
-                            # "strength": {"positive": positive_strength, "negative": negative_strength}
                         }
                     )
 
@@ -217,7 +209,7 @@ def analyze_actions(epi_action, save_figure=False, n_fft=16):
     return action_fft, per_action_dim
 
 
-def do_policy_dissection(collect_episodes, specific_neuron=None, specific_obs=None, obs_neuron_pair=None):
+def do_policy_dissection(collect_episodes, specific_neuron=None, specific_obs=None):
     n_fft = 32
     # assert not os.path.exists("dissection"), "please save previous result"
     # os.makedirs("dissection")
@@ -288,8 +280,8 @@ if __name__ == "__main__":
 
         while True:
             o[..., 11:13] = torch.Tensor([0., 0.])
-
-            action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func)
+            action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func,
+                                             deterministic=True)
             o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
             episode_activation_values.append(activation)
             current_step += 1

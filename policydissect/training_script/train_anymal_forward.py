@@ -45,8 +45,8 @@ def update_env_cfg(env_cfg):
     env_cfg.commands.ranges.ang_vel_yaw = [0., 0.]
     env_cfg.commands.ranges.heading = [0., 0.]
 
-    # only reward tracking lin_vel
-    env_cfg.rewards.scales.tracking_ang_vel = 0.
+    env_cfg.noise.noise_scales.lin_vel = 0.
+    env_cfg.noise.noise_scales.ang_vel = 0.
     return env_cfg
 
 
