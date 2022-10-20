@@ -269,7 +269,7 @@ if __name__ == "__main__":
     seed_num = 10
     start_time = time.time()
 
-    path = "../scripts/anymal_only_forward.npz"
+    path = "../weights/anymal_forward_tanh.npz"
     activation_func = "tanh"
     task_name = "anymal_c_flat"
     env_cfg, train_cfg = task_registry.get_cfgs(task_name)

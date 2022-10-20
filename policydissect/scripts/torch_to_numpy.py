@@ -7,5 +7,5 @@ if __name__ == "__main__":
     ret = {}
     for layer, weight in weights.items():
         ret[layer] = weight.detach().cpu().numpy()
-    np.savez_compressed("anymal_only_forward.npz", **ret)
+    np.savez_compressed("../weights/anymal_forward_tanh.npz", **ret)
     print("model is converted and saved!")

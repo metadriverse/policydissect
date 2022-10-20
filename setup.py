@@ -225,6 +225,6 @@ setup(
     install_requires=[
         "pygame", "metadrive-simulator==0.2.5.3", "setuptools==50.0.0", "tensorboard", "yapf==0.30.0", "toolz", "box2d",
         'numpy==1.21.6', 'pybullet', "librosa", "protobuf==3.19.6", "glfw", "torch==1.10.0", "gym==0.19.0", "pyglet",
-        "tensorflow==2.10.0"
+        "tensorflow==2.10.0", "jupyter"
     ],
 )
