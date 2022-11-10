@@ -328,7 +328,7 @@ if __name__ == "__main__":
     self.gym.destroy_sim(self.sim)
     if self.viewer is not None:
         self.gym.destroy_viewer(self.viewer)
-    with open("../tutorial/collect_anymal.pkl", "wb+") as epi_data:
+    with open("../../tutorial/collect_anymal.pkl", "wb+") as epi_data:
         pickle.dump(collected_episodes, epi_data)
     pd_ret = do_policy_dissection(collected_episodes)
     with open("{}.pkl".format("policy_dissection_ret"), "wb+") as file:
