@@ -8,10 +8,10 @@ from policydissect.utils.policy import ppo_inference_tf
 # neuron at layer 0, index 249 is for speed control
 PPO_EXPERT_CONDITIONAL_CONTROL_MAP = {
     "Left Lane Change": {
-        0: [(123, 8.5)]
+        0: [(1, -8.5)]
     },
     "Right Lane Change": {
-        0: [(123, -8)]
+        0: [(1, 7)]
     },
     "Brake": {
         0: [(249, -20)]
@@ -34,7 +34,8 @@ if __name__ == "__main__":
     )
     o = env.reset()
     while True:
-        o, r, d, i = env.step(ppo_inference_tf(builtin_ppo, o, 2, PPO_EXPERT_CONDITIONAL_CONTROL_MAP, env.command))
+        o, r, d, i = env.step(ppo_inference_tf(builtin_ppo, o, 2, PPO_EXPERT_CONDITIONAL_CONTROL_MAP, env.command)[0])
+        print(o[0] + o[1])
         env.render(
             text={
                 "w": "Lane Follow",
