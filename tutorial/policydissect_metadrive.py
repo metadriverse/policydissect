@@ -18,18 +18,20 @@ if __name__ == "__main__":
     seed_num = 1
     max_step = 1500
 
-    env = SafeMetaDriveEnv(dict(
-        use_render=False,
-        accident_prob=0.,
-        traffic_density=0.,
-        random_spawn_lane_index=False,
-        map="COCX",
-        environment_num=1,
-        start_seed=30,
-        vehicle_config=dict(
-            lidar=dict(num_lasers=240, distance=50, num_others=4, gaussian_noise=0.0, dropout_prob=0.0)
-        ),
-    ))
+    env = SafeMetaDriveEnv(
+        dict(
+            use_render=False,
+            accident_prob=0.,
+            traffic_density=0.,
+            random_spawn_lane_index=False,
+            map="COCX",
+            environment_num=1,
+            start_seed=30,
+            vehicle_config=dict(
+                lidar=dict(num_lasers=240, distance=50, num_others=4, gaussian_noise=0.0, dropout_prob=0.0)
+            ),
+        )
+    )
 
     print("===== Do Policy Dissection for on ckpt =====")
     path = ckpt_path
@@ -49,8 +51,9 @@ if __name__ == "__main__":
             current_step += 1
             total_r += r
             if d or current_step > max_step:
-                collected_episodes.append(dict(neuron_activation=episode_activation_values,
-                                               observations=episode_observations))
+                collected_episodes.append(
+                    dict(neuron_activation=episode_activation_values, observations=episode_observations)
+                )
                 print("Finish seed: {}, reward: {}, Success: {}".format(seed, total_r, i["arrive_dest"]))
                 break
             episode_observations.append(o)

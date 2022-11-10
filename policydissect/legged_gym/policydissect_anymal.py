@@ -68,8 +68,9 @@ if __name__ == "__main__":
         total_r = 0
 
         while True:
-            action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func,
-                                             deterministic=True)
+            action, activation = policy_func(
+                weights, o.clone().cpu().numpy(), {}, "", activation=activation_func, deterministic=True
+            )
             o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
             episode_activation_values.append(activation)
             current_step += 1
