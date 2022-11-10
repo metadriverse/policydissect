@@ -53,7 +53,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         },
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         },
                     }
                 )
@@ -62,7 +62,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         "{}_dim".format(target_dim_name): k,
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         }
                     }
                 )
@@ -259,8 +259,19 @@ def make_env(env_cfg, train_cfg, task_name="cassie"):
 
 
 if __name__ == "__main__":
+    """
+    This script dissect the anymal policy without command input. Though its training goal is moving forward, we can 
+    still control it by finding angular velocity related neurons.
+    """
+    import random
+
+    seed = 10
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+
     policy_func = ppo_inference_torch
-    seed_num = 10
+    seed_num = 20
     start_time = time.time()
 
     path = "../weights/anymal_forward_tanh.npz"
@@ -297,8 +308,12 @@ if __name__ == "__main__":
     self.gym.destroy_sim(self.sim)
     if self.viewer is not None:
         self.gym.destroy_viewer(self.viewer)
-    with open("collect_episodes.pkl", "rb+") as epi_data:
+
+    with open("collect_anymal.pkl", "wb+") as epi_data:
+        pickle.dump(collected_episodes, epi_data)
+
+    with open("collect_anymal.pkl", "rb+") as epi_data:
         collected_episodes = pickle.load(epi_data)
     pd_ret = do_policy_dissection(collected_episodes)
-    with open("{}.pkl".format("policy_dissection_ret"), "wb+") as file:
+    with open("{}.pkl".format("anymal_ret"), "wb+") as file:
         pickle.dump(pd_ret, file)

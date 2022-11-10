@@ -388,7 +388,7 @@ def play_anymal(args, map, activation_func="tanh", model_name=None, parkour=Fals
                 root_state = []
         root_state.append({"root_state": env.root_states.clone(), "dof_state": env.dof_state.clone()})
 
-        obs[..., 10] = 1.0  # Default run
+        obs[..., 10] = 1.2  # Default run
         actions, _ = ppo_inference_torch(
             policy_weights, obs.clone().cpu().numpy(), map, command, activation=activation_func, deterministic=True
         )

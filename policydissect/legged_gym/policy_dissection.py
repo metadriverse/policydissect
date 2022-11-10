@@ -71,7 +71,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         },
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         },
                     }
                 )
@@ -80,7 +80,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         "{}_dim".format(target_dim_name): k,
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         }
                     }
                 )
@@ -328,7 +328,7 @@ if __name__ == "__main__":
     self.gym.destroy_sim(self.sim)
     if self.viewer is not None:
         self.gym.destroy_viewer(self.viewer)
-    with open("collect_episodes.pkl", "wb+") as epi_data:
+    with open("../tutorial/collect_anymal.pkl", "wb+") as epi_data:
         pickle.dump(collected_episodes, epi_data)
     pd_ret = do_policy_dissection(collected_episodes)
     with open("{}.pkl".format("policy_dissection_ret"), "wb+") as file:
