@@ -259,49 +259,44 @@ def make_env(env_cfg, train_cfg, task_name="cassie"):
 
 
 if __name__ == "__main__":
-    # from policydissect.training_script.train_anymal_forward import update_env_cfg
-    #
-    # policy_func = ppo_inference_torch
-    # # policy_func = ppo_inference
-    # seed_num = 10
-    # start_time = time.time()
-    #
-    # path = "../weights/anymal_forward_tanh.npz"
-    # activation_func = "tanh"
-    # task_name = "anymal_c_flat"
-    # env_cfg, train_cfg = task_registry.get_cfgs(task_name)
-    # env_cfg = update_env_cfg(env_cfg)
-    #
-    # env = make_env(env_cfg=env_cfg, train_cfg=train_cfg, task_name=task_name)
-    # weights = np.load(path)
-    # print("===== Do Policy Dissection for {} ckpt =====".format(path))
-    # collected_episodes = []
-    # for seed in range(seed_num):
-    #     o, _ = env.reset()
-    #     episode_activation_values = []
-    #     episode_observations = [o.cpu().numpy()[0]]
-    #     current_step = 0
-    #     total_r = 0
-    #
-    #     while True:
-    #         o[..., 11:13] = torch.Tensor([0., 0.])
-    #         action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func,
-    #                                          deterministic=True)
-    #         o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
-    #         episode_activation_values.append(activation)
-    #         current_step += 1
-    #         total_r += r
-    #         if d:
-    #             collected_episodes.append(
-    #                 dict(neuron_activation=episode_activation_values, observations=episode_observations)
-    #             )
-    #             print("Finish seed: {}, reward: {}".format(seed, total_r))
-    #             break
-    #         episode_observations.append(o.cpu().numpy()[0])
-    # self = env
-    # self.gym.destroy_sim(self.sim)
-    # if self.viewer is not None:
-    #     self.gym.destroy_viewer(self.viewer)
+    policy_func = ppo_inference_torch
+    seed_num = 10
+    start_time = time.time()
+
+    path = "../weights/anymal_forward_tanh.npz"
+    activation_func = "tanh"
+    task_name = "anymal_c_flat_forward"
+    env_cfg, train_cfg = task_registry.get_cfgs(task_name)
+
+    env = make_env(env_cfg=env_cfg, train_cfg=train_cfg, task_name=task_name)
+    weights = np.load(path)
+    print("===== Do Policy Dissection for {} ckpt =====".format(path))
+    collected_episodes = []
+    for seed in range(seed_num):
+        o, _ = env.reset()
+        episode_activation_values = []
+        episode_observations = [o.cpu().numpy()[0]]
+        current_step = 0
+        total_r = 0
+
+        while True:
+            action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func,
+                                             deterministic=True)
+            o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
+            episode_activation_values.append(activation)
+            current_step += 1
+            total_r += r
+            if d:
+                collected_episodes.append(
+                    dict(neuron_activation=episode_activation_values, observations=episode_observations)
+                )
+                print("Finish seed: {}, reward: {}".format(seed, total_r))
+                break
+            episode_observations.append(o.cpu().numpy()[0])
+    self = env
+    self.gym.destroy_sim(self.sim)
+    if self.viewer is not None:
+        self.gym.destroy_viewer(self.viewer)
     with open("collect_episodes.pkl", "rb+") as epi_data:
         collected_episodes = pickle.load(epi_data)
     pd_ret = do_policy_dissection(collected_episodes)

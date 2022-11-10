@@ -33,6 +33,6 @@ if __name__ == '__main__':
     }
     args = get_args()
     args.num_envs = 1
-    args.task = "anymal_c_flat"
+    args.task = "anymal_c_flat_forward"
     activation = "tanh"
     play_anymal(args, activation_func=activation, map=forward_anymal, model_name="anymal_forward", parkour=False)

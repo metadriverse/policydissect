@@ -1,9 +1,6 @@
-import os
 import pickle
 import time
-import isaacgym
 from isaacgym.gymapi import *
-from isaacgym.gymtorch import *
 
 import numpy as np
 from isaacgym import gymapi, gymtorch
@@ -303,7 +300,6 @@ def replay_cassie(args, file_path, parkour=False, force_seed=None, frame_sus=Non
 
 
 def play_anymal(args, map, activation_func="tanh", model_name=None, parkour=False, log_last_epi=False, force_seed=None):
-    from policydissect.training_script.train_anymal_forward import update_env_cfg
     # env.reset()
     # import pygame module in this program
     import pygame
@@ -338,7 +334,6 @@ def play_anymal(args, map, activation_func="tanh", model_name=None, parkour=Fals
     font = pygame.font.Font('freesansbold.ttf', 32)
 
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
-    env_cfg = update_env_cfg(env_cfg)
 
     # override some parameters for testing
     env_cfg.env.num_envs = min(env_cfg.env.num_envs, 50)

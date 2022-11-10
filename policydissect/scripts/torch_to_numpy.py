@@ -2,7 +2,7 @@ import torch as th
 import numpy as np
 
 if __name__ == "__main__":
-    path = "../logs/flat_anymal_c/Oct20_12-09-57_/model_300.pt"
+    path = "../logs/flat_anymal_c/Nov10_15-04-03_/model_300.pt"
     weights = th.load(path)["model_state_dict"]
     ret = {}
     for layer, weight in weights.items():

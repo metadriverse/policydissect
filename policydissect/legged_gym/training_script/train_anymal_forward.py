@@ -28,36 +28,18 @@
 #
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
 
-import numpy as np
-import os
-from datetime import datetime
-
 import isaacgym
 from policydissect.legged_gym.envs import *
 from policydissect.legged_gym.utils import get_args, task_registry
-import torch
-
-
-def update_env_cfg(env_cfg):
-    # Only leadn to move forward
-    env_cfg.commands.ranges.lin_vel_x = [0.5, 1.5]
-    env_cfg.commands.ranges.lin_vel_y = [0., 0.]
-    env_cfg.commands.ranges.ang_vel_yaw = [0., 0.]
-    env_cfg.commands.ranges.heading = [0., 0.]
-
-    env_cfg.noise.noise_scales.lin_vel = 0.
-    env_cfg.noise.noise_scales.ang_vel = 0.
-    return env_cfg
 
 
 def train(args):
     """
     This script is for training an ANYmal_C robot, which can only move forward
     """
-    args.task = "anymal_c_flat"
+    args.task = "anymal_c_flat_forward"
     args.headless = True
     env_cfg, train_cfg, = task_registry.get_cfgs(args.task)
-    env_cfg = update_env_cfg(env_cfg)
     env, env_cfg = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
     ppo_runner, train_cfg = task_registry.make_alg_runner(env=env, name=args.task, args=args)
     ppo_runner.learn(num_learning_iterations=train_cfg.runner.max_iterations, init_at_random_ep_len=True)
