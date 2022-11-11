@@ -181,7 +181,10 @@ The default yaw tracking is achieved by explicit goal-conditioned control, while
 running ```python play/run_tracking_experiment.py --primitive_activation```
 will change to primitive-activation conditional control.
 
-
+## Policy Dissection Examples
+In ```example``` folder, we provide two examples showing how to dissect policy. The results can be read by opening
+```read_result.ipynb``` with jupyter notebook. Also, the identified units are chosen as motor primitives for evoking 
+behaviors of Anymal and the MetaDrive agents. Check previous section about how to play with them.
 
 ## Troubleshooting
 
