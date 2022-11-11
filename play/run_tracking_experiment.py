@@ -25,5 +25,5 @@ if __name__ == '__main__':
         model_name="anymal",
         target_heading_list=[0, 0.4, 0.9, 1.2, 0.9, 0.4, 0., -0.4, -0.9, -1.2, -0.9, -0.4, 0.],
         command_last_time=100,
-        trigger_neuron=False
+        trigger_neuron=args.primitive_activation
     )

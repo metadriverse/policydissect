@@ -1,9 +1,6 @@
-import os
 import pickle
 import time
-import isaacgym
 from isaacgym.gymapi import *
-from isaacgym.gymtorch import *
 
 import numpy as np
 from isaacgym import gymapi, gymtorch
@@ -111,7 +108,7 @@ def follow_command(
             pickle.dump(logger.state_log, file)
 
 
-def play(args, map, activation_func="elu", model_name=None, parkour=False, log_last_epi=False, force_seed=None):
+def play_cassie(args, map, activation_func="elu", model_name=None, parkour=False, log_last_epi=False, force_seed=None):
     # env.reset()
     # import pygame module in this program
     import pygame
@@ -300,3 +297,130 @@ def replay_cassie(args, file_path, parkour=False, force_seed=None, frame_sus=Non
         env.step(env.sample_actions())
         if frame_sus is not None:
             time.sleep(frame_sus)
+
+
+def play_anymal(args, map, activation_func="tanh", model_name=None, parkour=False, log_last_epi=False, force_seed=None):
+    # env.reset()
+    # import pygame module in this program
+    import pygame
+
+    # activate the pygame library
+    # initiate pygame and give permission
+    # to use pygame's functionality.
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0, 1080)
+    pygame.init()
+
+    # define the RGB value for white,
+    #  green, blue colour .
+    white = (255, 255, 255)
+    green = (0, 255, 0)
+    blue = (0, 0, 128)
+
+    # assigning values to X and Y variable
+    X = 200
+    Y = 200
+
+    # create the display surface object
+    # of specific dimension..e(X, Y).
+    display_surface = pygame.display.set_mode((X, Y))
+
+    # set the pygame window name
+    pygame.display.set_caption('Show Text')
+
+    # create a font object.
+    # 1st parameter is the font file
+    # which is present in pygame.
+    # 2nd parameter is size of the font
+    font = pygame.font.Font('freesansbold.ttf', 32)
+
+    env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
+
+    # override some parameters for testing
+    env_cfg.env.num_envs = min(env_cfg.env.num_envs, 50)
+    env_cfg.terrain.num_rows = 5
+    env_cfg.terrain.num_cols = 5
+    env_cfg.terrain.curriculum = False
+    env_cfg.no_obstacle = not parkour
+    env_cfg.noise.add_noise = False
+    env_cfg.domain_rand.randomize_friction = False
+    env_cfg.domain_rand.push_robots = False
+    env_cfg.terrain.mesh_type = "plane"
+    train_cfg.runner.num_steps_per_env = 1
+
+    # prepare environment
+    env, _ = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
+    seed_env(env, force_seed)
+    obs = env.get_observations()
+    env.max_episode_length = 10000
+
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_W, "Forward")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_A, "Left")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_D, "Right")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_S, "Stop")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_C, "Crouch")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_X, "Tiptoe")
+    env.gym.subscribe_viewer_keyboard_event(env.viewer, gymapi.KEY_R, "Reset")
+
+    self = env
+    name = model_name or ("anymal" if "anymal" in args.task else "cassie")
+    policy_weights = np.load(os.path.join(PACKAGE_DIR, "weights", "{}_{}.npz".format(name, activation_func)))
+
+    root_state = []
+    episode_length = 0
+    seed_env(env, force_seed)
+    command = "Forward"
+    obs, _ = env.reset()
+    # env.gym.attach_camera_to_body(camera_handle, env.envs[0], env.gym.find_actor_rigid_body_handleenv.actor_handles[0])
+    for i in range(10 * int(env.max_episode_length)):
+        episode_length += 1
+        for evt in self.gym.query_viewer_action_events(self.viewer):
+            if evt.value > 0 and evt.action in map.keys():
+                command = evt.action
+                print("{}: {}".format(command, episode_length))
+            if evt.value > 0 and evt.action == "Reset":
+                episode_length = 0
+                seed_env(env, force_seed)
+                command = "Forward"
+                obs, _ = env.reset()
+                if log_last_epi:
+                    with open("demo.pkl", "wb+") as file:
+                        pickle.dump(root_state, file)
+                root_state = []
+        root_state.append({"root_state": env.root_states.clone(), "dof_state": env.dof_state.clone()})
+
+        obs[..., 10] = 1.2  # Default run
+        actions, _ = ppo_inference_torch(
+            policy_weights, obs.clone().cpu().numpy(), map, command, activation=activation_func, deterministic=True
+        )
+        actions = torch.unsqueeze(torch.from_numpy(actions.astype(np.float32)), dim=0)
+        obs, _, rews, dones, infos, = env.step(actions)
+        x, y, z = env.base_pos[0]
+        env.set_camera((x - 3, y, 2), (x, y, z))
+        # env.set_camera((-1.5+10, -2.5, 1.8), (3.4+10, 1, 0.8))
+
+        display_surface.fill(white)
+
+        # copying the text surface object
+        # to the display surface object
+        # at the center coordinate.
+        # on which text is drawn on it.
+        text = font.render(command, True, green, blue)
+
+        # create a rectangular object for the
+        # text surface object
+        textRect = text.get_rect()
+
+        # set the center of the rectangular object.
+        textRect.center = (X // 2, Y // 2)
+        display_surface.blit(text, textRect)
+        pygame.display.update()
+
+        if dones[0]:
+            episode_length = 0
+            seed_env(env, force_seed)
+            command = "Forward"
+            obs, _ = env.reset()
+            if log_last_epi:
+                with open("demo.pkl", "wb+") as file:
+                    pickle.dump(root_state, file)
+            root_state = []

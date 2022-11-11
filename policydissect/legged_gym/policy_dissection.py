@@ -55,7 +55,9 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                 neuron_phase = neurons_activation_fft[layer][neuron_index]["fft_phase"]
                 target_phase = target_dim["fft_phase"]
                 phase_diff = neuron_phase - target_phase
-                base_freq = np.argmax(np.sum(neuron_fft - target_dim_fft, axis=1))
+                base_freq = np.argmax(
+                    np.sum(np.linalg.norm(neuron_fft - target_dim_fft, axis=1, keepdims=True), axis=1)
+                )
 
                 relation_coefficient = -2 * abs(np.mean(phase_diff[base_freq]) / np.pi) + 1
 
@@ -69,7 +71,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         },
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         },
                     }
                 )
@@ -78,7 +80,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         "{}_dim".format(target_dim_name): k,
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         }
                     }
                 )
@@ -309,7 +311,7 @@ if __name__ == "__main__":
 
         while True:
             if command is not None:
-                o[..., 9:12] = torch.Tensor(command)
+                o[..., 10:13] = torch.Tensor(command)
             action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func)
             o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
             episode_activation_values.append(activation)
@@ -326,7 +328,7 @@ if __name__ == "__main__":
     self.gym.destroy_sim(self.sim)
     if self.viewer is not None:
         self.gym.destroy_viewer(self.viewer)
-    with open("collect_episodes.pkl", "wb+") as epi_data:
+    with open("../../tutorial/collect_anymal.pkl", "wb+") as epi_data:
         pickle.dump(collected_episodes, epi_data)
     pd_ret = do_policy_dissection(collected_episodes)
     with open("{}.pkl".format("policy_dissection_ret"), "wb+") as file:

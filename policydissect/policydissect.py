@@ -1,38 +1,9 @@
-from policydissect.legged_gym import LEGGED_GYM_ROOT_DIR
-import os
-
-import isaacgym
-from policydissect.legged_gym.envs import *
-from policydissect.legged_gym.utils import get_args, export_policy_as_jit, task_registry, Logger
-from policydissect.legged_gym.policy_utils import ppo_inference_torch, control_neuron_activation
-import numpy as np
-import torch
-import pickle
-import time
-from isaacgym import *
-from policydissect.legged_gym import *
-
-import numpy as np
-from policydissect.legged_gym.policy_utils import ppo_inference_torch
-from policydissect.legged_gym.utils import get_args, task_registry
-
-import os
 import librosa
 import matplotlib.pyplot as plt
-
-import pickle
 import numpy as np
 
 
 def cal_relation(data_1, data_2):
-    # if np.linalg.norm(data_1) != 0:
-    #     data_1 = data_1 / np.linalg.norm(data_1)
-    # if np.linalg.norm(data_2) != 0:
-    #     data_2 = data_2 / np.linalg.norm(data_2)
-    # assert len(data_1) == len(data_2), "d_1:{}, d_2:{}".format(len(data_1), len(data_2))
-    # error = 0
-    # for i in range(len(data_1)):
-    #     error += abs(data_1[i] - data_2[i])
     return np.linalg.norm(data_1 - data_2)
 
 
@@ -55,8 +26,11 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                 neuron_phase = neurons_activation_fft[layer][neuron_index]["fft_phase"]
                 target_phase = target_dim["fft_phase"]
                 phase_diff = neuron_phase - target_phase
-                base_freq = np.argmax(np.sum(neuron_fft - target_dim_fft, axis=1))
+                base_freq = np.argmax(
+                    np.sum(np.linalg.norm(neuron_fft - target_dim_fft, axis=1, keepdims=True), axis=1)
+                )
 
+                # phase_diff = (phase_diff + np.pi) % (2 * np.pi) - np.pi
                 relation_coefficient = -2 * abs(np.mean(phase_diff[base_freq]) / np.pi) + 1
 
                 error_freq = cal_relation(neuron_fft, target_dim_fft)
@@ -69,7 +43,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         },
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         },
                     }
                 )
@@ -78,7 +52,7 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
                         "{}_dim".format(target_dim_name): k,
                         "error": {
                             "freq_diff": error_freq,
-                            "base_phase_diff": relation_coefficient
+                            "correlation": relation_coefficient
                         }
                     }
                 )
@@ -121,21 +95,27 @@ def axis_shift(epi_activation, label="after_tanh"):
     acivation_per_step = []
     for layers_per_step in epi_activation:
         layers = []
+        unit_num_per_layer = [len(x[label][0]) for x in layers_per_step]
         for layer in [x[label][0] for x in layers_per_step]:
-            if len(layer) != 512:
-                layers.append(np.concatenate([layer, np.zeros([512 - len(layer)])]))
+            # padding dim
+            if len(layer) != max(unit_num_per_layer):
+                layers.append(np.concatenate([layer, np.zeros([max(unit_num_per_layer) - len(layer)])]))
             else:
                 layers.append(layer)
         concat_ret = np.array(layers)
         acivation_per_step.append(concat_ret)
     acivation_per_step = np.array(acivation_per_step)
     acivation_per_step = np.moveaxis(acivation_per_step, 0, -1)
-    return acivation_per_step
+
+    # Remove padding dims
+    ret = []
+    for k, unit_num in enumerate(unit_num_per_layer):
+        ret.append(acivation_per_step[k][:unit_num][:])
+    return np.array(ret)
 
 
 def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=None):
     activation_after_tanh = axis_shift(epi_activation)
-    # activation_before_tanh = axis_shift(epi_activation, label="before_tanh")
     neurons_fft = []
     for layer in range(len(activation_after_tanh)):
         layer_fft = []
@@ -148,16 +128,10 @@ def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=
                     for_neuron=True,
                     n_fft=n_fft
                 )
-                strength_dist = activation_after_tanh[layer][neuron]
-                # positive_strength = np.quantile(strength_dist, strength_quantile)
-                # negative_strength = np.quantile(strength_dist, 1 - strength_quantile)
-                layer_fft.append(
-                    {
-                        "fft_amplitude": fft_ret,
-                        "fft_phase": phase,
-                        # "strength": {"positive": positive_strength, "negative": negative_strength}
-                    }
-                )
+                layer_fft.append({
+                    "fft_amplitude": fft_ret,
+                    "fft_phase": phase,
+                })
             elif specific_neuron is not None:
                 assert isinstance(specific_neuron, list), "Use list [(layer, neuron index), (),...]"
                 if (layer, neuron) in specific_neuron:
@@ -168,24 +142,15 @@ def analyze_neuron(epi_activation, save_figure=False, n_fft=16, specific_neuron=
                         for_neuron=True,
                         n_fft=n_fft
                     )
-                    strength_dist = activation_after_tanh[layer][neuron]
-                    # positive_strength = np.quantile(strength_dist, strength_quantile)
-                    # negative_strength = np.quantile(strength_dist, 1 - strength_quantile)
-                    layer_fft.append(
-                        {
-                            "fft_amplitude": fft_ret,
-                            "fft_phase": phase,
-                            # "strength": {"positive": positive_strength, "negative": negative_strength}
-                        }
-                    )
+                    layer_fft.append({
+                        "fft_amplitude": fft_ret,
+                        "fft_phase": phase,
+                    })
                 else:
-                    layer_fft.append(
-                        {
-                            "fft_amplitude": np.inf,
-                            "fft_phase": np.inf,
-                            # "strength": {"positive": positive_strength, "negative": negative_strength}
-                        }
-                    )
+                    layer_fft.append({
+                        "fft_amplitude": np.inf,
+                        "fft_phase": np.inf,
+                    })
 
         neurons_fft.append(layer_fft)
     return neurons_fft, activation_after_tanh
@@ -239,7 +204,7 @@ def analyze_actions(epi_action, save_figure=False, n_fft=16):
     return action_fft, per_action_dim
 
 
-def do_policy_dissection(collect_episodes, specific_neuron=None, specific_obs=None, obs_neuron_pair=None):
+def do_policy_dissection(collect_episodes, specific_neuron=None, specific_obs=None):
     n_fft = 32
     # assert not os.path.exists("dissection"), "please save previous result"
     # os.makedirs("dissection")
@@ -260,74 +225,3 @@ def do_policy_dissection(collect_episodes, specific_neuron=None, specific_obs=No
         this_epi_frequency_error["seed"] = k
         ckpt_ret[k] = this_epi_frequency_error
     return ckpt_ret
-
-
-def make_env(task_name="cassie"):
-    args = get_args()
-    args.num_envs = 1
-    args.task = task_name
-    args.headless = True
-    env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
-    # override some parameters for testing
-    env_cfg.env.num_envs = min(env_cfg.env.num_envs, 50)
-    env_cfg.terrain.num_rows = 5
-    env_cfg.terrain.num_cols = 5
-    env_cfg.terrain.curriculum = False
-    env_cfg.noise.add_noise = False
-    env_cfg.domain_rand.randomize_friction = False
-    env_cfg.domain_rand.push_robots = False
-    env_cfg.terrain.mesh_type = "plane"
-    train_cfg.runner.num_steps_per_env = 1
-
-    # prepare environment
-    env, _ = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
-    return env
-
-
-if __name__ == "__main__":
-    policy_func = ppo_inference_torch
-    # policy_func = ppo_inference
-    seed_num = 10
-    start_time = time.time()
-
-    path = "../weights/anymal_tanh.npz"
-    activation_func = "tanh"
-    task_name = "anymal_c_flat"
-    # task_name = "cassie"
-    command = None
-
-    env = make_env(task_name=task_name)
-    weights = np.load(path)
-    print("===== Do Policy Dissection for {} ckpt =====".format(path))
-    collected_episodes = []
-    for seed in range(seed_num):
-        o, _ = env.reset()
-        episode_activation_values = []
-        episode_observations = [o.cpu().numpy()[0]]
-        current_step = 0
-        total_r = 0
-
-        while True:
-            if command is not None:
-                o[..., 9:12] = torch.Tensor(command)
-            action, activation = policy_func(weights, o.clone().cpu().numpy(), {}, "", activation=activation_func)
-            o, _, r, d, i = env.step(torch.unsqueeze(torch.from_numpy(action.astype(np.float32)), dim=0))
-            episode_activation_values.append(activation)
-            current_step += 1
-            total_r += r
-            if d:
-                collected_episodes.append(
-                    dict(neuron_activation=episode_activation_values, observations=episode_observations)
-                )
-                print("Finish seed: {}, reward: {}".format(seed, total_r))
-                break
-            episode_observations.append(o.cpu().numpy()[0])
-    self = env
-    self.gym.destroy_sim(self.sim)
-    if self.viewer is not None:
-        self.gym.destroy_viewer(self.viewer)
-    with open("collect_episodes.pkl", "wb+") as epi_data:
-        pickle.dump(collected_episodes, epi_data)
-    pd_ret = do_policy_dissection(collected_episodes)
-    with open("{}.pkl".format("policy_dissection_ret"), "wb+") as file:
-        pickle.dump(pd_ret, file)

@@ -1,7 +1,7 @@
 from isaacgym import gymapi  # We have to put this line here!
 from policydissect.legged_gym.envs import *  # We have to put this line here!
 from policydissect.legged_gym.utils import get_args
-from policydissect.utils.isaacgym_utils import play
+from policydissect.utils.isaacgym_utils import play_cassie
 
 if __name__ == '__main__':
     # This is a policy with Elu which is not a symmetric activation function.
@@ -58,4 +58,4 @@ if __name__ == '__main__':
     args.num_envs = 1
     args.task = "cassie"
     activation = "elu"
-    play(args, activation_func=activation, map=forward_cassie, model_name="forward_cassie", parkour=args.parkour)
+    play_cassie(args, activation_func=activation, map=forward_cassie, model_name="forward_cassie", parkour=args.parkour)

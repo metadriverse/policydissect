@@ -35,9 +35,9 @@ def ppo_inference_tf(
     x = x.reshape(-1)
     mean, log_std = np.split(x, 2)
     if deterministic:
-        return mean
+        return mean, step_activation_value
     std = np.exp(log_std)
-    return np.random.normal(mean, std)
+    return np.random.normal(mean, std), step_activation_value
 
 
 def ppo_inference_torch(

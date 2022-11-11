@@ -75,7 +75,7 @@ To collaborate with the AI driver in [MetaDrive environment](https://github.com/
 # - KEY_S: braking
 # - KEY_D: right lane changing
 # - KEY_R:Reset
-python policydissect/scripts/play_metadrive.py
+python play/play_metadrive.py
 ``` 
 
 
@@ -92,9 +92,9 @@ For playing with legged robot, run:
 # - KEY_S: stop
 # - KEY_D: moving right
 # - KEY_R: reset
-python policydissect/scripts/play_quadrupedal.py
-python policydissect/scripts/play_quadrupedal.py --hard
-python policydissect/scripts/play_quadrupedal.py --hard --seed 1001
+python play/play_pybullet_a1.py
+python play/play_pybullet_a1.py --hard
+python play/play_pybullet_a1.py --hard --seed 1001
 ```
 
 
@@ -122,8 +122,8 @@ Run the following command to play with the robot. Add flag```--parkour```to laun
 # - KEY_D:Right
 # - KEY_SPACE:Back Flip
 # - KEY_R:Reset
-python policydissect/scripts/play_cassie.py
-python policydissect/scripts/play_cassie.py --parkour
+python play/play_cassie.py
+python play/play_cassie.py --parkour
 ```
 
 *tips: Switch to Tiptoe state before pressing Key_Q to increase the distance of jump.*
@@ -146,7 +146,7 @@ You can try them via:
 # - KEY_A: stand up from split
 # - KEY_S: restore running after jumping
 # - KEY_R: reset
-python policydissect/scripts/play_gym_bipedalwalker.py
+python play/play_gym_bipedalwalker.py
 
 # Mujoco-Ant
 # Keymap:
@@ -156,7 +156,7 @@ python policydissect/scripts/play_gym_bipedalwalker.py
 # - KEY_D: move right
 # - KEY_Q: rotation
 # - KEY_R: reset
-python policydissect/scripts/play_mujoco_ant.py
+python play/play_mujoco_ant.py
     
 # Mujoco-Walker
 # Keymap:
@@ -164,7 +164,7 @@ python policydissect/scripts/play_mujoco_ant.py
 # - KEY_A: stop
 # - KEY_W: freeze red knee
 # - KEY_D: restore running
-python policydissect/scripts/play_mujoco_walker.py
+python play/play_mujoco_walker.py
 ```
 
 ### Comparison with explicit goal-conditioned control
@@ -176,12 +176,15 @@ controller determining the unit output according to the tracking error. As a res
 and can achieve the similar control precision, compared to explicitly indicating the goal in the network input.
 Video is available [here](https://metadriverse.github.io/policydissect/#Tracking%20Demo).
 
-The experiment script can be found at ```policydissect/scripts/run_tracking_experiment.py```. 
+The experiment script can be found at ```play/run_tracking_experiment.py```. 
 The default yaw tracking is achieved by explicit goal-conditioned control, while
-running ```python policydissect/scripts/run_tracking_experiment.py --primitive_activation```
+running ```python play/run_tracking_experiment.py --primitive_activation```
 will change to primitive-activation conditional control.
 
-
+## Policy Dissection Examples
+In ```example``` folder, we provide two examples showing how to dissect policy. The results can be read by opening
+```read_result.ipynb``` with jupyter notebook. Also, the identified units are chosen as motor primitives for evoking 
+behaviors of Anymal and the MetaDrive agents. Check previous section about how to play with them.
 
 ## Troubleshooting
 
