@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     env = make_env(env_cfg=env_cfg, train_cfg=train_cfg, task_name=task_name)
     weights = np.load(path)
-    print("===== Do Policy Dissection for {} ckpt =====".format(path))
+    print("===== Do Policy Dissection =====".format(path))
     collected_episodes = []
     for seed in range(seed_num):
         o, _ = env.reset()

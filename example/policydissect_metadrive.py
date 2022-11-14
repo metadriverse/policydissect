@@ -33,7 +33,7 @@ if __name__ == "__main__":
         )
     )
 
-    print("===== Do Policy Dissection for on ckpt =====")
+    print("===== Do Policy Dissection =====")
     path = ckpt_path
     weights = np.load(ckpt_path)
     collected_episodes = []
