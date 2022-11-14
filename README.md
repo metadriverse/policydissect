@@ -133,6 +133,7 @@ python play/play_cassie.py --parkour
 > Do not draw the windows or close the pygame window during running.
 
 
+
 ### Gym Environments
 
 We also discover motor primitives in three gym environments: Box2d-BipedalWalker, Mujoco-Ant and Mujoco-Walker. 
@@ -143,7 +144,7 @@ You can try them via:
 # BipedalWalker
 # Keymap:
 # - KEY_W: jump
-# - KEY_A: stand up from split
+# - KEY_A: front-flip
 # - KEY_S: restore running after jumping
 # - KEY_R: reset
 python play/play_gym_bipedalwalker.py
