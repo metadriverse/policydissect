@@ -6,7 +6,7 @@ FPS = 50
 SCALE = 30.0  # affects how fast-paced the game is, forces should be adjusted as well
 
 MOTORS_TORQUE = 80
-MOTORS_TORQUE_BOOST = 1000
+MOTORS_TORQUE_BOOST = 5000
 
 SPEED_HIP = 4
 SPEED_KNEE = 6
@@ -28,10 +28,65 @@ TERRAIN_GRASS = 10  # low long are grass spots, in steps
 TERRAIN_STARTPAD = 20  # in steps
 FRICTION = 2.5
 
+import time
+
+def wrap_to_pi(angles):
+    angles %= 2 * np.pi
+    angles -= 2 * np.pi * (angles > np.pi)
+    return angles
 
 class MyBipedalWalker(BipedalWalkerHardcore):
     hardcore = False
     count = 0
+
+    def _generate_terrain(self, hardcore):
+        GRASS, STUMP, STAIRS, PIT, _STATES_ = range(5)
+        state = GRASS
+        velocity = 0.0
+        y = TERRAIN_HEIGHT
+        counter = TERRAIN_STARTPAD
+        oneshot = False
+        self.terrain = []
+        self.terrain_x = []
+        self.terrain_y = []
+        for i in range(TERRAIN_LENGTH):
+            x = i * TERRAIN_STEP
+            self.terrain_x.append(x)
+
+            if state == GRASS and not oneshot:
+                velocity = 0.8 * velocity + 0.01 * np.sign(TERRAIN_HEIGHT - y)
+                # if i > TERRAIN_STARTPAD:
+                #     velocity += self.np_random.uniform(-1, 1) / SCALE  # 1
+                y += velocity
+
+            oneshot = False
+            self.terrain_y.append(y)
+            counter -= 1
+            if counter == 0:
+                counter = self.np_random.randint(TERRAIN_GRASS / 2, TERRAIN_GRASS)
+                if state == GRASS and hardcore:
+                    state = self.np_random.randint(1, _STATES_)
+                    oneshot = True
+                else:
+                    state = GRASS
+                    oneshot = True
+
+        self.terrain_poly = []
+        for i in range(TERRAIN_LENGTH - 1):
+            poly = [
+                (self.terrain_x[i], self.terrain_y[i]),
+                (self.terrain_x[i + 1], self.terrain_y[i + 1]),
+            ]
+            self.fd_edge.shape.vertices = poly
+            t = self.world.CreateStaticBody(fixtures=self.fd_edge)
+            color = (0.3, 1.0 if i % 2 == 0 else 0.8, 0.3)
+            t.color1 = color
+            t.color2 = color
+            self.terrain.append(t)
+            color = (0.4, 0.6, 0.3)
+            poly += [(poly[1][0], 0), (poly[0][0], 0)]
+            self.terrain_poly.append((poly, color))
+        self.terrain.reverse()
 
     @property
     def command(self):
@@ -48,29 +103,31 @@ class MyBipedalWalker(BipedalWalkerHardcore):
             self.viewer.window.need_reset = False
 
     def step(self, action):
+        # time.sleep(0.01)
         # self.hull.ApplyForceToCenter((0, 20), True) -- Uncomment this to receive a bit of stability help
         control_speed = False  # Should be easier as well
-        TORQUE = MOTORS_TORQUE
-        if self.command == "down":
+        TORQUE = MOTORS_TORQUE if self.command != "left" else MOTORS_TORQUE_BOOST
+        if self.command == "down" or self.command == "left" or self.command=="up":
             self.count += 1
 
-        if self.count > 50:
+        if self.count > 55 and self.command != "right":
             self.viewer.window.command = "right"
             self.count = 0
+
         if control_speed:
-            self.joints[0].motorSpeed = float(SPEED_HIP * np.clip(action[0], -1, 1))
-            self.joints[1].motorSpeed = float(SPEED_KNEE * np.clip(action[1], -1, 1))
-            self.joints[2].motorSpeed = float(SPEED_HIP * np.clip(action[2], -1, 1))
-            self.joints[3].motorSpeed = float(SPEED_KNEE * np.clip(action[3], -1, 1))
+            self.joints[0].motorSpeed = float(SPEED_HIP * np.clip(action[0], -2000, 2000))
+            self.joints[1].motorSpeed = float(SPEED_KNEE * np.clip(action[1], -2000, 2000))
+            self.joints[2].motorSpeed = float(SPEED_HIP * np.clip(action[2], -2000, 2000))
+            self.joints[3].motorSpeed = float(SPEED_KNEE * np.clip(action[3], -2000, 2000))
         else:
             self.joints[0].motorSpeed = float(SPEED_HIP * np.sign(action[0]))
-            self.joints[0].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[0]), 0, 1))
+            self.joints[0].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[0]), 0, 2000))
             self.joints[1].motorSpeed = float(SPEED_KNEE * np.sign(action[1]))
-            self.joints[1].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[1]), 0, 1))
+            self.joints[1].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[1]), 0, 2000))
             self.joints[2].motorSpeed = float(SPEED_HIP * np.sign(action[2]))
-            self.joints[2].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[2]), 0, 1))
+            self.joints[2].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[2]), 0, 2000))
             self.joints[3].motorSpeed = float(SPEED_KNEE * np.sign(action[3]))
-            self.joints[3].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[3]), 0, 1))
+            self.joints[3].maxMotorTorque = float(TORQUE * np.clip(np.abs(action[3]), 0, 2000))
 
         self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
 
@@ -87,7 +144,7 @@ class MyBipedalWalker(BipedalWalkerHardcore):
             self.world.RayCast(self.lidar[i], self.lidar[i].p1, self.lidar[i].p2)
 
         state = [
-            self.hull.angle,  # Normal angles up to 0.5 here, but sure more is possible.
+            wrap_to_pi(self.hull.angle),  # Normal angles up to 0.5 here, but sure more is possible.
             2.0 * self.hull.angularVelocity / FPS,
             0.3 * vel.x * (VIEWPORT_W / SCALE) / FPS,  # Normalized to get -1..1 range
             0.3 * vel.y * (VIEWPORT_H / SCALE) / FPS,
