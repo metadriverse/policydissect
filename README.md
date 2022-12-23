@@ -9,8 +9,7 @@
 
 [comment]: <> ([**Poster**]&#40;https://github.com/decisionforce/HACO/blob/main/docs/iclr_poster.pdf&#41; )
 
-Currently, we provide some interactive neural controllers enabled by *Policy Dissection*.
-The policy dissection method and training code will be updated soon.
+In this repo, we provide the [implementation](https://github.com/metadriverse/policydissect/tree/main/example) of *Policy Dissection* and some [interactive neural controllers](https://github.com/metadriverse/policydissect/tree/main/play) enabled by this method. 
 
 **Supported Environments**:
 
