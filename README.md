@@ -57,7 +57,7 @@ For playing with the Mujoco-Ant and Mujoco-Walker, please
 - install **mujoco200** according to https://www.roboti.us/download.html (Mujoco licence can be found at **https://www.roboti.us/license.html**)
 - copy contents in the folder to `~/.mujoco/mujoco200`
 - copy licence from https://www.roboti.us/license.html to `~/.mujoco/`
-- add this line to `.bashrc`: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/zhenghao/.mujoco/mujoco200/bin`
+- add this line to `.bashrc`: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/USERNAME/.mujoco/mujoco200/bin`
 - run ```pip install mujoco-py==2.0.2.7``` (Solutions of compiling error can be easily found at https://github.com/openai/mujoco-py/issues)
 
 ## Play with AI
