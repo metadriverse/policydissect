@@ -197,7 +197,7 @@ this:
 export LD_LIBRARY_PATH=/path/to/libpython/directory
 # If you are using Conda, the path should be /path/to/conda/envs/your_env/lib.
 # For example:
-export LD_LIBRARY_PATH=/home/zhenghao/anaconda3/envs/policydissect/lib
+export LD_LIBRARY_PATH=/home/USERNAME/anaconda3/envs/policydissect/lib
 ```
 
 If you encounter `CalledProcessError: Command '['which', 'c++']' returned non-zero exit status 1.`, try this:
