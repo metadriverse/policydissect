@@ -35,9 +35,9 @@ def ppo_inference_tf(
     x = x.reshape(-1)
     mean, log_std = np.split(x, 2)
     if deterministic:
-        return mean
+        return mean, step_activation_value
     std = np.exp(log_std)
-    return np.random.normal(mean, std)
+    return np.random.normal(mean, std), step_activation_value
 
 
 def ppo_inference_torch(
@@ -71,8 +71,9 @@ def _normalize_obs(obs_mid, obs_scale, obs):
 
 
 def sac_inference_tf(
-    weights, obs, hidden_layer_num, conditional_control_map, command, deterministic=False, activation="tanh"
+    weights, obs, hidden_layer_num, conditional_control_map, command, deterministic=False, activation="tanh", need_activation=False
 ):
+    step_activation_value = []
     obs = np.asarray(obs)
     if obs.ndim == 1:
         obs = np.expand_dims(obs, axis=0)
@@ -83,10 +84,14 @@ def sac_inference_tf(
             weights["default_policy/sequential/action_{}/bias".format(layer)]
         x = np.tanh(x) if activation == "tanh" else relu(x)
         control_neuron_activation(x, layer - 1, conditional_control_map, command)
+        step_activation_value.append({"after_tanh": x})
     x = np.matmul(x, weights["default_policy/sequential/action_out/kernel"]) + \
         weights["default_policy/sequential/action_out/bias"]
     mean, log_std = np.split(x, 2, axis=1)
     std = np.exp(log_std)
     action = np.random.normal(mean, std) if not deterministic else mean
     squashed = ((np.tanh(action) + 1.0) / 2.0) * 2 - 1
-    return squashed[0]
+    if need_activation:
+        return squashed[0], step_activation_value
+    else:
+        return squashed[0]

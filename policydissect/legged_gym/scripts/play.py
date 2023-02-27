@@ -129,5 +129,5 @@ if __name__ == '__main__':
     MOVE_CAMERA = False
     args = get_args()
     args.num_envs = 50
-    args.task = "anymal_c_flat"
+    args.task = "anymal_c_flat_forward"
     play(args)

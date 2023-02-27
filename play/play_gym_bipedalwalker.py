@@ -5,10 +5,11 @@ from policydissect import PACKAGE_DIR
 from policydissect.gym.my_bipedal_walker_env import MyBipedalWalker
 from policydissect.utils.policy import sac_inference_tf
 
+# Note: Since jumper higher is required for flipping, I slightly change the torque force only when performing front-flip
 jump = {
     "left": {
-        0: [(150, 10), (189, 10), (249, 10), (235, 10)]
-    },  # key_a: stand up from split
+        0: [(224, 45), (32, 12), (98, -8)]
+    },  # key_a: flip
     "down": {
         0: [(202, 40)]
     },  # key_s: restore running after jumping

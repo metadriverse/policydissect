@@ -64,6 +64,23 @@ class AnymalCFlatCfg(AnymalCRoughCfg):
         ]  # on ground planes the friction combination mode is averaging, i.e total friction = (foot_friction + 1.)/2.
 
 
+class ForwardAnymalCFlat(AnymalCFlatCfg):
+    class env(AnymalCRoughCfg.env):
+        num_observations = 47
+
+    class commands(AnymalCFlatCfg.commands):
+        class ranges(AnymalCRoughCfg.commands.ranges):
+            lin_vel_x = [0.5, 1.5]
+            lin_vel_y = [0., 0.]
+            ang_vel_yaw = [0., 0.]
+            heading = [0., 0.]
+
+    class noise(AnymalCRoughCfg.noise):
+        class noise_scale(AnymalCRoughCfg.noise.noise_scales):
+            lin_vel = 0.
+            ang_vel = 0.
+
+
 class AnymalCFlatCfgPPO(AnymalCRoughCfgPPO):
     class policy(AnymalCRoughCfgPPO.policy):
         actor_hidden_dims = [128, 64, 32]
