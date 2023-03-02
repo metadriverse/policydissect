@@ -25,13 +25,21 @@ def get_most_relevant_neuron(neurons_activation_fft, epi_target_dims_fft, target
 
                 neuron_phase = neurons_activation_fft[layer][neuron_index]["fft_phase"]
                 target_phase = target_dim["fft_phase"]
-                phase_diff = neuron_phase - target_phase
-                base_freq = np.argmax(
-                    np.sum(np.linalg.norm(neuron_fft - target_dim_fft, axis=1, keepdims=True), axis=1)
-                )
+                # phase_diff = neuron_phase - target_phase
+                # base_freq = np.argmax(
+                #     np.sum(np.linalg.norm(neuron_fft - target_dim_fft, axis=1, keepdims=True), axis=1)
+                # )
+                #
+                # # phase_diff = (phase_diff + np.pi) % (2 * np.pi) - np.pi
+                # relation_coefficient = -2 * abs(np.mean(phase_diff[base_freq]) / np.pi) + 1
 
-                # phase_diff = (phase_diff + np.pi) % (2 * np.pi) - np.pi
-                relation_coefficient = -2 * abs(np.mean(phase_diff[base_freq]) / np.pi) + 1
+                # base_freq_neuron = np.argmax(np.sum(neuron_fft, axis=1))
+                base_freq_obs = np.argmax(np.sum(target_dim_fft, axis=1))
+                phase_diff = neuron_phase[base_freq_obs] - target_phase[base_freq_obs]
+
+                phase_diff %= 2 * np.pi
+                phase_diff -= 2 * np.pi * (phase_diff > np.pi)
+                relation_coefficient = -2 * abs(np.mean(phase_diff) / np.pi) + 1
 
                 error_freq = cal_relation(neuron_fft, target_dim_fft)
                 # error = error_norm*error_freq
